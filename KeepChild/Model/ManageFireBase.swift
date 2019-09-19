@@ -203,6 +203,18 @@ class ManageFireBase {
         }
     }
     
+    func downloadPhotoProfil(idUserImage: String, completionHandler: @escaping (Error?,Data?) -> Void) {
+        let storageReference = Storage.storage().reference()
+        let reference = storageReference.child("usersProfil")
+        let photoUser = reference.child("\(idUserImage).jpg")
+        photoUser.getData(maxSize: 1*1024*1024) { (data, error) in
+            guard error == nil else { print("error download"); completionHandler(error,nil) ; return }
+            guard let dataSecure = data else { return }
+           // guard let image = UIImage(data: dataSecure) else { return }
+            completionHandler(nil,dataSecure)
+        }
+    }
+    
   /*  func retrieveAnnounceUser(idUser: String, completion: @escaping(Error?, [Announce]?) -> Void) {
         var announce2 = [Announce]()
         var arrayTampon = [Announce]()

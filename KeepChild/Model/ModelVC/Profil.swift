@@ -57,6 +57,14 @@ class ProfilGestion {
             completionHandler(nil,image)
         }
     }
+
+    func downloadPhotoProfil(idUserImage: String, completionHandler: @escaping (Error?,Data?) -> Void) {
+        manageFireBase.downloadPhotoProfil(idUserImage: idUserImage) { (error, data) in
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let dataSecure = data else { return }
+            completionHandler(nil,dataSecure)
+        }
+    }
     /*func retrieveProfilUser(idUser: String) {
         let idUserAnnouce = idUser
         Firestore.firestore().collection("ProfilUser").getDocuments { (querySnapshot, err) in

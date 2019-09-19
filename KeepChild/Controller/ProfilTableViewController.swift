@@ -69,6 +69,13 @@ class ProfilTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         
+        profilGestion.downloadPhotoProfil(idUserImage: idUser) { (error, data) in
+            guard error == nil else { return }
+            guard let dataSecure = data else { return }
+            guard let image = UIImage(data: dataSecure) else { return }
+            self.profilView.imageProfil.image = image
+        }
+        
             //UserDefaults.standard.set(manageFireBase.profil, forKey: "userProfil")
         
        /* manageFireBase.retrieveProfilUser()

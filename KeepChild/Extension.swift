@@ -99,6 +99,21 @@ extension UIImage {
         return jpegData(compressionQuality: jpegQuality.rawValue)
     }
 }
+
+extension UIImageView {
+    func download(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFill) {
+        contentMode = mode
+        let storageReference = Storage.storage().reference()
+        let reference = storageReference.child("usersProfil")
+        let photoUser = reference.child("\(idUserImage).jpg")
+        photoUser.getData(maxSize: 1*1024*1024) { (data, error) in
+            guard error == nil else { print("error download:\(error?.localizedDescription)") ; return }
+            guard let dataSecure = data else { return }
+            let image = UIImage(data: dataSecure)
+            self.image = image
+        }
+    }
+}
 /*extension UIImage {
     func uploadProfileImage(imageData: Data)
     {

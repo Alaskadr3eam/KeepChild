@@ -387,13 +387,54 @@
                             <textInputTraits key="textInputTraits"/>
                         </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="TAI-6r-tgb">
-                                <rect key="frame" x="0.0" y="72" width="414" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="96" id="TAI-6r-tgb" customClass="CustomCell" customModule="KeepChild" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="414" height="96"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TAI-6r-tgb" id="pDP-wi-vZx">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="95.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GSX-Q5-78U">
+                                            <rect key="frame" x="0.0" y="0.0" width="118" height="96"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="GSX-Q5-78U" secondAttribute="height" multiplier="59:48" id="Mcb-Pt-khn"/>
+                                                <constraint firstAttribute="height" constant="96" id="NoK-I5-Ivh"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVn-QV-OTH">
+                                            <rect key="frame" x="138" y="11" width="256" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NVO-lH-ZUZ">
+                                            <rect key="frame" x="138" y="55" width="256" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="eIA-06-aKS"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="NVn-QV-OTH" firstAttribute="top" secondItem="pDP-wi-vZx" secondAttribute="topMargin" id="0SD-F3-5nw"/>
+                                        <constraint firstAttribute="bottom" secondItem="GSX-Q5-78U" secondAttribute="bottom" id="0WG-Se-MON"/>
+                                        <constraint firstItem="NVO-lH-ZUZ" firstAttribute="leading" secondItem="GSX-Q5-78U" secondAttribute="trailing" constant="20" id="I5D-UJ-Eyb"/>
+                                        <constraint firstItem="GSX-Q5-78U" firstAttribute="top" secondItem="pDP-wi-vZx" secondAttribute="top" id="Lcd-dg-hkL"/>
+                                        <constraint firstItem="NVn-QV-OTH" firstAttribute="leading" secondItem="GSX-Q5-78U" secondAttribute="trailing" constant="20" id="OAi-kv-wHb"/>
+                                        <constraint firstItem="NVn-QV-OTH" firstAttribute="trailing" secondItem="pDP-wi-vZx" secondAttribute="trailingMargin" id="Pvg-ml-cbu"/>
+                                        <constraint firstItem="NVO-lH-ZUZ" firstAttribute="trailing" secondItem="pDP-wi-vZx" secondAttribute="trailingMargin" id="ZST-fx-EgP"/>
+                                        <constraint firstItem="GSX-Q5-78U" firstAttribute="leading" secondItem="pDP-wi-vZx" secondAttribute="leading" id="d2v-QJ-Kbg"/>
+                                        <constraint firstItem="NVO-lH-ZUZ" firstAttribute="bottom" secondItem="pDP-wi-vZx" secondAttribute="bottomMargin" id="huA-Xk-hOG"/>
+                                        <constraint firstItem="NVO-lH-ZUZ" firstAttribute="top" secondItem="NVn-QV-OTH" secondAttribute="bottom" constant="23" id="xib-Pu-XHK"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="imageProfil" destination="GSX-Q5-78U" id="vJw-lz-B04"/>
+                                    <outlet property="priceLabel" destination="NVO-lH-ZUZ" id="Q0U-V6-LoO"/>
+                                    <outlet property="titleLabel" destination="NVn-QV-OTH" id="AxO-4o-3mc"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -408,7 +449,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BDf-3H-1x0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="941" y="703"/>
+            <point key="canvasLocation" x="940.57971014492762" y="702.45535714285711"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="1W3-be-mic">
@@ -545,7 +586,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="170.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8bY-Ad-brf">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-user-icon-27.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="8bY-Ad-brf">
                                                     <rect key="frame" x="20" y="11" width="374" height="149"/>
                                                 </imageView>
                                             </subviews>

@@ -59,42 +59,16 @@ class ProfilTableViewController: UITableViewController {
             guard profilUser != nil else { return }
             self.initView()
         }
-           // manageFireBase.retrieveProfilUser()
-            //manageFireBase.retrieveAnnounceUser2()
-        
+    
         profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard announce != nil else { return }
             self.tableView.reloadData()
         }
-        
-        profilGestion.downloadPhotoProfil(idUserImage: idUser) { (error, data) in
-            guard error == nil else { return }
-            guard let dataSecure = data else { return }
-            guard let image = UIImage(data: dataSecure) else { return }
-            self.profilView.imageProfil.image = image
-        }
-        
-            //UserDefaults.standard.set(manageFireBase.profil, forKey: "userProfil")
-        
-       /* manageFireBase.retrieveProfilUser()
-        manageFireBase.retrieveAnnounceUser2()*/
-    }
-    
-  /*  func test() {
-        manageFireBase.test { (error, announce) in
-            if let error = error {
-                
-            } else {
-                guard let announceSecure = announce else { return }
-                self.announceList = announceSecure
-                self.tableView.reloadData()
-            }
-        }
-    }*/
 
-    
+    }
+ 
     @IBAction func logOut() {
         try! Auth.auth().signOut()
         if let storyboard = self.storyboard {
@@ -108,7 +82,8 @@ class ProfilTableViewController: UITableViewController {
     func initView() {
         guard let profil = profilGestion.profil else { return }
         //if profilGestion.profil != nil {
-            profilView.pseudoLabel.text = /*profilGestion.*/profil.pseudo
+        profilView.pseudoLabel.text = /*profilGestion.*/profil.pseudo
+        profilView.imageProfil.download(idUserImage: profil.iDuser, contentMode: .scaleToFill)
         //}
     }
 

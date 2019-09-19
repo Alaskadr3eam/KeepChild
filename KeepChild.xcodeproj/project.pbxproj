@@ -25,6 +25,7 @@
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
 		31D39A6223311BE80050A777 /* FireBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6123311BE80050A777 /* FireBase.swift */; };
 		31D39A6423321B780050A777 /* ManageFireBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6323321B780050A777 /* ManageFireBase.swift */; };
+		31D39A672333A3990050A777 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A662333A3990050A777 /* CustomCell.swift */; };
 		31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31D232B77D80088E508 /* AppDelegate.swift */; };
 		31E2D320232B77D80088E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31F232B77D80088E508 /* ViewController.swift */; };
 		31E2D323232B77D80088E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E2D321232B77D80088E508 /* Main.storyboard */; };
@@ -75,6 +76,7 @@
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
 		31D39A6123311BE80050A777 /* FireBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireBase.swift; sourceTree = "<group>"; };
 		31D39A6323321B780050A777 /* ManageFireBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFireBase.swift; sourceTree = "<group>"; };
+		31D39A662333A3990050A777 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomCell.swift; path = ../../../../../Documents/CustomCell.swift; sourceTree = "<group>"; };
 		31E2D31A232B77D80088E508 /* KeepChild.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepChild.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31E2D31D232B77D80088E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		31E2D31F232B77D80088E508 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			children = (
 				3133EFE1232C1AB800691182 /* AuthView.swift */,
 				31865B35232CE7CB00A52657 /* ProfilView.swift */,
+				31D39A662333A3990050A777 /* CustomCell.swift */,
 				31547E02232E3A4A00698B95 /* AnnounceTableView.swift */,
 			);
 			path = View;
@@ -528,6 +531,7 @@
 				31D39A6223311BE80050A777 /* FireBase.swift in Sources */,
 				31261848232B83DF00091AA4 /* AuthViewController.swift in Sources */,
 				3133EFE2232C1AB800691182 /* AuthView.swift in Sources */,
+				31D39A672333A3990050A777 /* CustomCell.swift in Sources */,
 				31261846232B81F700091AA4 /* AnnounceSearchTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

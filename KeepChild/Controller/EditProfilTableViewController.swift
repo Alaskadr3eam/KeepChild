@@ -62,13 +62,13 @@ class EditProfilTableViewController: UITableViewController {
     }
 
     func initView() {
-        let profil = profilGestion.profil
-        if profil != nil {
-            nameTextField.text = profil!.nom
-            prenomTextField.text = profil!.prenom
-            telTextField.text = String(profil!.tel)
-            pseudoTextField.text = profil!.pseudo
-        }
+        guard let profil = profilGestion.profil else { return }
+            nameTextField.text = profil.nom
+            prenomTextField.text = profil.prenom
+            telTextField.text = String(profil.tel)
+            pseudoTextField.text = profil.pseudo
+            pictureProfil.download(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        
     }
     
     func createProfilUser() {

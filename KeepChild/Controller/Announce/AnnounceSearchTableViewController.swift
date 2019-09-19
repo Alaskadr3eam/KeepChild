@@ -14,7 +14,6 @@ class AnnounceSearchTableViewController: UITableViewController {
 
     var announceList = AnnounceList()
    // var manageFireBase = ManageFireBase()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -60,14 +59,17 @@ class AnnounceSearchTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
         let announce = announceList.announceList[indexPath.row]
-        cell.textLabel!.text = announce.title
-       // cell.detailTextLabel!.text = announce.description
+        cell.titleLabel.text = announce.title
+        cell.priceLabel.text = announce.price
+        cell.imageProfil.download(idUserImage: announce.idUser, contentMode: .scaleToFill)
+       
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
         announceList.announceDetail = announceList.announceList[indexPath.row]
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
@@ -114,9 +116,11 @@ class AnnounceSearchTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailAnnounce" {
+            
             if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
                 //vcDestination.manageFireBase.idUser = announceList.announce.idUser
                 vcDestination.detailAnnounce.announce = announceList.announceDetail
+                
             }
         }
     }

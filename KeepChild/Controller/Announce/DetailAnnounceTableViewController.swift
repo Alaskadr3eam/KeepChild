@@ -25,7 +25,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var deleteButton: UIButton!
     
     var detailAnnounce = DetailAnnounce()
-    var profilGestion = ProfilGestion()
+
+    //var profilGestion = ProfilGestion()
     
     //var manageFireBase = ManageFireBase()
 
@@ -71,6 +72,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         priceLabel.text = announce?.price
         descriptionLabel.text = announce?.description
         pseudoLabel.text = detailAnnounce.profil.pseudo
+        image.download(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
     }
     
     @IBAction func deleteAnnounce() {

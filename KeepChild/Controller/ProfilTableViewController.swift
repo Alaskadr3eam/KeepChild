@@ -15,17 +15,22 @@ class ProfilTableViewController: UITableViewController {
     
     @IBOutlet weak var profilView: ProfilView!
     
-    var manageFireBase = ManageFireBase()
+    //var manageFireBase = ManageFireBase()
     var profilGestion = ProfilGestion()
-    var announceList = AnnounceList()
+    //var announceList = [Announce]()
 
+    
+    //var queryAnnounceProfil: Query!
+    //var queryProfil: Query!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        manageFireBase.delegateManageFirebase = self
-        manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
+       // manageFireBase.delegateManageFirebase = self
+       // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
 
-        manageFireBase.queryAnnounceProfil = manageFireBase.createQuery(collection: "Announce2", field: "idUser")//Firestore.firestore().collection("Announce2").whereField("idUser", isEqualTo: manageFireBase.idUser)
-        manageFireBase.queryProfil = manageFireBase.createQuery(collection: "ProfilUser", field: "iDuser")
+       // queryAnnounceProfil = manageFireBase.createQuery(collection: "Announce2", field: "idUser")//Firestore.firestore().collection("Announce2").whereField("idUser", isEqualTo: manageFireBase.idUser)
+       // queryProfil = manageFireBase.createQuery(collection: "ProfilUser", field: "iDuser")
 
 
     }
@@ -36,24 +41,51 @@ class ProfilTableViewController: UITableViewController {
         requestInitProfil()
     }
     //verify if user have a profil
-    func profilOrNotProfil() -> Bool {
+    func profilOrNotProfil() {
         
-        if manageFireBase.profil == nil {
+      /*  if manageFireBase.profil == nil {
            // performSegue(withIdentifier: "EditProfil", sender: nil)
             return false
         } else {
             return true
-        }
+        }*/
     }
     func requestInitProfil() {
-       
-            manageFireBase.retrieveProfilUser()
-            manageFireBase.retrieveAnnounceUser2()
+        guard let idUser = profilGestion.idUser else { return }
+        
+        profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error,profilUser) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard profilUser != nil else { return }
+            self.initView()
+        }
+           // manageFireBase.retrieveProfilUser()
+            //manageFireBase.retrieveAnnounceUser2()
+        
+        profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard announce != nil else { return }
+            self.tableView.reloadData()
+        }
+        
             //UserDefaults.standard.set(manageFireBase.profil, forKey: "userProfil")
         
        /* manageFireBase.retrieveProfilUser()
         manageFireBase.retrieveAnnounceUser2()*/
     }
+    
+  /*  func test() {
+        manageFireBase.test { (error, announce) in
+            if let error = error {
+                
+            } else {
+                guard let announceSecure = announce else { return }
+                self.announceList = announceSecure
+                self.tableView.reloadData()
+            }
+        }
+    }*/
 
     
     @IBAction func logOut() {
@@ -67,9 +99,10 @@ class ProfilTableViewController: UITableViewController {
     
     
     func initView() {
-        if manageFireBase.profil != nil {
-            profilView.pseudoLabel.text = manageFireBase.profil.pseudo
-        }
+        guard let profil = profilGestion.profil else { return }
+        //if profilGestion.profil != nil {
+            profilView.pseudoLabel.text = /*profilGestion.*/profil.pseudo
+        //}
     }
 
     // MARK: - Table view data source
@@ -82,7 +115,7 @@ class ProfilTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         
-        return manageFireBase.announceProfil.count
+        return profilGestion.arrayProfilAnnounce.count
         
     }
     
@@ -91,10 +124,10 @@ class ProfilTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellAnnounce", for: indexPath)
-        if manageFireBase.announceProfil.count == 0 {
+        if profilGestion.arrayProfilAnnounce.count == 0 {
             return cell
         } else {
-        let announce = manageFireBase.announceProfil[indexPath.row]
+        let announce = profilGestion.arrayProfilAnnounce[indexPath.row]
 
         cell.textLabel!.text = announce.title
         cell.detailTextLabel!.text = announce.price
@@ -105,7 +138,7 @@ class ProfilTableViewController: UITableViewController {
     
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        manageFireBase.announceDetail = manageFireBase.announceProfil[indexPath.row]
+        profilGestion.announceDetail = profilGestion.arrayProfilAnnounce[indexPath.row]
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
     
@@ -156,22 +189,11 @@ class ProfilTableViewController: UITableViewController {
         }
         if segue.identifier == "DetailAnnounce" {
             if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
-                vcDestination.manageFireBase.idUser = manageFireBase.idUser
-                vcDestination.detailAnnounce.announce = manageFireBase.announceDetail
+                //vcDestination.detailAnnounce.announce = manageFireBase.idUser
+                vcDestination.detailAnnounce.announce = profilGestion.announceDetail
             }
         }
     }
     
 
-}
-extension ProfilTableViewController: ManageFireBaseDelegate {
-    func resultForRequestAnnounce(announce: [Announce]) {
-     /*   announceProfil = announce*/
-        tableView.reloadData()
-    }
-    
-    func resultForRequestProfil(profilUser: ProfilUser) {
-        /*profil = profilUser*/
-        self.initView()
-    }
 }

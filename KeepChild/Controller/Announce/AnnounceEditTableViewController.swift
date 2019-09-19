@@ -17,14 +17,14 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var descriptionAnnounceTextField: UITextField!
     @IBOutlet weak var priceAnnounceTextField: UITextField!
 
-    var announceList = AnnounceList()
+    var announceEdit = AnnounceEdit()
 
-    var manageFireBase = ManageFireBase()
+   // var manageFireBase = ManageFireBase()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
+       // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
 
         
@@ -42,14 +42,16 @@ class AnnounceEditTableViewController: UITableViewController {
 
     @objc func saveAnnounce() {
     
-        let announce = createAnnounce()
-        manageFireBase.addData(announce: announce)
+        guard let announce = createAnnounce() else { return }
+        
+        announceEdit.addData(announce: announce)
+        //manageFireBase.addData(announce: announce)
         //alert pour dire message annonce sauvegarder ou echec
         reinitView()
     }
     
-    private func createAnnounce() -> Announce {
-        let idUser = manageFireBase.idUser
+    private func createAnnounce() -> Announce? {
+        guard let idUser = announceEdit.idUser else { return nil }
         let title = titleAnnounceTextField.text!
         let description = descriptionAnnounceTextField.text!
         let price = priceAnnounceTextField.text!

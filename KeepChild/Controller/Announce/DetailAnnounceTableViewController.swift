@@ -27,18 +27,18 @@ class DetailAnnounceTableViewController: UITableViewController {
     var detailAnnounce = DetailAnnounce()
     var profilGestion = ProfilGestion()
     
-    var manageFireBase = ManageFireBase()
+    //var manageFireBase = ManageFireBase()
 
-    var userId = String()
-    var profil: ProfilUser!
+    //var userId = String()
+    //var profil: ProfilUser!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        manageFireBase.delegateManageFireBaseDetailAnnounce = self
-        profilGestion.delegateProfilGestion = self
+        //manageFireBase.delegateManageFireBaseDetailAnnounce = self
+        //profilGestion.delegateProfilGestion = self
         //manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
         
-        manageFireBase.queryProfil = manageFireBase.createQuery(collection: "ProfilUser", field: "iDuser")
+       // manageFireBase.queryProfil = manageFireBase.createQuery(collection: "ProfilUser", field: "iDuser")
         
         //retrieveProfilUser()
         //retrieveProfilUser()
@@ -51,9 +51,18 @@ class DetailAnnounceTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        manageFireBase.retrieveProfilUser()
+        request()
     }
-
+    func request() {
+       // guard let idUser = detailAnnounce.idUser else { return }
+        let idUser = detailAnnounce.announce.idUser
+        detailAnnounce.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard profilUser != nil else { return }
+            self.initView()
+        }
+    }
     // MARK: - Table view data source
 
     func initView() {
@@ -61,12 +70,12 @@ class DetailAnnounceTableViewController: UITableViewController {
         titleLabel.text = announce?.title
         priceLabel.text = announce?.price
         descriptionLabel.text = announce?.description
-        pseudoLabel.text = manageFireBase.profil.pseudo
+        pseudoLabel.text = detailAnnounce.profil.pseudo
     }
     
     @IBAction func deleteAnnounce() {
-        if manageFireBase.idUser == detailAnnounce.announce.idUser {
-        manageFireBase.deleteAnnounce(announceId: detailAnnounce.announce.id!)
+        if detailAnnounce.idUser == detailAnnounce.announce.idUser {
+        detailAnnounce.deleteAnnounce(announceId: detailAnnounce.announce.id!)
         }
     }
     
@@ -148,7 +157,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     */
 
 }
-extension DetailAnnounceTableViewController: ProfilGestionDelegate {
+/*extension DetailAnnounceTableViewController: ProfilGestionDelegate {
     func initViewEditProfil() {
     }
     
@@ -157,9 +166,4 @@ extension DetailAnnounceTableViewController: ProfilGestionDelegate {
     }
     
     
-}
-extension DetailAnnounceTableViewController: ManageFireBaseDelegateDetailAnnounce {
-    func resultForRequestProfil() {
-        initView()
-    }
-}
+}*/

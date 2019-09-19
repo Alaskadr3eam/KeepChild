@@ -12,28 +12,23 @@ import CodableFirebase
 
 class ManageFireBase {
     
-    var delegateManageFirebase: ManageFireBaseDelegate?
-    var delegateManageFireBaseEditProfil: ManageFireBaseDelegateEditProfil?
-    var delegateManageFireBaseAnnounceSearch: ManageFireBaseDelegateAnnounceSearch?
-    var delegateManageFireBaseDetailAnnounce: ManageFireBaseDelegateDetailAnnounce?
+    //var arrayProfilAnnounce = [Announce]()
+    //var profilRetrieve: ProfilUser!
     
-    var arrayProfilAnnounce = [Announce]()
-    var profilRetrieve: ProfilUser!
+    //var queryAnnounceProfil: Query!
+    //var queryProfil: Query!
+    //var idUser = String()
+    //var profil: ProfilUser!
+    //var announceProfil = [Announce]()
     
-    var queryAnnounceProfil: Query!
-    var queryProfil: Query!
-    var idUser = String()
-    var profil: ProfilUser!
-    var announceProfil = [Announce]()
-    
-    var queryAnnounceAll: Query!
-    var announceListData = [Announce]()
+    //var queryAnnounceAll: Query!
+    //var announceListData = [Announce]()
     
     //for detail announce
-    var announceDetail: Announce!
+    //var announceDetail: Announce!
     
-    func createQuery(collection: String, field: String) -> Query {
-        let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: idUser)
+    func createQuery(collection: String, field: String, equal: String) -> Query {
+        let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: equal)
         return query
     }
 
@@ -52,8 +47,29 @@ class ManageFireBase {
         }
         
     }
+
+    func retrieveAnnounceUser(collection: String, field: String, equal: String,completionHandler: @escaping(Error?, [Announce]?) -> Void) {
+        var announceProfil = [Announce]()
+        createQuery(collection: collection, field: field, equal: equal).getDocuments() { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+                for document in querySnap.documents {
+                    var announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
+                    announce.id = document.documentID
+                    print("\(document.documentID) => \(document.data())")
+                    announceProfil.append(announce)
+                }
+                completionHandler(nil,announceProfil)
+                //self.announceProfil = announceProfil
+                //self.delegateManageFirebase?.resultForRequestAnnounce(announce: announceProfil)
+            }
+        
+    }
     
-    func retrieveAnnounceUser2(/*query: Query*/) {
+    /*func retrieveAnnounceUser2(/*query: Query*/) {
         var announceProfil = [Announce]()
         queryAnnounceProfil.getDocuments() { (querySnapshot, err) in
             if let err = err {
@@ -70,7 +86,7 @@ class ManageFireBase {
                 self.delegateManageFirebase?.resultForRequestAnnounce(announce: announceProfil)
             }
         }
-    }
+    }*/
     
     func deleteAnnounce(announceId: String) {
         Firestore.firestore().collection("Announce2").document(announceId).delete() { err in
@@ -82,8 +98,29 @@ class ManageFireBase {
                 }
             }
     }
-    
-    func retrieveProfilUser(/*query: Query*/) {
+    func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+        var arrayProfil = [ProfilUser]()
+        
+        createQuery(collection: collection, field: field, equal: equal).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+                for document in querySnap.documents {
+                    let profil = try! FirestoreDecoder().decode(ProfilUser.self, from: document.data())
+                    arrayProfil.append(profil)
+                    print(document.documentID, document.data())
+                }
+                if arrayProfil.count == 0 {
+                    completionHandler(nil,nil)
+                } else {
+                    completionHandler(nil,arrayProfil)
+                }
+            }
+        
+    }
+   /* func retrieveProfilUser(/*query: Query*/) {
         var arrayProfil = [ProfilUser]()
 
         queryProfil.getDocuments { (querySnapshot, err) in
@@ -106,23 +143,25 @@ class ManageFireBase {
                 }
             }
         }
-    }
+    }*/
     
-    func readDataAnnounce() {
-        announceListData = [Announce]()
-        queryAnnounceAll.getDocuments { (querySnapshot, err) in
-            if let err = err {
-                print("erreur : \(err)")
-            } else {
-                for document in querySnapshot!.documents {
+    func readDataAnnounce(collection: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        var announceListArray = [Announce]()
+        createQueryAll(collection: collection).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+                for document in querySnap.documents {
                     var announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
                     announce.id = document.documentID
-                    self.announceListData.append(announce)
+                    announceListArray.append(announce)
                     print(document.documentID, document.data())
                 }
+            completionHandler(nil,announceListArray)
             }
-            self.delegateManageFireBaseAnnounceSearch?.resultForRequestAnnounceSearch()
-        }
+            //self.delegateManageFireBaseAnnounceSearch?.resultForRequestAnnounceSearch()
     }
     
     func addData(announce: Announce) {
@@ -136,7 +175,7 @@ class ManageFireBase {
         }
     }
     
-    func retrieveAnnounceUser(idUser: String, completion: @escaping(Error?, [Announce]?) -> Void) {
+  /*  func retrieveAnnounceUser(idUser: String, completion: @escaping(Error?, [Announce]?) -> Void) {
         var announce2 = [Announce]()
         var arrayTampon = [Announce]()
         Firestore.firestore().collection("Announce2").getDocuments { (querySnapshot, err) in
@@ -158,22 +197,5 @@ class ManageFireBase {
                 completion(nil,announce2)
             }
         }
-    }
-}
-
-protocol ManageFireBaseDelegate {
-    func resultForRequestAnnounce(announce: [Announce])
-    func resultForRequestProfil(profilUser: ProfilUser)
-}
-
-protocol ManageFireBaseDelegateEditProfil {
-    func resultForRequestProfil()
-}
-
-protocol ManageFireBaseDelegateAnnounceSearch {
-    func resultForRequestAnnounceSearch()
-}
-
-protocol ManageFireBaseDelegateDetailAnnounce {
-    func resultForRequestProfil()
+    }*/
 }

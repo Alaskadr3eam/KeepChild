@@ -12,25 +12,27 @@ import CodableFirebase
 
 class AnnounceList {
     
-    var delegateAnnounceList: AnnounceListDelegate?
+    //var delegateAnnounceList: AnnounceListDelegate?
     
-    var announceReference: DocumentReference?
+    //var announceReference: DocumentReference?
     
-    fileprivate var query: Query? {
+    var manageFireBase = ManageFireBase()
+    
+  /*  fileprivate var query: Query? {
         didSet {
             if let listener = listener {
                 listener.remove()
                // observeQuery()
             }
         }
-    }
+    }*/
     
-    private var listener: ListenerRegistration?
-    var documents: [DocumentSnapshot] = []
-    var didChangeData: ((AnnounceListData) -> Void)?
-    var announce: Announce!
-    var announceListData = [Announce]()
-    var idUser = String()
+    //private var listener: ListenerRegistration?
+    //var documents: [DocumentSnapshot] = []
+    //var didChangeData: ((AnnounceListData) -> Void)?
+    var announceDetail: Announce!
+    var announceList = [Announce]()
+    var idUser = UserDefaults.standard.string(forKey: "userID")
    /* var viewData: AnnounceListData {
         didSet {
             didChangeData?(viewData)
@@ -41,23 +43,24 @@ class AnnounceList {
         self.viewData = viewData
         query = baseQuery()
     }*/
-    func readData() {
-        announceListData = [Announce]()
-        Firestore.firestore().collection("Announce2").getDocuments { (querySnapshot, err) in
-            if let err = err {
-                print("erreur : \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
-                    self.announceListData.append(announce)
-                    print(document.documentID, document.data())
-                }
+    func readData(collection: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        manageFireBase.readDataAnnounce(collection: collection) { [weak self] (error, announceList) in
+            guard let self = self else { return }
+            guard error == nil else {
+                completionHandler(error,nil)
+                return
             }
-            self.delegateAnnounceList?.updateTableView()
+            guard let announce = announceList else { return }
+            self.announceList = announce
+            completionHandler(nil,announce)
         }
     }
+    
+   /* func addData(announce: Announce) {
+        manageFireBase.addData(announce: announce)
+    }*/
 
-    func addData(announce: Announce) {
+    /*func addData(announce: Announce) {
         let docData = try! FirestoreEncoder().encode(announce)
         Firestore.firestore().collection("Announce2").addDocument(data: docData) { error in
             if let error = error {
@@ -66,7 +69,7 @@ class AnnounceList {
                 print("Document successfully written!")
             }
         }
-    }
+    }*/
    /* func observeQuery() {
       /*  guard let query = query else { return }
         stopObserving()
@@ -94,17 +97,17 @@ class AnnounceList {
         //}
     }*/
     
-    func stopObserving() {
+    /*func stopObserving() {
         listener?.remove()
-    }
+    }*/
     
-    fileprivate func baseQuery() -> Query {
+/*    fileprivate func baseQuery() -> Query {
         return Firestore.firestore().collection("Announce").limit(to: 50)
-    }
+    }*/
     
     
     
 }
-protocol AnnounceListDelegate {
+/*protocol AnnounceListDelegate {
     func updateTableView()
-}
+}*/

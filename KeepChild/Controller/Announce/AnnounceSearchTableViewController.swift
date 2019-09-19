@@ -13,13 +13,13 @@ import Firebase
 class AnnounceSearchTableViewController: UITableViewController {
 
     var announceList = AnnounceList()
-    var manageFireBase = ManageFireBase()
+   // var manageFireBase = ManageFireBase()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        manageFireBase.delegateManageFireBaseAnnounceSearch = self
-        announceList.delegateAnnounceList = self
-        manageFireBase.queryAnnounceAll = manageFireBase.createQueryAll(collection: "Announce2")
+        
+        //announceList.delegateAnnounceList = self
+       // manageFireBase.queryAnnounceAll = manageFireBase.createQueryAll(collection: "Announce2")
        // announceList.observeQuery()
 
         // Uncomment the following line to preserve selection between presentations
@@ -32,8 +32,18 @@ class AnnounceSearchTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         manageFireBase.readDataAnnounce()
+         //manageFireBase.readDataAnnounce()
         //announceList.readData()
+        request()
+    }
+    
+    func request() {
+        announceList.readData(collection: "Announce2") { [weak self] (error, announceList) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard announceList != nil else { return }
+            self.tableView.reloadData()
+        }
     }
 
     // MARK: - Table view data source
@@ -45,20 +55,20 @@ class AnnounceSearchTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return manageFireBase.announceListData.count
+        return announceList.announceList.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let announce = manageFireBase.announceListData[indexPath.row]
+        let announce = announceList.announceList[indexPath.row]
         cell.textLabel!.text = announce.title
        // cell.detailTextLabel!.text = announce.description
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        announceList.announce = manageFireBase.announceListData[indexPath.row]
+        announceList.announceDetail = announceList.announceList[indexPath.row]
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
     
@@ -105,22 +115,22 @@ class AnnounceSearchTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailAnnounce" {
             if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
-                vcDestination.manageFireBase.idUser = announceList.announce.idUser
-                vcDestination.detailAnnounce.announce = announceList.announce
+                //vcDestination.manageFireBase.idUser = announceList.announce.idUser
+                vcDestination.detailAnnounce.announce = announceList.announceDetail
             }
         }
     }
     
 
 }
-extension AnnounceSearchTableViewController: AnnounceListDelegate {
+/*extension AnnounceSearchTableViewController: AnnounceListDelegate {
     func updateTableView() {
         tableView.reloadData()
     }
-}
+}*/
 
-extension AnnounceSearchTableViewController: ManageFireBaseDelegateAnnounceSearch {
+/*extension AnnounceSearchTableViewController: ManageFireBaseDelegateAnnounceSearch {
     func resultForRequestAnnounceSearch() {
         tableView.reloadData()
     }
-}
+}*/

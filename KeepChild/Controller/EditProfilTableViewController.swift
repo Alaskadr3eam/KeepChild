@@ -21,25 +21,31 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var pictureProfil: UIImageView!
 
     
-   var manageFireBase = ManageFireBase()
+ 
     var profilGestion = ProfilGestion()
  
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        manageFireBase.delegateManageFireBaseEditProfil = self
+
         
         initTapGestureForAddPicture()
     
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
+   
+        request()
+
         
-        manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
-       /* guard let profil = UserDefaults.standard.object(forKey: "userProfil") as? ProfilUser else { return }
-        manageFireBase.profil = profil*/
-        manageFireBase.queryProfil = manageFireBase.createQuery(collection: "ProfilUser", field: "iDuser")//Firestore.firestore().collection("ProfilUser").whereField("iDuser", isEqualTo: manageFireBase.idUser)
-        manageFireBase.retrieveProfilUser()
-        initViewFinal()
-        
+    }
+
+    func request() {
+        guard let idUser = profilGestion.idUser else { return }
+        profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error,profilUser) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard profilUser != nil else { return }
+            self.initView()
+        }
     }
 
     func initTapGestureForAddPicture(){
@@ -54,15 +60,9 @@ class EditProfilTableViewController: UITableViewController {
         //selectedImage = view.image
         pickPicture()
     }
-    
-    func initViewFinal() {
-        initView()
-        //manageFireBase.retrieveProfilUser()
- 
-    }
 
     func initView() {
-        let profil = manageFireBase.profil
+        let profil = profilGestion.profil
         if profil != nil {
             nameTextField.text = profil!.nom
             prenomTextField.text = profil!.prenom
@@ -73,15 +73,13 @@ class EditProfilTableViewController: UITableViewController {
     
     func createProfilUser() {
         guard let name = nameTextField.text else { return }
-        //profilUser!.nom = name
         guard let prenom = prenomTextField.text else { return }
-        //profilUser!.prenom = prenomTextField.text!
         guard let tel = telTextField.text else { return }
         guard let telInt = Int(tel) else { return }
-        //profilUser!.tel = telTextField.text!
         guard let pseudo = pseudoTextField.text else { return }
-       // profilUser!.pseudo = telTextField.text!
-       let profilUserSave = ProfilUser(iDuser: manageFireBase.idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt)
+        guard let idUser = profilGestion.idUser else { return }
+        
+       let profilUserSave = ProfilUser(iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt)
     
     let docData = try! FirestoreEncoder().encode(profilUserSave)
     Firestore.firestore().collection("ProfilUser").addDocument(data: docData) { error in
@@ -218,7 +216,7 @@ extension EditProfilTableViewController: UIImagePickerControllerDelegate, UINavi
         
     }
 }
-extension EditProfilTableViewController: ProfilGestionDelegate {
+/*extension EditProfilTableViewController: ProfilGestionDelegate {
     func initViewDetailAnnounce() {
 
     }
@@ -228,10 +226,6 @@ extension EditProfilTableViewController: ProfilGestionDelegate {
     }
     
     
-}
+}*/
 
-extension EditProfilTableViewController: ManageFireBaseDelegateEditProfil {
-    func resultForRequestProfil() {
-        initView()
-    }
-}
+

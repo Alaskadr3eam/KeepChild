@@ -131,12 +131,9 @@
 		31261840232B804800091AA4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				31D39A6523335CCB0050A777 /* ModelVC */,
 				31261841232B805600091AA4 /* Announce.swift */,
-				31261849232B8C4400091AA4 /* AnnounceList.swift */,
-				31865B37232CE9B400A52657 /* Profil.swift */,
 				31D39A6323321B780050A777 /* ManageFireBase.swift */,
-				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
-				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
 				31D39A6123311BE80050A777 /* FireBase.swift */,
 			);
 			path = Model;
@@ -172,6 +169,17 @@
 				31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */,
 			);
 			path = Announce;
+			sourceTree = "<group>";
+		};
+		31D39A6523335CCB0050A777 /* ModelVC */ = {
+			isa = PBXGroup;
+			children = (
+				31865B37232CE9B400A52657 /* Profil.swift */,
+				31261849232B8C4400091AA4 /* AnnounceList.swift */,
+				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
+				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
+			);
+			path = ModelVC;
 			sourceTree = "<group>";
 		};
 		31E2D311232B77D80088E508 = {

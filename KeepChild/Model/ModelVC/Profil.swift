@@ -14,20 +14,43 @@ import FirebaseAuth
 
 class ProfilGestion {
     
-    var delegateProfilGestion: ProfilGestionDelegate?
-    let storage = Storage.storage()
+   // var delegateProfilGestion: ProfilGestionDelegate?
+   // let storage = Storage.storage()
     //let storage = Storage.reference(forURL: "gs://keepchild-7145f.appspot.com/PictureProfil")
-    var idUser = String()
+    var manageFireBase = ManageFireBase()
+    var idUser = UserDefaults.standard.string(forKey: "userID")
     var arrayProfil = [ProfilUser]()
     var profil: ProfilUser!
+    var announceDetail: Announce!
     var arrayProfilAnnounce = [Announce]()
+    
     var imageProfil = UIImage()
     
+
     
+    func retrieveAnnunceUser(collection: String, field: String, equal: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        manageFireBase.retrieveAnnounceUser(collection: collection, field: field, equal: equal) { [weak self] (error, announce) in
+            guard let self = self else { return }
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let announceSecure = announce else { return }
+            self.arrayProfilAnnounce = announceSecure
+            completionHandler(nil,announceSecure)
+        }
+    }
     
    
+    func retrieveProfilUser2(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+        manageFireBase.retrieveProfilUser(collection: collection, field: field, equal: equal) { [weak self] (error, profilUser) in
+            
+            guard let self = self else { return }
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let profilArray = profilUser else { return }
+            self.profil = profilArray[0]
+            completionHandler(nil,profilArray)
+        }
+    }
     
-    func retrieveProfilUser(idUser: String) {
+    /*func retrieveProfilUser(idUser: String) {
         let idUserAnnouce = idUser
         Firestore.firestore().collection("ProfilUser").getDocuments { (querySnapshot, err) in
             if let err = err {
@@ -44,11 +67,11 @@ class ProfilGestion {
                         self.profil = profil
                     }
                 }
-                self.delegateProfilGestion?.initViewDetailAnnounce()
-                self.delegateProfilGestion?.initViewEditProfil()
+                //self.delegateProfilGestion?.initViewDetailAnnounce()
+                //self.delegateProfilGestion?.initViewEditProfil()
             }
         }
-    }
+    }*/
     
     func uploadProfileImage(imageData: Data)
     {
@@ -84,7 +107,7 @@ class ProfilGestion {
     }
 
     
-    func addPhoto(image: UIImage) {
+   /* func addPhoto(image: UIImage) {
         let pictureSave = image.pngData()
         let storageRef = storage.reference()
         let photoProfil = storageRef.child("PictureProfil/")
@@ -103,7 +126,7 @@ class ProfilGestion {
             }
         }
 
-    }
+    }*/
     
     func transformUIimageInData(image: UIImageView) {
         let pictureSave = image.image?.pngData()
@@ -114,7 +137,7 @@ class ProfilGestion {
     }
     
 }
-protocol ProfilGestionDelegate {
+/*protocol ProfilGestionDelegate {
     func initViewDetailAnnounce()
     func initViewEditProfil()
-}
+}*/

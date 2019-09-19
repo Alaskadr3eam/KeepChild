@@ -50,6 +50,13 @@ class ProfilGestion {
         }
     }
     
+    func uploadPhotoProfil(imageData: Data, completionHandler: @escaping(Error?,StorageMetadata?) -> Void) {
+        manageFireBase.uploadProfileImage(imageData: imageData) { (error, data) in
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let image = data else { return }
+            completionHandler(nil,image)
+        }
+    }
     /*func retrieveProfilUser(idUser: String) {
         let idUserAnnouce = idUser
         Firestore.firestore().collection("ProfilUser").getDocuments { (querySnapshot, err) in

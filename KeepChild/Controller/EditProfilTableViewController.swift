@@ -72,7 +72,7 @@ class EditProfilTableViewController: UITableViewController {
     }
     
     func createProfilUser() {
-        guard let name = nameTextField.text else { return }
+    /*    guard let name = nameTextField.text else { return }
         guard let prenom = prenomTextField.text else { return }
         guard let tel = telTextField.text else { return }
         guard let telInt = Int(tel) else { return }
@@ -88,17 +88,23 @@ class EditProfilTableViewController: UITableViewController {
     } else {
     print("Document successfully written!")
     }
+    }*/
+        
+        guard let pictureDataCompress = pictureProfil.image?.jpeg(.low) else { print("rror save picture"); return }
+        profilGestion.uploadPhotoProfil(imageData: pictureDataCompress) { (error, data) in
+            guard error == nil else { return }
+            guard data != nil else { return }
+        }
+    //uploadProfileImage(imageData: pictureProfilData!)
     }
-    let pictureProfilData = pictureProfil.image?.pngData()
-    uploadProfileImage(imageData: pictureProfilData!)
-    }
+    
     
    
     @objc func saveProfilUser() {
         createProfilUser()
     }
 
-    func uploadProfileImage(imageData: Data) {
+  /*  func uploadProfileImage(imageData: Data) {
         /*let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
          activityIndicator.startAnimating()
          activityIndicator.center = self.view.center
@@ -128,7 +134,7 @@ class EditProfilTableViewController: UITableViewController {
                 print("Meta data of uploaded image \(String(describing: uploadedImageMeta))")
             }
         }
-    }
+    }*/
     // MARK: - Table view data source
 
 

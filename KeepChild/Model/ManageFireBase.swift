@@ -174,6 +174,34 @@ class ManageFireBase {
             }
         }
     }
+
+    func uploadProfileImage(imageData: Data, completionHandler: @escaping (Error?,StorageMetadata?) -> Void) {
+        /*let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
+         activityIndicator.startAnimating()
+         activityIndicator.center = self.view.center
+         self.view.addSubview(activityIndicator)*/
+        
+        
+        let storageReference = Storage.storage().reference()
+        let currentUser = Auth.auth().currentUser
+        let profileImageRef = storageReference.child("usersProfil")/*.child(currentUser!.uid).child("\(currentUser!.uid)-profileImage.jpg")*/
+        let fileName = ("\(currentUser!.uid).jpg")
+        let profilRef = profileImageRef.child(fileName)
+        
+        let uploadMetaData = StorageMetadata()
+        uploadMetaData.contentType = "image/jpeg"
+        
+        profilRef.putData(imageData, metadata: uploadMetaData) { (uploadedImageMeta, error) in
+            guard error == nil else {
+                print("Error took place \(String(describing: error?.localizedDescription))")
+                completionHandler(error,nil)
+                return
+            }
+            guard let imageUpload = uploadedImageMeta else { return }
+            print("Meta data of uploaded image \(String(describing: uploadedImageMeta))")
+            completionHandler(nil,imageUpload)
+        }
+    }
     
   /*  func retrieveAnnounceUser(idUser: String, completion: @escaping(Error?, [Announce]?) -> Void) {
         var announce2 = [Announce]()

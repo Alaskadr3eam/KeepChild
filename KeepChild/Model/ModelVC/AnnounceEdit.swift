@@ -15,4 +15,6 @@ class AnnounceEdit {
     func addData(announce: Announce) {
         manageFireBase.addData(announce: announce)
     }
+
+    
 }

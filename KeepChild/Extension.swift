@@ -86,7 +86,19 @@ extension UIViewController {
         return idUserTransfer
     }
 }
-
+extension UIImage {
+    enum Quality: CGFloat {
+        case lowest  = 0
+        case low     = 0.25
+        case medium  = 0.5
+        case high    = 0.75
+        case highest = 1
+    }
+    
+    func jpeg(_ jpegQuality: Quality) -> Data? {
+        return jpegData(compressionQuality: jpegQuality.rawValue)
+    }
+}
 /*extension UIImage {
     func uploadProfileImage(imageData: Data)
     {

@@ -16,6 +16,8 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var titleAnnounceTextField: UITextField!
     @IBOutlet weak var descriptionAnnounceTextField: UITextField!
     @IBOutlet weak var priceAnnounceTextField: UITextField!
+    @IBOutlet weak var latitudeAnnounceTextField: UITextField!
+    @IBOutlet weak var longitudeAnnounceTextField: UITextField!
 
     var announceEdit = AnnounceEdit()
 
@@ -55,7 +57,10 @@ class AnnounceEditTableViewController: UITableViewController {
         let title = titleAnnounceTextField.text!
         let description = descriptionAnnounceTextField.text!
         let price = priceAnnounceTextField.text!
-        return Announce(id: nil,idUser: idUser , title: title, description: description, price: price)
+        guard let latitude = Double(latitudeAnnounceTextField.text!) else { return nil }
+        guard let longitute = Double(longitudeAnnounceTextField.text!) else { return nil }
+        let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
+        return Announce(id: "",idUser: idUser , title: title, description: description, price: price, coordinate: coordinate)
     }
     
     func reinitView() {

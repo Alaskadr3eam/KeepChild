@@ -445,6 +445,7 @@
                     <navigationItem key="navigationItem" id="k4R-Wr-kHY"/>
                     <connections>
                         <segue destination="1RQ-uG-WVW" kind="show" identifier="DetailAnnounce" id="YSA-qc-JcI"/>
+                        <segue destination="neb-f6-fCl" kind="show" identifier="mapKitView" id="L10-Ed-NPR"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BDf-3H-1x0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -513,6 +514,40 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseIdentifier" id="Jc4-ab-wtz">
+                                        <rect key="frame" x="0.0" y="160" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Jc4-ab-wtz" id="3cJ-Sh-1Yi">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="latitude" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OhJ-sL-64o">
+                                                    <rect key="frame" x="20" y="6" width="374" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseIdentifier" id="7Pd-dD-o9k">
+                                        <rect key="frame" x="0.0" y="204" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7Pd-dD-o9k" id="NyI-DZ-BMP">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="longitude" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="okv-xk-ncx">
+                                                    <rect key="frame" x="20" y="6" width="374" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -524,6 +559,8 @@
                     <navigationItem key="navigationItem" title="Root View Controller" id="kh0-KR-5hw"/>
                     <connections>
                         <outlet property="descriptionAnnounceTextField" destination="M4N-jV-Ndt" id="zN9-Xh-Ygi"/>
+                        <outlet property="latitudeAnnounceTextField" destination="OhJ-sL-64o" id="n9c-SS-pHb"/>
+                        <outlet property="longitudeAnnounceTextField" destination="okv-xk-ncx" id="Zok-t6-7Y1"/>
                         <outlet property="priceAnnounceTextField" destination="5x0-mj-mgh" id="ujR-eQ-B1a"/>
                         <outlet property="titleAnnounceTextField" destination="knw-L2-sd0" id="2tv-pM-SF2"/>
                     </connections>
@@ -679,6 +716,9 @@
                                             <subviews>
                                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="E6Q-Ta-LX5">
                                                     <rect key="frame" x="20" y="11" width="374" height="149"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="1RQ-uG-WVW" id="p8m-xJ-bX0"/>
+                                                    </connections>
                                                 </mapView>
                                             </subviews>
                                             <constraints>
@@ -776,12 +816,45 @@
             </objects>
             <point key="canvasLocation" x="1879.7101449275365" y="699.77678571428567"/>
         </scene>
+        <!--Map Kit Announce View Controller-->
+        <scene sceneID="fpH-n9-5G6">
+            <objects>
+                <viewController id="neb-f6-fCl" customClass="MapKitAnnounceViewController" customModule="KeepChild" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YKi-Id-brG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="OgE-dw-bla">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <connections>
+                                    <outlet property="delegate" destination="neb-f6-fCl" id="Lzx-0x-Mso"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="OgE-dw-bla" firstAttribute="leading" secondItem="yCE-Bf-UZv" secondAttribute="leading" id="MSW-L7-9J6"/>
+                            <constraint firstItem="OgE-dw-bla" firstAttribute="top" secondItem="yCE-Bf-UZv" secondAttribute="top" id="ZH0-Gq-3Os"/>
+                            <constraint firstItem="OgE-dw-bla" firstAttribute="trailing" secondItem="yCE-Bf-UZv" secondAttribute="trailing" id="bhw-WX-627"/>
+                            <constraint firstItem="OgE-dw-bla" firstAttribute="bottom" secondItem="yCE-Bf-UZv" secondAttribute="bottom" id="fjR-ar-0iZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yCE-Bf-UZv"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapKitViewAnnounce" destination="OgE-dw-bla" id="Gtc-DF-TVW"/>
+                        <segue destination="1RQ-uG-WVW" kind="show" identifier="DetailAnnounce" id="NNJ-ZR-kTl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RM1-gs-TEE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1426.0869565217392" y="1342.6339285714284"/>
+        </scene>
     </scenes>
     <resources>
         <image name="add-user-icon-27.jpg" width="1600" height="1600"/>
         <image name="enfantsheureux" width="1000" height="563"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="YSA-qc-JcI"/>
+        <segue reference="NNJ-ZR-kTl"/>
     </inferredMetricsTieBreakers>
 </document>

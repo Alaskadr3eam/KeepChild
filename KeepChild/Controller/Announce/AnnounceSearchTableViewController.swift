@@ -17,6 +17,7 @@ class AnnounceSearchTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "map"), style: .plain, target: self, action: #selector(mapAccess))
         //announceList.delegateAnnounceList = self
        // manageFireBase.queryAnnounceAll = manageFireBase.createQueryAll(collection: "Announce2")
        // announceList.observeQuery()
@@ -43,6 +44,11 @@ class AnnounceSearchTableViewController: UITableViewController {
             guard announceList != nil else { return }
             self.tableView.reloadData()
         }
+    }
+
+    @objc func mapAccess() {
+        announceList.announceList = announceList.announceList
+        performSegue(withIdentifier: "mapKitView", sender: nil)
     }
 
     // MARK: - Table view data source
@@ -116,11 +122,13 @@ class AnnounceSearchTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailAnnounce" {
-            
             if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
-                //vcDestination.manageFireBase.idUser = announceList.announce.idUser
                 vcDestination.detailAnnounce.announce = announceList.announceDetail
-                
+            }
+        }
+        if segue.identifier == "mapKitView" {
+            if let vcDestination = segue.destination as? MapKitAnnounceViewController {
+                vcDestination.mapKitAnnounce.announceList = announceList.announceList
             }
         }
     }

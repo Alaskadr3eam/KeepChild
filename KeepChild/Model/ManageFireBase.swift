@@ -154,6 +154,8 @@ class ManageFireBase {
             }
             guard let querySnap = querySnapshot else { return }
                 for document in querySnap.documents {
+                    print(document.data())
+                    
                     var announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
                     announce.id = document.documentID
                     announceListArray.append(announce)
@@ -166,6 +168,7 @@ class ManageFireBase {
     
     func addData(announce: Announce) {
         let docData = try! FirestoreEncoder().encode(announce)
+        print(docData)
         Firestore.firestore().collection("Announce2").addDocument(data: docData) { error in
             if let error = error {
                 print("Error writing document: \(error)")

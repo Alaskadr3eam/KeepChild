@@ -28,6 +28,8 @@
 		31D39A672333A3990050A777 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A662333A3990050A777 /* CustomCell.swift */; };
 		31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */; };
 		31D39A6C2333C0F60050A777 /* MapKitAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */; };
+		31D39A6E2338DCE70050A777 /* EditAnnounceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */; };
+		31D39A702338E4740050A777 /* EditProfilTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6F2338E4740050A777 /* EditProfilTableView.swift */; };
 		31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31D232B77D80088E508 /* AppDelegate.swift */; };
 		31E2D320232B77D80088E508 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31F232B77D80088E508 /* ViewController.swift */; };
 		31E2D323232B77D80088E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E2D321232B77D80088E508 /* Main.storyboard */; };
@@ -81,6 +83,8 @@
 		31D39A662333A3990050A777 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomCell.swift; path = ../../../../../Documents/CustomCell.swift; sourceTree = "<group>"; };
 		31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounceViewController.swift; path = ../../../../../../Documents/MapKitAnnounceViewController.swift; sourceTree = "<group>"; };
 		31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounce.swift; path = ../../../../../../Documents/MapKitAnnounce.swift; sourceTree = "<group>"; };
+		31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditAnnounceTableView.swift; path = ../../../../../Documents/EditAnnounceTableView.swift; sourceTree = "<group>"; };
+		31D39A6F2338E4740050A777 /* EditProfilTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditProfilTableView.swift; path = ../../../../../Documents/EditProfilTableView.swift; sourceTree = "<group>"; };
 		31E2D31A232B77D80088E508 /* KeepChild.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepChild.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31E2D31D232B77D80088E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		31E2D31F232B77D80088E508 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 				31865B35232CE7CB00A52657 /* ProfilView.swift */,
 				31D39A662333A3990050A777 /* CustomCell.swift */,
 				31547E02232E3A4A00698B95 /* AnnounceTableView.swift */,
+				31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */,
+				31D39A6F2338E4740050A777 /* EditProfilTableView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -532,6 +538,8 @@
 				31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */,
 				3126184A232B8C4400091AA4 /* AnnounceList.swift in Sources */,
 				31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */,
+				31D39A6E2338DCE70050A777 /* EditAnnounceTableView.swift in Sources */,
+				31D39A702338E4740050A777 /* EditProfilTableView.swift in Sources */,
 				31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */,
 				31547E03232E3A4A00698B95 /* AnnounceTableView.swift in Sources */,
 				31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */,

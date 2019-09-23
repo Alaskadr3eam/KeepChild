@@ -76,6 +76,24 @@ extension UITableView {
     }
 }
 
+extension UITableViewController {
+    func setEmptyMessage(_ message: String) {
+        //create label for message
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height: self.view.bounds.size.height))
+        
+        messageLabel.text = message
+        messageLabel.backgroundColor = UIColor(named: "Fond")
+        messageLabel.textColor = .white
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = UIFont(name: "TrebuchetMS", size: 18)
+        messageLabel.sizeToFit()
+        //add label in backgroundView
+    
+        self.tableView.backgroundView = messageLabel
+        self.tableView.separatorStyle = .none
+    }
+}
 extension UIViewController {
     func verifyIdUser() -> String? {
         var idUserTransfer = String()

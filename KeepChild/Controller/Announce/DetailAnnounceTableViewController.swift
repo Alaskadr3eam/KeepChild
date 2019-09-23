@@ -115,7 +115,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     
     @IBAction func deleteAnnounce() {
         if detailAnnounce.idUser == detailAnnounce.announce.idUser {
-        detailAnnounce.deleteAnnounce(announceId: detailAnnounce.announce.id)
+            guard let id = detailAnnounce.announce.id else { return }
+            detailAnnounce.deleteAnnounce(announceId: id)
         }
     }
 

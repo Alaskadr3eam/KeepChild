@@ -10,6 +10,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 import CodableFirebase
+import CoreLocation
 
 class ProfilTableViewController: UITableViewController {
     
@@ -17,15 +18,23 @@ class ProfilTableViewController: UITableViewController {
     
     //var manageFireBase = ManageFireBase()
     var profilGestion = ProfilGestion()
-    //var announceList = [Announce]()
+   
+    let locationManager = CLLocationManager()
 
-    
-    //var queryAnnounceProfil: Query!
-    //var queryProfil: Query!
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            guard let lat = locationManager.location?.coordinate.latitude else { return }
+            guard let long = locationManager.location?.coordinate.longitude else { return }
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    
        // manageFireBase.delegateManageFirebase = self
        // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
 

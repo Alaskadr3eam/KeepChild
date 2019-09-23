@@ -24,9 +24,24 @@ class ProfilGestion {
     var announceDetail: Announce!
     var arrayProfilAnnounce = [Announce]()
     
+    var documentID = String()
+    
+    var postalCode = String()
+    var city = String()
+    var lat: Double!
+    var long: Double!
+    
     var imageProfil = UIImage()
     
-
+    var isSelected = false
+    
+    func locIsOkOrNot() {
+        if lat == nil && long == nil {
+            isSelected = false
+        } else if lat != nil && long != nil {
+            isSelected = true
+        }
+    }
     
     func retrieveAnnunceUser(collection: String, field: String, equal: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         manageFireBase.retrieveAnnounceUser(collection: collection, field: field, equal: equal) { [weak self] (error, announce) in
@@ -63,6 +78,18 @@ class ProfilGestion {
             guard error == nil else { completionHandler(error,nil); return }
             guard let dataSecure = data else { return }
             completionHandler(nil,dataSecure)
+        }
+    }
+    
+    func addDataProfil(profil: ProfilUser) {
+        manageFireBase.addDataProfil(profil: profil)
+    }
+    
+    func updateProfil(collection: String, documentID: String, update: [String : Any], completionHandler: @escaping(Error?, Bool?) -> Void) {
+        manageFireBase.updateData(collection: collection, documentID: documentID, update: update) { (error, bool) in
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let boolSecure = bool else { return }
+            completionHandler(nil,boolSecure)
         }
     }
     /*func retrieveProfilUser(idUser: String) {

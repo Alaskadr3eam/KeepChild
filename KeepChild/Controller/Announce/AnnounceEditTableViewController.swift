@@ -20,6 +20,7 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var longitudeAnnounceTextField: UITextField!
 
     var announceEdit = AnnounceEdit()
+    var profilGestion = ProfilGestion()
 
    // var manageFireBase = ManageFireBase()
     
@@ -29,14 +30,17 @@ class AnnounceEditTableViewController: UITableViewController {
        // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
 
-        
-     
+      
+     requestProfil()
         
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        requestProfil()
+        profilOrNot()
+        
     }
 
     // MARK: - Table view data source
@@ -50,6 +54,34 @@ class AnnounceEditTableViewController: UITableViewController {
         //manageFireBase.addData(announce: announce)
         //alert pour dire message annonce sauvegarder ou echec
         reinitView()
+    }
+
+    private func profilOrNot() {
+        if profilGestion.profil == nil {
+            //self.tableView.sectio
+            self.setEmptyMessage("essaie")
+            //tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
+        }
+    }
+    
+    private func requestProfil() {
+        guard let idUser = profilGestion.idUser else { return }
+        profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
+            guard let self = self else { return }
+            guard error == nil else {
+                self.setEmptyMessage("essaie")
+                //self.tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
+                return
+            }
+            guard profil != nil else {
+                self.setEmptyMessage("essaie")
+                //self.tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
+                return
+                
+            }
+            //self.profilOrNot()
+        }
+        //self.profilOrNot()
     }
     
     private func createAnnounce() -> Announce? {

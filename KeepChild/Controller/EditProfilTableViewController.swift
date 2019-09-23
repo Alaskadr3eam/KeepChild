@@ -11,6 +11,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import CodableFirebase
 import FirebaseStorage
+import CoreLocation
 
 class EditProfilTableViewController: UITableViewController {
     
@@ -20,8 +21,18 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var telTextField: UITextField!
     @IBOutlet weak var pictureProfil: UIImageView!
 
+  /*  var update: [String: Any] = [
+        "name": nameTextField.text,
+        "prenom": prenomTextField.text,
+        "telInt": Int(telTextField.text),
+        "pseudo": pseudoTextField.text,
+        "idUser": profilGestion.idUser,
+        "postalCode": profilGestion.postalCode,
+        "ville": profilGestion.city
+    ]*/
+    @IBOutlet weak var editProfilTableView: EditProfilTableView!
+    let locationManager = CLLocationManager()
     
- 
     var profilGestion = ProfilGestion()
  
     
@@ -29,26 +40,54 @@ class EditProfilTableViewController: UITableViewController {
         super.viewDidLoad()
 
         
+        
         initTapGestureForAddPicture()
-    
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
+
+        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
    
         request()
 
         
     }
+    
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            //locationManager.distanceFilter = 100000
+            guard let lat = locationManager.location?.coordinate.latitude else { return }
+            guard let long = locationManager.location?.coordinate.longitude else { return }
+            profilGestion.lat = lat
+            profilGestion.long = long
+            // guard lat != nil, long != nil else { return }
+            //let initialLocation = CLLocation(latitude: lat, longitude: long)
+            //centerMapOnLocation(location: initialLocation)
+            //mapKitViewAnnounce.showsUserLocation = true
+           
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
+    }
+    //choice button save or update
+    private func buttonNavigation() {
+        if profilGestion.profil == nil {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
+        } else {
+            let updateButton = UIBarButtonItem(title: "Update", style: .plain, target: self, action: #selector(updateProfilButton))
+            self.navigationItem.rightBarButtonItem = updateButton
+        }
+    }
 
-    func request() {
+   private func request() {
         guard let idUser = profilGestion.idUser else { return }
         profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error,profilUser) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard profilUser != nil else { return }
             self.initView()
+            //self.buttonNavigation()
         }
     }
 
-    func initTapGestureForAddPicture(){
+    private func initTapGestureForAddPicture(){
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageIsTapped(_ :)))
         tapGestureRecognizer.numberOfTapsRequired = 1
         pictureProfil.isUserInteractionEnabled = true
@@ -61,132 +100,104 @@ class EditProfilTableViewController: UITableViewController {
         pickPicture()
     }
 
-    func initView() {
+    private func initView() {
         guard let profil = profilGestion.profil else { return }
-            nameTextField.text = profil.nom
-            prenomTextField.text = profil.prenom
-            telTextField.text = String(profil.tel)
-            pseudoTextField.text = profil.pseudo
-            pictureProfil.download(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        nameTextField.text = profil.nom
+        prenomTextField.text = profil.prenom
+        telTextField.text = String(profil.tel)
+        pseudoTextField.text = profil.pseudo
+        pictureProfil.download(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        buttonNavigation()
         
     }
     
-    func createProfilUser() {
-    /*    guard let name = nameTextField.text else { return }
-        guard let prenom = prenomTextField.text else { return }
-        guard let tel = telTextField.text else { return }
-        guard let telInt = Int(tel) else { return }
-        guard let pseudo = pseudoTextField.text else { return }
-        guard let idUser = profilGestion.idUser else { return }
+    private func createProfilUser() -> ProfilUser? {
+        guard let name = nameTextField.text else { return nil }
+        guard let prenom = prenomTextField.text else { return nil }
+        guard let tel = telTextField.text else { return nil }
+        guard let telInt = Int(tel) else { return nil }
+        guard let pseudo = pseudoTextField.text else { return nil }
+        guard let idUser = profilGestion.idUser else { return nil }
+        let postalCode = profilGestion.postalCode
+        let city = profilGestion.city
+        let coordinate = GeoPoint(latitude: profilGestion.lat, longitude: profilGestion.long)
         
-       let profilUserSave = ProfilUser(iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt)
-    
-    let docData = try! FirestoreEncoder().encode(profilUserSave)
-    Firestore.firestore().collection("ProfilUser").addDocument(data: docData) { error in
-    if let error = error {
-    print("Error writing document: \(error)")
-    } else {
-    print("Document successfully written!")
+        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt, postalCode: postalCode, city: city, coordinate: coordinate )
     }
-    }*/
-        
+    
+    private func uploadPictureProfil() {
         guard let pictureDataCompress = pictureProfil.image?.jpeg(.low) else { print("rror save picture"); return }
         profilGestion.uploadPhotoProfil(imageData: pictureDataCompress) { (error, data) in
             guard error == nil else { return }
             guard data != nil else { return }
         }
-    //uploadProfileImage(imageData: pictureProfilData!)
+    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+       // let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
+        if indexPath.row == 5 {
+            cellAdresseListenner()
+        }
+        if indexPath.row == 4 {
+            checkLocationAuthorizationStatus()
+            profilGestion.isSelected = true
+            //editProfilTableView.geoLocCell.accessoryView!.isHidden = false
+        //    cell.accessoryView?.isHidden = true
+        }
+        //...
+    }
+
+    func cellAdresseListenner() {
+
+        let alert = UIAlertController(title: "Register", message: "Register", preferredStyle: .alert)
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            guard let postalCodeFiel = alert.textFields![0].text else { return }
+            guard let cityField = alert.textFields![1].text else { return }
+            
+            self.profilGestion.postalCode = postalCodeFiel
+            self.profilGestion.city = cityField
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addTextField { (textEmail) in
+            textEmail.placeholder = "Enter your Postal Code"
+        }
+        alert.addTextField { (textPassword) in
+            textPassword.placeholder = "Enter your city"
+        }
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true, completion: nil)
     }
     
-    
+    func updateProfil(collection: String, documentID: String, update: [String:Any]) {
+        profilGestion.updateProfil(collection: collection, documentID: documentID, update: update) { (error, bool) in
+            guard error == nil else { return }
+            guard bool != nil else { return }
+        }
+    }
    
     @objc func saveProfilUser() {
-        createProfilUser()
+        guard let profilUserSave = createProfilUser() else { return }
+        profilGestion.addDataProfil(profil: profilUserSave)
+        uploadPictureProfil()
     }
-
-  /*  func uploadProfileImage(imageData: Data) {
-        /*let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
-         activityIndicator.startAnimating()
-         activityIndicator.center = self.view.center
-         self.view.addSubview(activityIndicator)*/
-        
-        
-        let storageReference = Storage.storage().reference()
-        let currentUser = Auth.auth().currentUser
-        let profileImageRef = storageReference.child("usersProfil").child(currentUser!.uid).child("\(currentUser!.uid)-profileImage.jpg")
-        
-        let uploadMetaData = StorageMetadata()
-        uploadMetaData.contentType = "image/jpeg"
-        
-        profileImageRef.putData(imageData, metadata: uploadMetaData) { (uploadedImageMeta, error) in
-            
-            // activityIndicator.stopAnimating()
-            // activityIndicator.removeFromSuperview()
-            
-            if error != nil
-            {
-                print("Error took place \(String(describing: error?.localizedDescription))")
-                return
-            } else {
-                
-                //self.userProfileImageView.image = UIImage(data: imageData)
-                
-                print("Meta data of uploaded image \(String(describing: uploadedImageMeta))")
-            }
-        }
-    }*/
-    // MARK: - Table view data source
-
-
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     
-    // MARK: - Navigation
+    @objc func updateProfilButton() {
+        let update: [String: Any] = [
+            "name": nameTextField.text as Any,
+            "prenom": prenomTextField.text as Any,
+            "telInt": Int(telTextField.text!) as Any,
+            "pseudo": pseudoTextField.text as Any,
+            "idUser": profilGestion.idUser as Any,
+            "postalCode": profilGestion.postalCode,
+            "ville": profilGestion.city
+        ]
+        guard let documentID = profilGestion.profil.id else { return }
+        updateProfil(collection: "ProfilUser", documentID: documentID, update: update)
+    }
 
+  
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
       

@@ -35,6 +35,22 @@ class EditProfilTableViewController: UITableViewController {
     
     var profilGestion = ProfilGestion()
  
+    /*var isSelected: Bool {
+        if profilGestion.lat != nil && profilGestion.long != nil {
+            return true
+        }
+        return false
+    }*/
+    
+    var isSelected = false
+    
+    func locIsOkOrNot() {
+        if profilGestion.lat != nil && profilGestion.long != nil {
+            isSelected = true
+            tableView.reloadData()
+        }
+        isSelected = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +64,11 @@ class EditProfilTableViewController: UITableViewController {
         request()
 
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        locIsOkOrNot()
     }
     
     func checkLocationAuthorizationStatus() {
@@ -140,7 +161,8 @@ class EditProfilTableViewController: UITableViewController {
         }
         if indexPath.row == 4 {
             checkLocationAuthorizationStatus()
-            profilGestion.isSelected = true
+            locIsOkOrNot()
+            //isSelected = true
             //editProfilTableView.geoLocCell.accessoryView!.isHidden = false
         //    cell.accessoryView?.isHidden = true
         }

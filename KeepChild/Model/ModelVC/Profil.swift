@@ -33,15 +33,7 @@ class ProfilGestion {
     
     var imageProfil = UIImage()
     
-    var isSelected = false
     
-    func locIsOkOrNot() {
-        if lat == nil && long == nil {
-            isSelected = false
-        } else if lat != nil && long != nil {
-            isSelected = true
-        }
-    }
     
     func retrieveAnnunceUser(collection: String, field: String, equal: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         manageFireBase.retrieveAnnounceUser(collection: collection, field: field, equal: equal) { [weak self] (error, announce) in

@@ -14,6 +14,9 @@ import FirebaseUI
 class AuthViewController: UIViewController, FUIAuthDelegate {
 
     @IBOutlet weak var authView: AuthView!
+    
+    var profilGestion = ProfilGestion()
+
     var loginToList = "LoginToList"
 
     
@@ -21,22 +24,14 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         super.viewDidLoad()
         
         authView.authViewDelegate = self
-        Auth.auth().addStateDidChangeListener() { auth, user in
-            if user != nil {
-                guard let id = user?.uid else { return }
-                UserDefaults.standard.set(id, forKey: "userID")
-                self.performSegue(withIdentifier: self.loginToList, sender: nil)
-                self.authView.emailLoginTextField.text = nil
-                self.authView.passwordLoginTextField.text = nil
-            }
-        }
-
+        retrieveUserAuth()
+ 
     }
-    
-    
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if profilGestion.profil != nil {
+            performSegue(withIdentifier: loginToList, sender: nil)
+        }
    /*     if Auth.auth().currentUser != nil {
             //do something :D
         } else {
@@ -50,12 +45,44 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             self.present(authViewController, animated: true, completion: nil)
         }*/
     }
-
+    func retrieveUserAuth() {
+        Auth.auth().addStateDidChangeListener() { auth, user in
+            guard auth != nil else {
+                return
+            }
+            guard user != nil else {
+               return
+            }
+            guard let id = user?.uid else { return }
+            UserDefaults.standard.set(id, forKey: "userID")
+            self.profilGestion.idUser = id
+            self.retrieveProfil()
+            self.authView.emailLoginTextField.text = nil
+            self.authView.passwordLoginTextField.text = nil
+        }
+    }
+    //func retrieve profilUser if existing
+    func retrieveProfil() {
+        guard let idUser = profilGestion.idUser else { return }
+        profilGestion.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { (error, profil) in
+            guard error == nil else { return }
+            guard profil != nil else {
+                self.performSegue(withIdentifier: "EditProfil", sender: nil)
+                return
+            }
+            self.profilGestion.encodedProfilUser(profil: self.profilGestion.profil)
+            // self.encodedProfilUser(profil: self.profilGestion.profil)
+            self.performSegue(withIdentifier: self.loginToList, sender: nil)
+        }
+    }
     
     @IBAction func saveToMainViewController (segue:UIStoryboardSegue) {
-        let profilViewController = segue.source as! ProfilTableViewController
+        _ = segue.source as! ProfilTableViewController
        try! Auth.auth().signOut()
-        
+        UserDefaults.standard.removeObject(forKey: "ProfilUser")
+        profilGestion.profil = nil
+        UserDefaults.standard.removeObject(forKey: "userID")
+        profilGestion.idUser = nil
         
     }
 
@@ -65,7 +92,12 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == loginToList {
-            if let vcDestination = segue.destination as? ProfilTableViewController {
+            if segue.destination is ProfilTableViewController {
+            }
+        }
+        if segue.identifier == "EditProfil" {
+            if segue.destination is EditProfilTableViewController {
+                
             }
         }
         // Get the new view controller using segue.destination.
@@ -84,11 +116,16 @@ extension AuthViewController: AuthViewDelegate {
         else { return }
         
         Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-            if let error = error, user == nil {
-                let alert = UIAlertController(title: "Sign In Failed", message: error.localizedDescription, preferredStyle: .alert)
+            guard error == nil else {
+                let alert = UIAlertController(title: "Sign In Failed", message: error?.localizedDescription, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.present(alert, animated: true, completion: nil)
+                self.present(alert, animated: true, completion: nil)
+                return
             }
+            guard user != nil else { return }
+            let id = user?.user.uid
+            UserDefaults.standard.set(id, forKey: "userID")
+            self.retrieveProfil()
         }
     }
     

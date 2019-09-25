@@ -15,13 +15,17 @@ class DetailAnnounce {
     
     var idUser = UserDefaults.standard.string(forKey: "userID")
     var announce: Announce!
-    var profil: ProfilUser!
+
+    var lat: CLLocationCoordinate2D!
+    var long: CLLocationCoordinate2D!
+    var locationAnnounce: CLLocationCoordinate2D!
+   // var profil: ProfilUser!
     
-    var locality = String()
-    var administrativeArea = String()
-    var postalCode = String()
+   // var locality = String()
+   // var administrativeArea = String()
+  //  var postalCode = String()
     
-    func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+  /*  func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         manageFireBase.retrieveProfilUser(collection: collection, field: field, equal: equal) { [weak self] (error, profilUser) in
             guard error == nil else {
                 completionHandler(error,nil)
@@ -32,13 +36,13 @@ class DetailAnnounce {
             self.profil = profilArray[0]
             completionHandler(nil,profilArray)
         }
-    }
+    }*/
 
     func deleteAnnounce(announceId: String) {
         manageFireBase.deleteAnnounce(announceId: announceId)
     }
     
-    func retrieveAdresseWithLocation(location: CLLocation, geocoder: CLGeocoder, completionHandler: @escaping(Error?,CLPlacemark?) -> Void) {
+ /*   func retrieveAdresseWithLocation(location: CLLocation, geocoder: CLGeocoder, completionHandler: @escaping(Error?,CLPlacemark?) -> Void) {
         geocoder.reverseGeocodeLocation(location, completionHandler: {(placemarks, error) in
             guard error == nil else {
                 completionHandler(error,nil)
@@ -55,5 +59,21 @@ class DetailAnnounce {
             }
             
         })
+    }*/
+    
+    func getCoordinate( addressString : String,
+                        completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(addressString) { [weak self] (placemarks, error) in
+            guard let self = self else { return }
+            guard error == nil else {
+                completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
+                return
+            }
+            guard let placemark = placemarks?[0] else { return }
+            let location = placemark.location!
+            self.locationAnnounce = location.coordinate
+            completionHandler(location.coordinate, nil)
+        }
     }
 }

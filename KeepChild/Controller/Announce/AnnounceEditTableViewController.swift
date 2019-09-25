@@ -18,7 +18,9 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var priceAnnounceTextField: UITextField!
     @IBOutlet weak var latitudeAnnounceTextField: UITextField!
     @IBOutlet weak var longitudeAnnounceTextField: UITextField!
-
+    @IBOutlet weak var switchTel: UISwitch!
+   
+    
     var announceEdit = AnnounceEdit()
     var profilGestion = ProfilGestion()
 
@@ -30,15 +32,15 @@ class AnnounceEditTableViewController: UITableViewController {
        // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
 
-      
-     requestProfil()
+      profilGestion.decodeProfilSaved()
+     //requestProfil()
         
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        requestProfil()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+       // requestProfil()
         profilOrNot()
         
     }
@@ -47,52 +49,79 @@ class AnnounceEditTableViewController: UITableViewController {
 
 
     @objc func saveAnnounce() {
-    
-        guard let announce = createAnnounce() else { return }
+        retriveGeoLocForAnnounce()
         
-        announceEdit.addData(announce: announce)
         //manageFireBase.addData(announce: announce)
         //alert pour dire message annonce sauvegarder ou echec
-        reinitView()
+        //reinitView()
+    }
+
+    func enableTextfield(bool: Bool) {
+        titleAnnounceTextField.isUserInteractionEnabled = bool
+        descriptionAnnounceTextField.isUserInteractionEnabled = bool
+        priceAnnounceTextField.isUserInteractionEnabled = bool
     }
 
     private func profilOrNot() {
         if profilGestion.profil == nil {
-            //self.tableView.sectio
-            self.setEmptyMessage("essaie")
-            //tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
+            enableTextfield(bool: false)
+           // self.tableView.setEmptyMessage("Impossible d'éditer une annonce sans créer son profil.")
+        } else {
+            enableTextfield(bool: true)
+           // self.tableView.restore()
         }
     }
     
-    private func requestProfil() {
+   /* private func requestProfil() {
         guard let idUser = profilGestion.idUser else { return }
         profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else {
-                self.setEmptyMessage("essaie")
-                //self.tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
                 return
             }
             guard profil != nil else {
                 self.setEmptyMessage("essaie")
-                //self.tableView.setEmptyMessage("Il faut créer son profil pour pouvoir déposer une annonce.")
                 return
                 
             }
-            //self.profilOrNot()
+            self.tableView.restore()
+            self.enableTextfield(bool: true)
         }
         //self.profilOrNot()
-    }
+    }*/
     
-    private func createAnnounce() -> Announce? {
-        guard let idUser = announceEdit.idUser else { return nil }
-        let title = titleAnnounceTextField.text!
-        let description = descriptionAnnounceTextField.text!
-        let price = priceAnnounceTextField.text!
-        guard let latitude = Double(latitudeAnnounceTextField.text!) else { return nil }
-        guard let longitute = Double(longitudeAnnounceTextField.text!) else { return nil }
-        let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
-        return Announce(id: "",idUser: idUser , title: title, description: description, price: price, coordinate: coordinate)
+   
+    
+    
+    func switchTelIsClicked() -> Bool {
+        if switchTel.isOn {
+            return true
+        }
+        return false
+    }
+    //retrieve geoloc, create announce and addData in database.
+    func retriveGeoLocForAnnounce() {
+        let adressString = "(\(profilGestion.profil.postalCode) \(profilGestion.profil.city)"
+        announceEdit.getCoordinate(addressString: adressString) { [weak self] (coordinate, error) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard coordinate != nil else { return }
+            //creation announce une fois les coordonnées recupérées
+            self.createAnnounce()
+            self.announceEdit.addData(announce: self.announceEdit.announce)
+            self.reinitView()
+        }
+    }
+    private func createAnnounce() {
+        guard
+            let title = titleAnnounceTextField.text,
+            let description = descriptionAnnounceTextField.text,
+            let price = priceAnnounceTextField.text else {
+                self.presentAlert(title: "Attention", message: "Tout les champs ne sont pas remplis")
+                return
+        }
+        let tel = switchTelIsClicked()
+        announceEdit.createAnnounce(title: title, description: description, price: price, tel: tel)
     }
     
     func reinitView() {

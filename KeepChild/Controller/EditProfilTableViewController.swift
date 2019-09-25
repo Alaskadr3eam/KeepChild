@@ -19,28 +19,12 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var prenomTextField: UITextField!
     @IBOutlet weak var pseudoTextField: UITextField!
     @IBOutlet weak var telTextField: UITextField!
-    @IBOutlet weak var pictureProfil: UIImageView!
+    @IBOutlet weak var pictureProfil: CustomImageView!
 
-  /*  var update: [String: Any] = [
-        "name": nameTextField.text,
-        "prenom": prenomTextField.text,
-        "telInt": Int(telTextField.text),
-        "pseudo": pseudoTextField.text,
-        "idUser": profilGestion.idUser,
-        "postalCode": profilGestion.postalCode,
-        "ville": profilGestion.city
-    ]*/
-    @IBOutlet weak var editProfilTableView: EditProfilTableView!
+    @IBOutlet weak var editProfilTableView: CustomTableView!
     let locationManager = CLLocationManager()
     
     var profilGestion = ProfilGestion()
- 
-    /*var isSelected: Bool {
-        if profilGestion.lat != nil && profilGestion.long != nil {
-            return true
-        }
-        return false
-    }*/
     
     var isSelected = false
     
@@ -55,14 +39,11 @@ class EditProfilTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        
         initTapGestureForAddPicture()
-
-        //self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
+        buttonNavigation()
    
-        request()
-
+        profilGestion.decodeProfilSaved()
+        initView()
         
     }
     
@@ -70,19 +51,13 @@ class EditProfilTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         locIsOkOrNot()
     }
-    
+    //func for retrieve location user.
     func checkLocationAuthorizationStatus() {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            //locationManager.distanceFilter = 100000
             guard let lat = locationManager.location?.coordinate.latitude else { return }
             guard let long = locationManager.location?.coordinate.longitude else { return }
             profilGestion.lat = lat
             profilGestion.long = long
-            // guard lat != nil, long != nil else { return }
-            //let initialLocation = CLLocation(latitude: lat, longitude: long)
-            //centerMapOnLocation(location: initialLocation)
-            //mapKitViewAnnounce.showsUserLocation = true
-           
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
@@ -93,21 +68,11 @@ class EditProfilTableViewController: UITableViewController {
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
         } else {
             let updateButton = UIBarButtonItem(title: "Update", style: .plain, target: self, action: #selector(updateProfilButton))
+            updateButton.tintColor = UIColor.white
             self.navigationItem.rightBarButtonItem = updateButton
         }
     }
-
-   private func request() {
-        guard let idUser = profilGestion.idUser else { return }
-        profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error,profilUser) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard profilUser != nil else { return }
-            self.initView()
-            //self.buttonNavigation()
-        }
-    }
-
+    //func init tap gesture for add photo
     private func initTapGestureForAddPicture(){
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageIsTapped(_ :)))
         tapGestureRecognizer.numberOfTapsRequired = 1
@@ -117,7 +82,6 @@ class EditProfilTableViewController: UITableViewController {
     
     @objc func imageIsTapped(_ sender: UITapGestureRecognizer) {
         pictureProfil.contentMode = .scaleAspectFit
-        //selectedImage = view.image
         pickPicture()
     }
 
@@ -127,7 +91,7 @@ class EditProfilTableViewController: UITableViewController {
         prenomTextField.text = profil.prenom
         telTextField.text = String(profil.tel)
         pseudoTextField.text = profil.pseudo
-        pictureProfil.download(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        pictureProfil.downloadCustom(idUserImage: profil.iDuser, contentMode: .scaleToFill)
         buttonNavigation()
         
     }
@@ -141,9 +105,8 @@ class EditProfilTableViewController: UITableViewController {
         guard let idUser = profilGestion.idUser else { return nil }
         let postalCode = profilGestion.postalCode
         let city = profilGestion.city
-        let coordinate = GeoPoint(latitude: profilGestion.lat, longitude: profilGestion.long)
         
-        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt, postalCode: postalCode, city: city, coordinate: coordinate )
+        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt, postalCode: postalCode, city: city/*, coordinate: coordinate*/ )
     }
     
     private func uploadPictureProfil() {
@@ -153,6 +116,8 @@ class EditProfilTableViewController: UITableViewController {
             guard data != nil else { return }
         }
     }
+
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
        // let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
@@ -198,11 +163,27 @@ class EditProfilTableViewController: UITableViewController {
             guard bool != nil else { return }
         }
     }
-   
-    @objc func saveProfilUser() {
+    
+    private func saveProfilWithPicture() {
         guard let profilUserSave = createProfilUser() else { return }
         profilGestion.addDataProfil(profil: profilUserSave)
         uploadPictureProfil()
+        dismiss(animated: true, completion: nil)
+    }
+
+    private func saveProfilNoPicture() {
+        guard let profilUserSave = createProfilUser() else { return }
+        profilGestion.addDataProfil(profil: profilUserSave)
+        dismiss(animated: true, completion: nil)
+    }
+   
+    @objc func saveProfilUser() {
+        if pictureProfil.image == UIImage(named: "addUser") {
+            saveProfilNoPicture()
+        } else {
+            saveProfilWithPicture()
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func updateProfilButton() {

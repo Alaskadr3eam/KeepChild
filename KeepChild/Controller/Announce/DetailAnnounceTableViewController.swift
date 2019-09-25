@@ -15,67 +15,98 @@ import CoreLocation
 
 class DetailAnnounceTableViewController: UITableViewController {
     
-    @IBOutlet weak var image: UIImageView!
+    @IBOutlet weak var image: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var cpLabel: UILabel!
-    @IBOutlet weak var locMapKit: MKMapView!
+    @IBOutlet weak var locMapKit: CustomMKMapView!
     @IBOutlet weak var pseudoLabel: UILabel!
+    @IBOutlet weak var telLabel: UILabel!
+    @IBOutlet weak var mailLabel: UILabel!
     @IBOutlet weak var modifyButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
+    @IBOutlet weak var detailTableView: CustomTableView!
+ /*   // loadingView
+    var loadingView = UIView()
+    var spinner = UIActivityIndicatorView()
+    var label = UILabel()*/
+    // model for gestion controller
     var detailAnnounce = DetailAnnounce()
     var mapKitAnnounce = MapKitAnnounce()
-
-  
-    
-    //var profilGestion = ProfilGestion()
-    
-    //var manageFireBase = ManageFireBase()
-
-    //var userId = String()
-    //var profil: ProfilUser!
+    var profilGestion = ProfilGestion()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locMapKit.delegate = self
-        createAnnotationMapView()
-        initLocMapView()
-        adresseString()
+       // locMapKit.setLoadingScreen()
+        request()
+        //retrieveCoordinateAnnounce()
+        
+        //createAnnotationMapView()
+        //initLocMapView()
+        //adresseString()
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         request()
     }
-    
+
+    //MARK: - PrepareMapKit
+
+    //func for prepare mapKitView
     private func centerMapOnLocation(location: CLLocation, regionRadius: CLLocationDistance) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         locMapKit.setRegion(coordinateRegion, animated: true)
+        //on enleve la page de chargement mapKit
+        locMapKit.removeLoadingScreen()
     }
-    
+    //func for create annotation for mapKitView
     private func createAnnotationMapView() {
         let announceLoc = mapKitAnnounce.transformAnnounceIntoAnnounceLocation(announce: detailAnnounce.announce)
         mapKitAnnounce.announceDetailLocation = announceLoc
         locMapKit.addAnnotation(announceLoc)
     }
-    
+    //func for initialize mapKitView
     private func initializeRegionViewMapView() {
+        createAnnotationMapView()
         let lat = mapKitAnnounce.announceDetailLocation.coordinate.latitude
         let longitude = mapKitAnnounce.announceDetailLocation.coordinate.longitude
         let initialisation = CLLocation(latitude: lat, longitude: longitude)
         let regionRadius: CLLocationDistance = 10000
         centerMapOnLocation(location: initialisation, regionRadius: regionRadius)
+        //on enleve la possibilité d'interagir avec la mapKitView
+        locMapKit.isUserInteractionEnabled = false
     }
-    
+    //func initialisation MapKitView
     private func initLocMapView() {
         initializeRegionViewMapView()
     }
-    private func adresseString() {
+
+    private func retrieveCoordinateAnnounce() {
+        let adresseString = ("\(profilGestion.profil.city) \(profilGestion.profil.postalCode)")
+        print(adresseString)
+        detailAnnounce.getCoordinate(addressString: adresseString) { [weak self] (coordinate, error) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard coordinate != nil else { return }
+            //une fois les coordonées trouvé on initialise makKitView
+            self.initLocMapView()
+            print(coordinate.latitude)
+            print(coordinate.longitude)
+            //on initialise la vue complete
+            self.initView()
+            self.detailTableView.removeLoadingScreen()
+        }
+    }
+    
+    
+  /*  private func adresseString() {
         let geocoder = CLGeocoder()
         let lat = mapKitAnnounce.announceDetailLocation.coordinate.latitude
         let longitude = mapKitAnnounce.announceDetailLocation.coordinate.longitude
@@ -86,15 +117,20 @@ class DetailAnnounceTableViewController: UITableViewController {
             guard placemark != nil else { return }
             self.initLabelCp()
         }
-    }
+    }*/
+    //MARK: - Prepare Display Announce Detail
     private func request() {
-       // guard let idUser = detailAnnounce.idUser else { return }
+      //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
+        detailTableView.setLoadingScreen()
+        locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
-        detailAnnounce.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
+        profilGestion.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else { return }
-            guard profilUser != nil else { return }
-            self.initView()
+            guard profil != nil else { return }
+            //une fois le prfil trouvé on trouve les coordonnées grace a l'adresse du profil
+            self.retrieveCoordinateAnnounce()
+            //self.initView()
         }
     }
     // MARK: - Table view data source
@@ -104,14 +140,29 @@ class DetailAnnounceTableViewController: UITableViewController {
         titleLabel.text = announce?.title
         priceLabel.text = announce?.price
         descriptionLabel.text = announce?.description
-        pseudoLabel.text = detailAnnounce.profil.pseudo
-        
-        image.download(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
+        pseudoLabel.text = profilGestion.profil.pseudo
+        let city = profilGestion.profil.city
+        let postalCode = profilGestion.profil.postalCode
+        cpLabel.text = "\(postalCode),\(city)"
+        telLabelInit()
+       // mailLabel.text = Auth.auth().
+        image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
+        //initLabelCp()
     }
     
-    private func initLabelCp() {
-        cpLabel.text = "\(detailAnnounce.postalCode),\(detailAnnounce.locality)"
+    func telLabelInit() {
+        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")/*{
+         (telLabel.text = String(profilGestion.profil.tel))
+         } else {
+         (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
+         }*/
     }
+    
+ /*   private func initLabelCp() {
+        let city = profilGestion.profil.city
+        let postalCode = profilGestion.profil.postalCode
+        cpLabel.text = "\(postalCode),\(city)"
+    }*/
     
     @IBAction func deleteAnnounce() {
         if detailAnnounce.idUser == detailAnnounce.announce.idUser {

@@ -14,13 +14,13 @@ import FirebaseAuth
 
 class ProfilGestion {
     
-   // var delegateProfilGestion: ProfilGestionDelegate?
-   // let storage = Storage.storage()
-    //let storage = Storage.reference(forURL: "gs://keepchild-7145f.appspot.com/PictureProfil")
     var manageFireBase = ManageFireBase()
     var idUser = UserDefaults.standard.string(forKey: "userID")
     var arrayProfil = [ProfilUser]()
     var profil: ProfilUser!
+
+    
+    
     var announceDetail: Announce!
     var arrayProfilAnnounce = [Announce]()
     
@@ -33,8 +33,21 @@ class ProfilGestion {
     
     var imageProfil = UIImage()
     
-    
-    
+    //func for encode object in userDefault
+    func encodedProfilUser(profil: ProfilUser) {
+        if let encodedProfil = try? JSONEncoder().encode(profil) {
+            UserDefaults.standard.set(encodedProfil, forKey: "ProfilUser")
+        }
+    }
+    //func for decode object in userDefault
+    func decodeProfilSaved(){
+        if let savedProfil = UserDefaults.standard.object(forKey: "ProfilUser") as? Data {
+            if let profilLoaded = try? JSONDecoder().decode(ProfilUser.self, from: savedProfil) {
+                self.profil = profilLoaded
+            }
+        }
+    }
+
     func retrieveAnnunceUser(collection: String, field: String, equal: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         manageFireBase.retrieveAnnounceUser(collection: collection, field: field, equal: equal) { [weak self] (error, announce) in
             guard let self = self else { return }
@@ -44,14 +57,15 @@ class ProfilGestion {
             completionHandler(nil,announceSecure)
         }
     }
-    
    
-    func retrieveProfilUser2(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+    func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         manageFireBase.retrieveProfilUser(collection: collection, field: field, equal: equal) { [weak self] (error, profilUser) in
             
             guard let self = self else { return }
             guard error == nil else { completionHandler(error,nil); return }
-            guard let profilArray = profilUser else { return }
+            guard let profilArray = profilUser else {
+                completionHandler(error,nil)
+                return }
             self.profil = profilArray[0]
             completionHandler(nil,profilArray)
         }
@@ -84,28 +98,6 @@ class ProfilGestion {
             completionHandler(nil,boolSecure)
         }
     }
-    /*func retrieveProfilUser(idUser: String) {
-        let idUserAnnouce = idUser
-        Firestore.firestore().collection("ProfilUser").getDocuments { (querySnapshot, err) in
-            if let err = err {
-                print("erreur : \(err)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let profil = try! FirestoreDecoder().decode(ProfilUser.self, from: document.data())
-                    self.arrayProfil.append(profil)
-                    print(document.documentID, document.data())
-                    
-                }
-                for profil in self.arrayProfil {
-                    if profil.iDuser == idUserAnnouce {
-                        self.profil = profil
-                    }
-                }
-                //self.delegateProfilGestion?.initViewDetailAnnounce()
-                //self.delegateProfilGestion?.initViewEditProfil()
-            }
-        }
-    }*/
     
     func uploadProfileImage(imageData: Data)
     {
@@ -139,39 +131,14 @@ class ProfilGestion {
             }
         }
     }
-
     
-   /* func addPhoto(image: UIImage) {
-        let pictureSave = image.pngData()
-        let storageRef = storage.reference()
-        let photoProfil = storageRef.child("PictureProfil/")
-        let data = pictureSave
-        _ = photoProfil.putData(data!, metadata: nil) { (metadata, error) in
-            guard let metadata = metadata else {
-                print("error")
-                return
-            }
-            _ = metadata.size
-            photoProfil.downloadURL { (url, error) in
-                guard url != nil else {
-                    print("error url")
-                    return
-                }
-            }
-        }
-
-    }*/
-    
-    func transformUIimageInData(image: UIImageView) {
+ /*   func transformUIimageInData(image: UIImageView) {
         let pictureSave = image.image?.pngData()
     }
     
     func downloadPhoto() {
         
-    }
+    }*/
     
 }
-/*protocol ProfilGestionDelegate {
-    func initViewDetailAnnounce()
-    func initViewEditProfil()
-}*/
+

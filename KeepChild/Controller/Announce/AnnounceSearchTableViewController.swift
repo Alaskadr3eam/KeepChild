@@ -12,6 +12,8 @@ import Firebase
 
 class AnnounceSearchTableViewController: UITableViewController {
 
+    @IBOutlet weak var searchTableView: CustomTableView!
+
     var announceList = AnnounceList()
    // var manageFireBase = ManageFireBase()
     override func viewDidLoad() {
@@ -38,11 +40,13 @@ class AnnounceSearchTableViewController: UITableViewController {
     }
     
     func request() {
+        searchTableView.setLoadingScreen()
         announceList.readData(collection: "Announce2") { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard announceList != nil else { return }
-            self.tableView.reloadData()
+            self.searchTableView.reloadData()
+            self.searchTableView.removeLoadingScreen()
         }
     }
 
@@ -69,7 +73,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         let announce = announceList.announceList[indexPath.row]
         cell.titleLabel.text = announce.title
         cell.priceLabel.text = announce.price
-        cell.imageProfil.download(idUserImage: announce.idUser, contentMode: .scaleToFill)
+        cell.imageProfil.downloadCustom(idUserImage: announce.idUser, contentMode: .scaleToFill)
        
         return cell
     }

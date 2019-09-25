@@ -1,18 +1,18 @@
 //
-//  ProfilView.swift
+//  CustomImageView.swift
 //  KeepChild
 //
-//  Created by Clément Martin on 14/09/2019.
+//  Created by Clément Martin on 25/09/2019.
 //  Copyright © 2019 Clément Martin. All rights reserved.
 //
 
 import UIKit
 
-class ProfilView: UIView {
-    
-    @IBOutlet weak var imageProfil: CustomImageView!
-    @IBOutlet weak var pseudoLabel: UILabel!
+class CustomImageView: UIImageView {
 
+    var loadingView = UIView()
+    var spinner = UIActivityIndicatorView()
+    
     /*
     // Only override draw() if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

@@ -85,6 +85,7 @@ class ManageFireBase {
                 completionHandler(error, nil)
                 return
             }
+            
             guard let querySnap = querySnapshot else { return }
                 for document in querySnap.documents {
                     var profil = try! FirestoreDecoder().decode(ProfilUser.self, from: document.data())
@@ -196,7 +197,9 @@ class ManageFireBase {
         let photoUser = reference.child("\(idUserImage).jpg")
         photoUser.getData(maxSize: 1*1024*1024) { (data, error) in
             guard error == nil else { print("error download"); completionHandler(error,nil) ; return }
-            guard let dataSecure = data else { return }
+            guard let dataSecure = data else {
+                completionHandler(nil,nil)
+                return }
            // guard let image = UIImage(data: dataSecure) else { return }
             completionHandler(nil,dataSecure)
         }

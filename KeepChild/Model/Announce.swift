@@ -23,6 +23,7 @@ struct Announce: Codable {
     var price: String
     //var geoPoint = CustomGeoPoint(latitude: 0, longitude: 0)
     var coordinate: GeoPoint
+    var tel: Bool
     
    /* init(id: String, idUser: String, title: String, description: String, price: String, coordinate: GeoPoint) {
         self.id = id
@@ -70,7 +71,7 @@ struct ProfilUser: Codable {
     var tel: Int
     var postalCode: String
     var city: String
-    var coordinate: GeoPoint?
+    //var coordinate: GeoPoint?
   //  var photo: String
 }
 
@@ -83,16 +84,19 @@ class AnnounceLocation: NSObject, MKAnnotation {
     var descriptionAnnounce: String
     var price: String
     var coordinate: CLLocationCoordinate2D
+    var tel: Bool
+    
     //var city: String
     //var postalCode: String
     
-    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D) {
+    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D,tel: Bool) {
         self.id = id
         self.idUser = idUser
         self.title = title
         self.descriptionAnnounce = descriptionAnnounce
         self.price = price
         self.coordinate = coordinate
+        self.tel = tel
         
         super.init()
     }

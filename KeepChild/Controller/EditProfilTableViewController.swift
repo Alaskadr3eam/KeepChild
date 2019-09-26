@@ -102,11 +102,12 @@ class EditProfilTableViewController: UITableViewController {
         guard let tel = telTextField.text else { return nil }
         guard let telInt = Int(tel) else { return nil }
         guard let pseudo = pseudoTextField.text else { return nil }
-        guard let idUser = profilGestion.idUser else { return nil }
+        let idUser = CurrentUserManager.shared.user.id
         let postalCode = profilGestion.postalCode
         let city = profilGestion.city
+        let email = CurrentUserManager.shared.user.email
         
-        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo, tel: telInt, postalCode: postalCode, city: city/*, coordinate: coordinate*/ )
+        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo,mail: email, tel: telInt, postalCode: postalCode, city: city/*, coordinate: coordinate*/ )
     }
     
     private func uploadPictureProfil() {

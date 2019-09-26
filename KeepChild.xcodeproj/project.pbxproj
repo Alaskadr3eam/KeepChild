@@ -22,6 +22,8 @@
 		31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */; };
 		31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA931C233B6A2500C88FD1 /* CustomImageView.swift */; };
 		31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */; };
+		31AA9321233CA41400C88FD1 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */; };
+		31AA9323233CAF2100C88FD1 /* SemaineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */; };
 		31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */; };
 		31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */; };
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
@@ -78,6 +80,8 @@
 		31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceEditTableViewController.swift; sourceTree = "<group>"; };
 		31AA931C233B6A2500C88FD1 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMKMapView.swift; sourceTree = "<group>"; };
+		31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
+		31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemaineTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 				31D39A6523335CCB0050A777 /* ModelVC */,
 				31261841232B805600091AA4 /* Announce.swift */,
 				31D39A6323321B780050A777 /* ManageFireBase.swift */,
+				31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */,
 				31D39A6123311BE80050A777 /* FireBase.swift */,
 			);
 			path = Model;
@@ -182,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */,
+				31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */,
 				31261845232B81F700091AA4 /* AnnounceSearchTableViewController.swift */,
 				31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */,
 			);
@@ -553,7 +559,9 @@
 				31865B38232CE9B400A52657 /* Profil.swift in Sources */,
 				31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */,
 				31547E05232E3CA300698B95 /* AnnounceEdit.swift in Sources */,
+				31AA9321233CA41400C88FD1 /* CurrentUserManager.swift in Sources */,
 				31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */,
+				31AA9323233CAF2100C88FD1 /* SemaineTableViewController.swift in Sources */,
 				31D39A6223311BE80050A777 /* FireBase.swift in Sources */,
 				31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */,
 				31261848232B83DF00091AA4 /* AuthViewController.swift in Sources */,

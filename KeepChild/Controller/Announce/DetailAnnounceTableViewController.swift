@@ -105,7 +105,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         detailTableView.setLoadingScreen()
         locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
-        profilGestion.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
+        profilGestion.retrieveProfilAnnounce(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard profil != nil else { return }
@@ -124,7 +124,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         let postalCode = profilGestion.profil.postalCode
         cpLabel.text = "\(postalCode),\(city)"
         telLabelInit()
-        // mailLabel.text = Auth.auth().
+        mailLabel.text = profilGestion.profil.mail
         image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
        // self.detailTableView.removeLoadingScreen()
 

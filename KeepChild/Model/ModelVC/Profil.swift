@@ -15,7 +15,7 @@ import FirebaseAuth
 class ProfilGestion {
     
     var manageFireBase = ManageFireBase()
-    var idUser = UserDefaults.standard.string(forKey: "userID")
+    var idUser: String! /*CurrentUserManager.shared.user.id*//*UserDefaults.standard.string(forKey: "userID")*/
     var arrayProfil = [ProfilUser]()
     var profil: ProfilUser!
 
@@ -58,7 +58,7 @@ class ProfilGestion {
         }
     }
    
-    func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+    func retrieveProfilAnnounce(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         manageFireBase.retrieveProfilUser(collection: collection, field: field, equal: equal) { [weak self] (error, profilUser) in
             
             guard let self = self else { return }

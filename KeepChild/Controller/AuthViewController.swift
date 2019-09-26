@@ -29,7 +29,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if profilGestion.profil != nil {
+        if CurrentUserManager.shared.profil != nil {
             performSegue(withIdentifier: loginToList, sender: nil)
         }
    /*     if Auth.auth().currentUser != nil {
@@ -54,8 +54,14 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
                return
             }
             guard let id = user?.uid else { return }
-            UserDefaults.standard.set(id, forKey: "userID")
-            self.profilGestion.idUser = id
+            guard let email = user?.email else { return }
+            //create user in singleton for use in app
+            let user = User(id: id, email: email)
+            CurrentUserManager.shared.user = user
+            //CurrentUserManager.shared.user.id = id
+            //CurrentUserManager.shared.user.email = email
+            //UserDefaults.standard.set(id, forKey: "userID")
+            //self.profilGestion.idUser = id
             self.retrieveProfil()
             self.authView.emailLoginTextField.text = nil
             self.authView.passwordLoginTextField.text = nil
@@ -63,14 +69,16 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     }
     //func retrieve profilUser if existing
     func retrieveProfil() {
-        guard let idUser = profilGestion.idUser else { return }
-        profilGestion.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { (error, profil) in
+        let idUser2 = CurrentUserManager.shared.user.id
+        //guard let idUser = profilGestion.idUser else { return }
+        CurrentUserManager.shared.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser2) { (error, profil) in
             guard error == nil else { return }
             guard profil != nil else {
                 self.performSegue(withIdentifier: "EditProfil", sender: nil)
                 return
             }
-            self.profilGestion.encodedProfilUser(profil: self.profilGestion.profil)
+           // self.profilGestion.encodedProfilUser(profil: self.profilGestion.profil)
+            //CurrentUserManager.shared.profil = self.profilGestion.profil
             // self.encodedProfilUser(profil: self.profilGestion.profil)
             self.performSegue(withIdentifier: self.loginToList, sender: nil)
         }
@@ -79,10 +87,11 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     @IBAction func saveToMainViewController (segue:UIStoryboardSegue) {
         _ = segue.source as! ProfilTableViewController
        try! Auth.auth().signOut()
-        UserDefaults.standard.removeObject(forKey: "ProfilUser")
-        profilGestion.profil = nil
-        UserDefaults.standard.removeObject(forKey: "userID")
-        profilGestion.idUser = nil
+        CurrentUserManager.shared.user = nil
+        //UserDefaults.standard.removeObject(forKey: "ProfilUser")
+        CurrentUserManager.shared.profil = nil
+        //UserDefaults.standard.removeObject(forKey: "userID")
+        //profilGestion.idUser = nil
         
     }
 
@@ -123,8 +132,11 @@ extension AuthViewController: AuthViewDelegate {
                 return
             }
             guard user != nil else { return }
-            let id = user?.user.uid
-            UserDefaults.standard.set(id, forKey: "userID")
+            guard let id = user?.user.uid else { return }
+            guard let email = user?.user.email else { return }
+            CurrentUserManager.shared.user.id = id
+            CurrentUserManager.shared.user.email = email
+            //UserDefaults.standard.set(id, forKey: "userID")
             self.retrieveProfil()
         }
     }

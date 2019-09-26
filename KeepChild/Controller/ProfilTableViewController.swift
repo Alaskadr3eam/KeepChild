@@ -23,7 +23,7 @@ class ProfilTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profilGestion.decodeProfilSaved()
+       // profilGestion.decodeProfilSaved()
         requestInitProfil()
         initView()
 
@@ -35,7 +35,8 @@ class ProfilTableViewController: UITableViewController {
     }
 
     func requestInitProfil() {
-        guard let idUser = profilGestion.idUser else { return }
+       // guard let idUser = profilGestion.idUser else { return }
+        let idUser = CurrentUserManager.shared.user.id
     
         profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
             guard let self = self else { return }
@@ -56,7 +57,8 @@ class ProfilTableViewController: UITableViewController {
     
     
     func initView() {
-        guard let profil = profilGestion.profil else { return }
+        //guard let profil = profilGestion.profil else { return }
+        guard let profil = CurrentUserManager.shared.profil else { return }
         profilView.pseudoLabel.text = /*profilGestion.*/profil.pseudo
         profilView.imageProfil.downloadCustom(idUserImage: profil.iDuser, contentMode: .scaleToFill)
     }

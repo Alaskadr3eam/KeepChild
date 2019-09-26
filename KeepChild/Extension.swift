@@ -105,7 +105,7 @@ extension CustomTableView {
         
         //self.addSubview(loadingView)
         self.addSubview(self.loadingView)
-        self.backgroundView = loadingView
+        //self.backgroundView = loadingView
     }
     
     func removeLoadingScreen() {

@@ -28,10 +28,9 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var deleteButton: UIButton!
     
     @IBOutlet weak var detailTableView: CustomTableView!
- /*   // loadingView
-    var loadingView = UIView()
-    var spinner = UIActivityIndicatorView()
-    var label = UILabel()*/
+    
+    @IBOutlet var cell: [UITableViewCell]!
+
     // model for gestion controller
     var detailAnnounce = DetailAnnounce()
     var mapKitAnnounce = MapKitAnnounce()
@@ -39,15 +38,10 @@ class DetailAnnounceTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+   
         locMapKit.delegate = self
-       // locMapKit.setLoadingScreen()
+
         request()
-        //retrieveCoordinateAnnounce()
-        
-        //createAnnotationMapView()
-        //initLocMapView()
-        //adresseString()
         
     }
     
@@ -105,19 +99,6 @@ class DetailAnnounceTableViewController: UITableViewController {
         }
     }
     
-    
-  /*  private func adresseString() {
-        let geocoder = CLGeocoder()
-        let lat = mapKitAnnounce.announceDetailLocation.coordinate.latitude
-        let longitude = mapKitAnnounce.announceDetailLocation.coordinate.longitude
-        let location = CLLocation(latitude: lat, longitude: longitude)
-        detailAnnounce.retrieveAdresseWithLocation(location: location, geocoder: geocoder) { [weak self] (error, placemark) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard placemark != nil else { return }
-            self.initLabelCp()
-        }
-    }*/
     //MARK: - Prepare Display Announce Detail
     private func request() {
       //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
@@ -130,11 +111,9 @@ class DetailAnnounceTableViewController: UITableViewController {
             guard profil != nil else { return }
             //une fois le prfil trouvé on trouve les coordonnées grace a l'adresse du profil
             self.retrieveCoordinateAnnounce()
-            //self.initView()
         }
     }
-    // MARK: - Table view data source
-
+    // MARK: - Prepare the view for display
     private func initView() {
         let announce = detailAnnounce.announce
         titleLabel.text = announce?.title
@@ -145,30 +124,23 @@ class DetailAnnounceTableViewController: UITableViewController {
         let postalCode = profilGestion.profil.postalCode
         cpLabel.text = "\(postalCode),\(city)"
         telLabelInit()
-       // mailLabel.text = Auth.auth().
+        // mailLabel.text = Auth.auth().
         image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
-        //initLabelCp()
+       // self.detailTableView.removeLoadingScreen()
+
     }
     
     func telLabelInit() {
-        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")/*{
-         (telLabel.text = String(profilGestion.profil.tel))
-         } else {
-         (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
-         }*/
+        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
     }
-    
- /*   private func initLabelCp() {
-        let city = profilGestion.profil.city
-        let postalCode = profilGestion.profil.postalCode
-        cpLabel.text = "\(postalCode),\(city)"
-    }*/
+    // MARK: - Action Button
     
     @IBAction func deleteAnnounce() {
         if detailAnnounce.idUser == detailAnnounce.announce.idUser {
             guard let id = detailAnnounce.announce.id else { return }
             detailAnnounce.deleteAnnounce(announceId: id)
         }
+        self.navigationController?.popViewController(animated: true)
     }
 
 }
@@ -197,13 +169,4 @@ extension DetailAnnounceTableViewController: MKMapViewDelegate {
         return view
     }
 }
-/*extension DetailAnnounceTableViewController: ProfilGestionDelegate {
-    func initViewEditProfil() {
-    }
-    
-    func initViewDetailAnnounce() {
-        initView()
-    }
-    
-    
-}*/
+

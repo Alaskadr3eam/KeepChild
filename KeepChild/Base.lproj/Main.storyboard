@@ -163,15 +163,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <view key="tableHeaderView" contentMode="scaleToFill" id="exY-qB-grD" customClass="ProfilView" customModule="KeepChild" customModuleProvider="target">
+                        <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" id="exY-qB-grD" customClass="ProfilView" customModule="KeepChild" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="psM-Bh-8gt" customClass="CustomImageView" customModule="KeepChild" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="45"/>
                                 </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pseudo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ei-Ot-u8V">
-                                    <rect key="frame" x="176.5" y="53.5" width="61.5" height="21"/>
+                                    <rect key="frame" x="176.5" y="12" width="61.5" height="21"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -507,7 +507,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="k4R-Wr-kHY"/>
                     <connections>
-                        <outlet property="searchTableView" destination="A4k-nS-YXP" id="VTw-zf-VmM"/>
+                        <outlet property="searchTableView" destination="A4k-nS-YXP" id="dNO-AJ-EHT"/>
                         <segue destination="1RQ-uG-WVW" kind="show" identifier="DetailAnnounce" id="YSA-qc-JcI"/>
                         <segue destination="neb-f6-fCl" kind="show" identifier="mapKitView" id="L10-Ed-NPR"/>
                     </connections>
@@ -700,7 +700,7 @@
             <objects>
                 <tableViewController id="1RQ-uG-WVW" customClass="DetailAnnounceTableViewController" customModule="KeepChild" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mG0-Ei-RPe" customClass="CustomTableView" customModule="KeepChild" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <sections>
@@ -928,7 +928,7 @@
                         <outlet property="cpLabel" destination="HlI-ge-bAb" id="xyq-Vp-HZC"/>
                         <outlet property="deleteButton" destination="CHp-oB-xQk" id="dYi-gx-tba"/>
                         <outlet property="descriptionLabel" destination="OUo-4B-DmM" id="ghP-R7-fZa"/>
-                        <outlet property="detailTableView" destination="mG0-Ei-RPe" id="4wn-jg-65t"/>
+                        <outlet property="detailTableView" destination="mG0-Ei-RPe" id="foC-h7-ufV"/>
                         <outlet property="image" destination="8bY-Ad-brf" id="3ua-Nq-ofS"/>
                         <outlet property="locMapKit" destination="E6Q-Ta-LX5" id="2s7-3J-DUj"/>
                         <outlet property="modifyButton" destination="d8A-7y-wry" id="dph-6u-TQd"/>
@@ -936,11 +936,21 @@
                         <outlet property="pseudoLabel" destination="Rcl-0g-pJm" id="jM9-I3-1af"/>
                         <outlet property="telLabel" destination="uSF-LD-Axt" id="MJq-na-EHs"/>
                         <outlet property="titleLabel" destination="hHR-F9-qz4" id="YHB-79-HdY"/>
+                        <outletCollection property="cell" destination="rf2-k9-1Jo" collectionClass="NSMutableArray" id="Wy2-5z-SW5"/>
+                        <outletCollection property="cell" destination="FrA-B9-Ck1" collectionClass="NSMutableArray" id="kcM-Ll-wUB"/>
+                        <outletCollection property="cell" destination="mrN-2T-SYZ" collectionClass="NSMutableArray" id="ikf-Pq-sva"/>
+                        <outletCollection property="cell" destination="Hm7-44-00U" collectionClass="NSMutableArray" id="1dw-Pk-djC"/>
+                        <outletCollection property="cell" destination="vb2-gF-Exz" collectionClass="NSMutableArray" id="O6T-TS-N8R"/>
+                        <outletCollection property="cell" destination="gsq-6v-bWE" collectionClass="NSMutableArray" id="rzO-dr-8AO"/>
+                        <outletCollection property="cell" destination="r3I-oX-f34" collectionClass="NSMutableArray" id="NEf-bq-dHZ"/>
+                        <outletCollection property="cell" destination="X5Q-Yw-QQc" collectionClass="NSMutableArray" id="UjC-3u-MXA"/>
+                        <outletCollection property="cell" destination="S7I-Wi-7jX" collectionClass="NSMutableArray" id="4mA-zT-rbu"/>
+                        <outletCollection property="cell" destination="y58-bZ-CYm" collectionClass="NSMutableArray" id="umv-Hx-bCI"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="byT-zX-NEn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1879.7101449275365" y="699.77678571428567"/>
+            <point key="canvasLocation" x="2235" y="826"/>
         </scene>
         <!--Map Kit Announce View Controller-->
         <scene sceneID="fpH-n9-5G6">
@@ -1000,7 +1010,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="vrQ-uh-ex1"/>
-        <segue reference="aA1-Lp-yn1"/>
+        <segue reference="YSA-qc-JcI"/>
+        <segue reference="I32-g5-SFf"/>
     </inferredMetricsTieBreakers>
 </document>

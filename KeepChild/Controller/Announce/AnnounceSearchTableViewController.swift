@@ -23,6 +23,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         //announceList.delegateAnnounceList = self
        // manageFireBase.queryAnnounceAll = manageFireBase.createQueryAll(collection: "Announce2")
        // announceList.observeQuery()
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -32,8 +33,8 @@ class AnnounceSearchTableViewController: UITableViewController {
        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
          //manageFireBase.readDataAnnounce()
         //announceList.readData()
         request()

@@ -45,6 +45,17 @@ class AnnounceEditTableViewController: UITableViewController {
         
     }
 
+    
+    //func for decode object in userDefault
+    func decodeProfilSaved() -> Semaine? {
+        if let savedProfil = UserDefaults.standard.object(forKey: "Semaine") as? Data {
+            if let semaineLoaded = try? JSONDecoder().decode(Semaine.self, from: savedProfil) {
+                return semaineLoaded
+            }
+        }
+        return nil
+    }
+    
     // MARK: - Table view data source
 
 
@@ -63,7 +74,7 @@ class AnnounceEditTableViewController: UITableViewController {
     }
 
     private func profilOrNot() {
-        if profilGestion.profil == nil {
+        if CurrentUserManager.shared.profil == nil {
             enableTextfield(bool: false)
            // self.tableView.setEmptyMessage("Impossible d'éditer une annonce sans créer son profil.")
         } else {
@@ -90,7 +101,7 @@ class AnnounceEditTableViewController: UITableViewController {
         //self.profilOrNot()
     }*/
     
-   
+
     
     
     func switchTelIsClicked() -> Bool {
@@ -101,14 +112,18 @@ class AnnounceEditTableViewController: UITableViewController {
     }
     //retrieve geoloc, create announce and addData in database.
     func retriveGeoLocForAnnounce() {
-        let adressString = "(\(profilGestion.profil.postalCode) \(profilGestion.profil.city)"
+        //let number = Int.random(in: 0 ..< 10000000000)
+        let idAnnounce = CurrentUserManager.shared.user.id
+        //guard let semaine = decodeProfilSaved() else { return }
+        let adressString = "(\(CurrentUserManager.shared.profil.postalCode) \(CurrentUserManager.shared.profil.city)"
         announceEdit.getCoordinate(addressString: adressString) { [weak self] (coordinate, error) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard coordinate != nil else { return }
             //creation announce une fois les coordonnées recupérées
             self.createAnnounce()
-            self.announceEdit.addData(announce: self.announceEdit.announce)
+            self.announceEdit.addData(announce: self.announceEdit.announce, idAnnounce: idAnnounce)
+            //self.announceEdit.addSemaine(semaine: semaine, idDocument: idAnnounce)
             self.reinitView()
         }
     }

@@ -24,13 +24,15 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         super.viewDidLoad()
         
         authView.authViewDelegate = self
-        retrieveUserAuth()
+        //retrieveUserAuth()
  
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if CurrentUserManager.shared.profil != nil {
             performSegue(withIdentifier: loginToList, sender: nil)
+        } else {
+            retrieveUserAuth()
         }
    /*     if Auth.auth().currentUser != nil {
             //do something :D

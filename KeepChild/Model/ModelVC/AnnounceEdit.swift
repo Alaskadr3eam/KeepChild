@@ -17,9 +17,10 @@ class AnnounceEdit {
     
     var announce: Announce!
     var location: CLLocationCoordinate2D!
+    var jour: String!
     
-    func addData(announce: Announce) {
-        manageFireBase.addData(announce: announce)
+    func addData(announce: Announce, idAnnounce: String) {
+        manageFireBase.addData(announce: announce, idAnnounce: idAnnounce)
     }
 
     func createAnnounce(title: String, description: String,price: String, tel: Bool) {
@@ -32,7 +33,8 @@ class AnnounceEdit {
         let longitute = location.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
         let tel = tel
-        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, coordinate: coordinate, tel: tel)
+        guard let jour = UserDefaults.standard.stringArray(forKey: "jour") else { return }
+        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, jour: jour, coordinate: coordinate, tel: tel)
         announce = announceCreate
     }
 
@@ -51,6 +53,10 @@ class AnnounceEdit {
             completionHandler(location.coordinate, nil)
         }
     }
+
+   /* func addSemaine(semaine: Semaine, idDocument: String) {
+        manageFireBase.addDataSemaine(semaine: semaine, idDocument: idDocument)
+    }*/
     
    
 }

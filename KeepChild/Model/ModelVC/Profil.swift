@@ -34,16 +34,16 @@ class ProfilGestion {
     var imageProfil = UIImage()
     
     //func for encode object in userDefault
-    func encodedProfilUser(profil: ProfilUser) {
+    func encodedProfilUser(semaine: Semaine) {
         if let encodedProfil = try? JSONEncoder().encode(profil) {
-            UserDefaults.standard.set(encodedProfil, forKey: "ProfilUser")
+            UserDefaults.standard.set(encodedProfil, forKey: "Semaine")
         }
     }
     //func for decode object in userDefault
     func decodeProfilSaved(){
-        if let savedProfil = UserDefaults.standard.object(forKey: "ProfilUser") as? Data {
-            if let profilLoaded = try? JSONDecoder().decode(ProfilUser.self, from: savedProfil) {
-                self.profil = profilLoaded
+        if let savedProfil = UserDefaults.standard.object(forKey: "Semaine") as? Data {
+            if let profilLoaded = try? JSONDecoder().decode(Semaine.self, from: savedProfil) {
+                //self.profil = profilLoaded
             }
         }
     }

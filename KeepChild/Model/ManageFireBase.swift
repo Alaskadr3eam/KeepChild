@@ -29,6 +29,7 @@ class ManageFireBase {
     
     func createQuery(collection: String, field: String, equal: String) -> Query {
         let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: equal)
+       
         return query
     }
 
@@ -139,10 +140,10 @@ class ManageFireBase {
 
     
     
-    func addData(announce: Announce) {
+    func addData(announce: Announce, idAnnounce: String) {
         let docData = try! FirestoreEncoder().encode(announce)
         print(docData)
-        Firestore.firestore().collection("Announce2").addDocument(data: docData) { error in
+        Firestore.firestore().collection("Announce2").document(idAnnounce).setData(docData) { error in
             if let error = error {
                 print("Error writing document: \(error)")
             } else {
@@ -155,6 +156,18 @@ class ManageFireBase {
         let docData = try! FirestoreEncoder().encode(profil)
         print(docData)
         Firestore.firestore().collection("ProfilUser").addDocument(data: docData) { error in
+            if let error = error {
+                print("Error writing document: \(error)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
+    }
+
+    func addDataSemaine(semaine: Semaine, idDocument: String) {
+        let docData = try! FirestoreEncoder().encode(semaine)
+        print(docData)
+        Firestore.firestore().collection("Semaine").document(idDocument).setData(docData) { error in
             if let error = error {
                 print("Error writing document: \(error)")
             } else {

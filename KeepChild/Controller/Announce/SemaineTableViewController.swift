@@ -29,16 +29,72 @@ enum semaineDataSource {
             return "Dimanche"
         }
     }
+
+    var isSelected: Bool {
+       return true
+    }
+    
+    var noSelected: Bool {
+        return false
+    }
+    
     
 }
 
+struct Jour {
+    var title: String
+    
+  
+}
+
+class JourItem {
+    private var item: Jour
+    var isSelected = false
+    var title: String {
+        return item.title
+    }
+
+    init(item: Jour) {
+        self.item = item
+    }
+}
+
+class ViewJour {
+    var items = [JourItem]()
+   
+    init() {
+        items = dataSource.map { JourItem(item: $0) }
+    }
+    
+    var selectedItems: [JourItem] {
+        return items.filter { return $0.isSelected }
+    }
+    
+    var itemBool = [Bool]()
+    let dataSource = [
+        Jour(title: "Lundi"),
+        Jour(title: "Mardi"),
+        Jour(title: "Mercredi"),
+        Jour(title: "Jeudi"),
+        Jour(title: "Vendredi"),
+        Jour(title: "Samedi"),
+        Jour(title: "Dimanche")
+    ]
+   
+}
+
+    
+
+
 class SemaineTableViewController: UITableViewController {
-
-    var dataSource = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
-
+    
+    var viewJour = ViewJour()
+   // var dataSource = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    var semaine: Semaine!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        tableView.allowsMultipleSelection = true
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -46,6 +102,11 @@ class SemaineTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    @objc func saveAnnounce() {
+        print(viewJour.selectedItems.map { $0.title })
+        print(viewJour.itemBool.enumerated())
+     
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -55,20 +116,47 @@ class SemaineTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return dataSource.count
+        return viewJour.items.count
     }
-
+    
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-        
-        cell.accessoryType = .checkmark
-        cell.textLabel?.text = dataSource[indexPath.row]
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "SemaineCell", for: indexPath) as? SemaineCell {
+            cell.item = viewJour.items[indexPath.row] // (2)
+            // select/deselect the cell
+            if viewJour.items[indexPath.row].isSelected {
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none) // (3)
+            } else {
+                tableView.deselectRow(at: indexPath, animated: false) // (4)
+            }
+            return cell
+        }
+        return UITableViewCell()
+    }
 
-        return cell
+    
+    
+    
+    /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let selectedIndexes = tableView.indexPathsForSelectedRows {
+            
+        }
+    }*/
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewJour.items[indexPath.row].isSelected = true
+        viewJour.itemBool.append(true)
     }
     
-
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        viewJour.items[indexPath.row].isSelected = false
+        viewJour.itemBool.append(false)
+    }
+    
+    func conversion() {
+        
+    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -114,4 +202,25 @@ class SemaineTableViewController: UITableViewController {
     }
     */
 
+}
+
+
+class SemaineCell: UITableViewCell {
+    
+    var item: JourItem? {
+        didSet {
+            textLabel?.text = item?.title
+        }
+    }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        selectionStyle = .none
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        // update UI
+        accessoryType = selected ? .checkmark : .none
+    }
 }

@@ -21,7 +21,8 @@ struct Announce: Codable {
     var title: String
     var description: String
     var price: String
-    var semaine: Semaine
+    //var semaine: Semaine
+    var jour: [String]
     //var geoPoint = CustomGeoPoint(latitude: 0, longitude: 0)
     var coordinate: GeoPoint
     var tel: Bool
@@ -38,16 +39,30 @@ struct Announce: Codable {
 }
 
 struct Semaine: Codable {
-    var idUser: String
-    var lundi: Bool
-    var mardi: Bool
-    var mercredi: Bool
-    var jeudi: Bool
-    var vendredi: Bool
-    var samedi: Bool
-    var dimanche: Bool
+    var idUser: String?
+    var lundi: Bool?
+    var mardi: Bool?
+    var mercredi: Bool?
+    var jeudi: Bool?
+    var vendredi: Bool?
+    var samedi: Bool?
+    var dimanche: Bool?
+    
 }
-
+/*struct DayItem: Codable {
+    private var item: Day
+    var isSelected = false
+    var title: String {
+        return item.title
+    }
+    
+    init(item: Day) {
+        self.item = item
+    }
+}
+struct Day: Codable {
+    var title: String
+}*/
 
 extension GeoPoint: GeoPointType {}
 
@@ -97,11 +112,12 @@ class AnnounceLocation: NSObject, MKAnnotation {
     var price: String
     var coordinate: CLLocationCoordinate2D
     var tel: Bool
+    var jour: [String]
     
     //var city: String
     //var postalCode: String
     
-    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D,tel: Bool) {
+    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D,tel: Bool,jour: [String]) {
         self.id = id
         self.idUser = idUser
         self.title = title
@@ -109,6 +125,7 @@ class AnnounceLocation: NSObject, MKAnnotation {
         self.price = price
         self.coordinate = coordinate
         self.tel = tel
+        self.jour = jour
         
         super.init()
     }

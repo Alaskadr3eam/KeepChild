@@ -24,6 +24,10 @@
 		31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */; };
 		31AA9321233CA41400C88FD1 /* CurrentUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */; };
 		31AA9323233CAF2100C88FD1 /* SemaineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */; };
+		31AA9325233CEDC200C88FD1 /* Semaine2TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9324233CEDC200C88FD1 /* Semaine2TableViewController.swift */; };
+		31AA9327233E20EE00C88FD1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9326233E20EE00C88FD1 /* ViewController.swift */; };
+		31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA936B233F4D6200C88FD1 /* MasterViewController.swift */; };
+		31AA936E233F5A2B00C88FD1 /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA936D233F5A2B00C88FD1 /* Master.swift */; };
 		31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */; };
 		31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */; };
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
@@ -82,6 +86,10 @@
 		31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMKMapView.swift; sourceTree = "<group>"; };
 		31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserManager.swift; sourceTree = "<group>"; };
 		31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemaineTableViewController.swift; sourceTree = "<group>"; };
+		31AA9324233CEDC200C88FD1 /* Semaine2TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Semaine2TableViewController.swift; sourceTree = "<group>"; };
+		31AA9326233E20EE00C88FD1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		31AA936B233F4D6200C88FD1 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		31AA936D233F5A2B00C88FD1 /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
 		31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
@@ -162,8 +170,10 @@
 				31D39A682333B53A0050A777 /* MapKitAnnounce */,
 				31D39A5C2330F0BD0050A777 /* Announce */,
 				31261847232B83DF00091AA4 /* AuthViewController.swift */,
+				31AA936B233F4D6200C88FD1 /* MasterViewController.swift */,
 				31865B31232CE77F00A52657 /* ProfilTableViewController.swift */,
 				31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */,
+				31AA9326233E20EE00C88FD1 /* ViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -187,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */,
+				31AA9324233CEDC200C88FD1 /* Semaine2TableViewController.swift */,
 				31AA9322233CAF2100C88FD1 /* SemaineTableViewController.swift */,
 				31261845232B81F700091AA4 /* AnnounceSearchTableViewController.swift */,
 				31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */,
@@ -202,6 +213,7 @@
 				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
 				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
 				31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */,
+				31AA936D233F5A2B00C88FD1 /* Master.swift */,
 			);
 			path = ModelVC;
 			sourceTree = "<group>";
@@ -541,12 +553,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31AA9327233E20EE00C88FD1 /* ViewController.swift in Sources */,
 				31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */,
 				31865B30232CE6CD00A52657 /* Extension.swift in Sources */,
 				31261842232B805600091AA4 /* Announce.swift in Sources */,
 				31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */,
 				3126184A232B8C4400091AA4 /* AnnounceList.swift in Sources */,
 				31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */,
+				31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */,
 				31D39A6E2338DCE70050A777 /* EditAnnounceTableView.swift in Sources */,
 				31D39A702338E4740050A777 /* CustomTableView.swift in Sources */,
 				31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */,
@@ -558,9 +572,11 @@
 				31D39A6C2333C0F60050A777 /* MapKitAnnounce.swift in Sources */,
 				31865B38232CE9B400A52657 /* Profil.swift in Sources */,
 				31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */,
+				31AA936E233F5A2B00C88FD1 /* Master.swift in Sources */,
 				31547E05232E3CA300698B95 /* AnnounceEdit.swift in Sources */,
 				31AA9321233CA41400C88FD1 /* CurrentUserManager.swift in Sources */,
 				31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */,
+				31AA9325233CEDC200C88FD1 /* Semaine2TableViewController.swift in Sources */,
 				31AA9323233CAF2100C88FD1 /* SemaineTableViewController.swift in Sources */,
 				31D39A6223311BE80050A777 /* FireBase.swift in Sources */,
 				31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */,

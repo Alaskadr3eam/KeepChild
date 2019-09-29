@@ -14,12 +14,23 @@ class AnnounceSearchTableViewController: UITableViewController {
 
     @IBOutlet weak var searchTableView: CustomTableView!
 
+    //let searchController = UISearchController(searchResultsController: nil)
+    
+    //@IBOutlet weak var controlSegmented: UISegmentedControl!
+
+   /* @IBAction func actionSegmentedControl(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:break
+        case 1:break
+        default:break
+        }
+    }*/
     var announceList = AnnounceList()
    // var manageFireBase = ManageFireBase()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "map"), style: .plain, target: self, action: #selector(mapAccess))
+        //initSearchController()
+       // self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "map"), style: .plain, target: self, action: #selector(mapAccess))
         //announceList.delegateAnnounceList = self
        // manageFireBase.queryAnnounceAll = manageFireBase.createQueryAll(collection: "Announce2")
        // announceList.observeQuery()
@@ -35,10 +46,53 @@ class AnnounceSearchTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        searchTableView.reloadData()
          //manageFireBase.readDataAnnounce()
         //announceList.readData()
-        request()
+        //request()
     }
+    // MARK: - Search Controller
+   /* private func initSearchController() {
+       
+        //searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.searchBar.placeholder = "Search Announce"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        searchController.searchBar.tintColor = UIColor.black
+        searchController.searchBar.barTintColor = UIColor.black
+        //searchController.searchBar.text
+        //searchController.searchBar.showsBookmarkButton = true
+        //searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
+        createButtonForFiltered()
+    }
+
+    private func createButtonForFiltered() {
+        searchController.searchBar.showsBookmarkButton = true
+        searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
+        // MARK: You may change position of bookmark button.
+        //searchController.searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
+        
+    }
+    
+    private func searchBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
+        /*recipeFavorite.recipeSearch = recipeFavorite.recipeArray.filter({( announce : Announce) -> Bool in
+            guard let name = recipe.label else {
+                return false
+            }
+            return name.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()*/
+    }
+    
+    private func isFiltering() -> Bool {
+        return searchController.isActive && !searchBarIsEmpty()
+    }*/
     
     func request() {
         searchTableView.setLoadingScreen()
@@ -49,6 +103,7 @@ class AnnounceSearchTableViewController: UITableViewController {
             self.searchTableView.reloadData()
             self.searchTableView.removeLoadingScreen()
         }
+        
     }
 
     @objc func mapAccess() {
@@ -151,3 +206,6 @@ class AnnounceSearchTableViewController: UITableViewController {
         tableView.reloadData()
     }
 }*/
+
+extension AnnounceSearchTableViewController: UISearchBarDelegate {
+}

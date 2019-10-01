@@ -19,7 +19,26 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var latitudeAnnounceTextField: UITextField!
     @IBOutlet weak var longitudeAnnounceTextField: UITextField!
     @IBOutlet weak var switchTel: UISwitch!
-   
+    
+    @IBOutlet weak var diurneSwitch: UISwitch!
+    @IBOutlet weak var nocturneSwitch: UISwitch!
+
+    func momentDaySwitch(_ sender: UISwitch) -> Bool {
+       
+        if sender.isOn {
+            //sender.thumbTintColor = UIColor.yellow
+            //mommentDayLabel.text = "Jour"
+            return true
+        } else {
+           // sender.thumbTintColor = UIColor.black
+            //mommentDayLabel.text = "Nuit"
+            return false
+        }
+        //return false
+    }
+    
+   // var diurnal = Bool()
+   // var nocturne = Bool()
     
     var announceEdit = AnnounceEdit()
     var profilGestion = ProfilGestion()
@@ -28,7 +47,6 @@ class AnnounceEditTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
        // manageFireBase.idUser = UserDefaults.standard.string(forKey: "userID")!
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
 
@@ -60,6 +78,7 @@ class AnnounceEditTableViewController: UITableViewController {
 
 
     @objc func saveAnnounce() {
+       
         retriveGeoLocForAnnounce()
         
         //manageFireBase.addData(announce: announce)
@@ -122,7 +141,7 @@ class AnnounceEditTableViewController: UITableViewController {
             guard coordinate != nil else { return }
             //creation announce une fois les coordonnées recupérées
             self.createAnnounce()
-            self.announceEdit.addData(announce: self.announceEdit.announce, idAnnounce: idAnnounce)
+            self.announceEdit.addData(announce: self.announceEdit.announce)
             //self.announceEdit.addSemaine(semaine: semaine, idDocument: idAnnounce)
             self.reinitView()
         }
@@ -136,7 +155,7 @@ class AnnounceEditTableViewController: UITableViewController {
                 return
         }
         let tel = switchTelIsClicked()
-        announceEdit.createAnnounce(title: title, description: description, price: price, tel: tel)
+        announceEdit.createAnnounce(title: title, description: description, price: price, tel: tel, day: momentDaySwitch(diurneSwitch), night: momentDaySwitch(nocturneSwitch))
     }
     
     func reinitView() {

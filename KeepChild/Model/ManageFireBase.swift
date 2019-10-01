@@ -26,6 +26,8 @@ class ManageFireBase {
     
     //for detail announce
     //var announceDetail: Announce!
+
+    
     
     func createQuery(collection: String, field: String, equal: String) -> Query {
         let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: equal)
@@ -138,12 +140,54 @@ class ManageFireBase {
             //self.delegateManageFireBaseAnnounceSearch?.resultForRequestAnnounceSearch()
     }
 
+    func searchAnnounceWithFilter(dayFilter: [String], completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        var announceListArray = [Announce]()
+        Firestore.firestore().collection("Announce2").whereField("dayList", arrayContains: dayFilter[0]).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+            for document in querySnap.documents {
+                print(document.data())
+                
+                var announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
+                announce.id = document.documentID
+                announceListArray.append(announce)
+                print(document.documentID, document.data())
+            }
+            completionHandler(nil,announceListArray)
+        }
+        
+    }
+
+    func searchAnnounceWithFilter(dayFilter: String, boolFilter: Bool, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        var announceListArray = [Announce]()
+        Firestore.firestore().collection("Announce2").whereField(dayFilter, isEqualTo: boolFilter).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+            for document in querySnap.documents {
+                print(document.data())
+                
+                var announce = try! FirestoreDecoder().decode(Announce.self, from: document.data())
+                announce.id = document.documentID
+                announceListArray.append(announce)
+                print(document.documentID, document.data())
+            }
+            completionHandler(nil,announceListArray)
+        }
+        
+    }
+
     
     
-    func addData(announce: Announce, idAnnounce: String) {
+    func addData(announce: Announce) {
         let docData = try! FirestoreEncoder().encode(announce)
         print(docData)
-        Firestore.firestore().collection("Announce2").document(idAnnounce).setData(docData) { error in
+        Firestore.firestore().collection("Announce2").addDocument(data: docData) { error in
             if let error = error {
                 print("Error writing document: \(error)")
             } else {

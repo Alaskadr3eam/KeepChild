@@ -1,49 +1,50 @@
 //
-//  Semaine2TableViewController.swift
+//  FilterTableViewController.swift
 //  KeepChild
 //
-//  Created by Clément Martin on 26/09/2019.
+//  Created by Clément Martin on 30/09/2019.
 //  Copyright © 2019 Clément Martin. All rights reserved.
 //
 
 import UIKit
 
-class Semaine2TableViewController: UITableViewController {
+class FilterTableViewController: UITableViewController {
+    
+    let tabBar = UITabBar()
 
+    @IBOutlet weak var buttonSearch: UIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
+    @IBOutlet weak var resetButton: UIBarButtonItem!
+    
     @IBOutlet var switchDay: [UISwitch]!
-    @IBOutlet weak var jourSwitch: UISwitch!
-    @IBOutlet weak var mommentDayLabel: UILabel!
-    
     var jour = [String]()
-    var announceEdit = AnnounceEdit()
     
+    @IBOutlet var switchJourNuit: [UISwitch]!
+    var momentDay = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
+    }
+    
+    func switchDayIsClicked(_ sender: UISwitch) {
+        
+            if sender.isOn {
+                jour.append(returnDayForSwitch(sender))
+            }/* else {
+                jour.append("")
+        }*/
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    // MARK: - Table view data source
-
-    func switchTelIsClicked(_ sender: UISwitch) -> Bool {
-        
+    func switchMomentDayIsClicked(_ sender: UISwitch) {
         if sender.isOn {
-            //jour.append(returnDayForSwitch(sender))
-            return true
-        } else {
-            return false
+            momentDay.append(returnDayForSwitch(sender))
         }
-        
     }
-    
-    
 
+   
+    
     func returnDayForSwitch(_ sender: UISwitch) -> String {
         switch sender.tag {
         case 0: return "Lundi"
@@ -53,31 +54,40 @@ class Semaine2TableViewController: UITableViewController {
         case 4: return "Vendredi"
         case 5: return "Samedi"
         case 6: return "Dimanche"
+        case 7: return "Jour"
+        case 8: return "Nuit"
         default : return ""
         }
     }
 
+    
     func createJourForKeep() {
         for switchButton in switchDay {
-            switchTelIsClicked(switchButton)
+            switchDayIsClicked(switchButton)
+        }
+        for switchButton in switchJourNuit {
+            switchMomentDayIsClicked(switchButton)
         }
     }
 
-    func createSemaine() -> Semaine {
-        let semaine = Semaine(idUser: nil, lundi: switchTelIsClicked(switchDay[0]), mardi: switchTelIsClicked(switchDay[1]), mercredi: switchTelIsClicked(switchDay[2]), jeudi: switchTelIsClicked(switchDay[3]), vendredi: switchTelIsClicked(switchDay[4]), samedi: switchTelIsClicked(switchDay[5]), dimanche: switchTelIsClicked(switchDay[6]))
-        return semaine
-    }
-    
-    @objc func saveAnnounce() {
-        //jour.removeAll()
-        //createJourForKeep()
-        //print(jour.enumerated())
-        announceEdit.encodeObjectInData(semaine: createSemaine())
-        //UserDefaults.standard.set(jour, forKey: "jour")
-        self.navigationController?.popViewController(animated: true)
-        
 
+    @IBAction func searchButtonIsClicked(_ sender: UIBarButtonItem) {
+        FilterSearch.shared.day = nil
+        FilterSearch.shared.boolDay = nil
+        //createJourForKeep()
+        //let jourSearch = jour.createString()
+        //let momentDaySearch = momentDay.createString()
+        FilterSearch.shared.day = "semaine.lundi"
+        FilterSearch.shared.boolDay = true
+        dismiss(animated: true, completion: nil)
+        //print(jour.enumerated())
+        //print(momentDay.enumerated())
     }
+
+
+    // MARK: - Table view data source
+
+   
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -134,4 +144,14 @@ class Semaine2TableViewController: UITableViewController {
     }
     */
 
+}
+
+class FilterSearch {
+    
+    static var shared = FilterSearch()
+    
+    private init () {}
+    
+    var day: String!
+    var boolDay: Bool!
 }

@@ -19,22 +19,37 @@ class AnnounceEdit {
     var location: CLLocationCoordinate2D!
     var jour: String!
     
-    func addData(announce: Announce, idAnnounce: String) {
-        manageFireBase.addData(announce: announce, idAnnounce: idAnnounce)
+
+    func encodeObjectInData(semaine: Semaine) {
+        if let encodedData = try? JSONEncoder().encode(semaine) {
+            UserDefaults.standard.set(encodedData, forKey: "semaine")
+        }
+    }
+    
+    func decodedDataInObject() -> Semaine? {
+        let decoded = UserDefaults.standard.data(forKey: "semaine")!
+        if let loadedSemaine = try? JSONDecoder().decode(Semaine.self, from: decoded) {
+            return loadedSemaine
+        }
+        return nil
+    }
+    func addData(announce: Announce) {
+        manageFireBase.addData(announce: announce)
     }
 
-    func createAnnounce(title: String, description: String,price: String, tel: Bool) {
+    func createAnnounce(title: String, description: String,price: String, tel: Bool, day: Bool, night: Bool) {
       
         guard let idUser = idUser else { return }
-        let title = title
-        let description = description
-        let price = price
+        //let title = title
+        //let description = description
+        //let price = price
         let latitude = location.latitude
         let longitute = location.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
-        let tel = tel
-        guard let jour = UserDefaults.standard.stringArray(forKey: "jour") else { return }
-        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, jour: jour, coordinate: coordinate, tel: tel)
+        //let tel = tel
+        let semaine = decodedDataInObject()!
+        //guard let jour = UserDefaults.standard.stringArray(forKey: "jour") else { return }
+        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
         announce = announceCreate
     }
 

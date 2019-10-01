@@ -30,36 +30,61 @@ class MasterViewController: UIViewController {
         return viewController
     }()
 
- /*   lazy var filterTableViewController: FilterTableViewController = {
+    lazy var filterTableViewController: FilterTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let viewController = storyboard.instantiateViewController(withIdentifier: "FilterTableViewController") as! FilterTableViewController
         self.addViewControllerAsChildViewController(childController: viewController)
         return viewController
-    }()*/
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupView()
         initSearchController()
+        request()
         //request()
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        request()
+        requestWithFilter()
     }
     
     func request() {
-        announceSearchTableViewController.searchTableView.setLoadingScreen()
+        
+            announceSearchTableViewController.searchTableView.setLoadingScreen()
         master.readData(collection: "Announce2") { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard announceList != nil else { return }
             self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
         }
+        
     }
+    
+    func requestWithFilter() {
+        if FilterSearch.shared.day != nil || FilterSearch.shared.boolDay != nil {
+            master.searchAnnounceFiltered(dayFilter: FilterSearch.shared.day, boolFilter: FilterSearch.shared.boolDay) { [weak self] (error, announceList) in
+                guard let self = self else { return }
+                guard error == nil else { return }
+                guard announceList != nil else { return }
+                self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
+            }
+        }
+    }
+    
+   /* func requestWithFilter() {
+        if FilterSearch.shared.day != nil || FilterSearch.shared.momentDay != nil {
+            master.searchAnnounceFiltered(searchDay: FilterSearch.shared.day) { [weak self] (error, announceList) in
+                guard let self = self else { return }
+                guard error == nil else { return }
+                guard announceList != nil else { return }
+                self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
+            }
+        }
+    }*/
      // MARK: - prepare ViewController
     private func prepareViewForChildViewController(vc1: AnnounceSearchTableViewController, vc2: MapKitAnnounceViewController) {
         prepareSearchTableView(vc: vc1)
@@ -83,6 +108,7 @@ class MasterViewController: UIViewController {
     private func initSearchController() {
         
         //searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = true
         searchController.searchBar.placeholder = "Search Announce"
         navigationItem.searchController = searchController
@@ -98,9 +124,12 @@ class MasterViewController: UIViewController {
     private func createButtonForFiltered() {
         searchController.searchBar.showsBookmarkButton = true
         searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
-        
         // MARK: You may change position of bookmark button.
         //searchController.searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
+        
+    }
+    
+    @objc func buttonFilteredIsClicked() {
         
     }
 
@@ -180,14 +209,33 @@ class MasterViewController: UIViewController {
         childController.didMove(toParent: self)
     }*/
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "filtered" {
+            if segue.destination is FilterTableViewController {
+                //vcDestination.detailAnnounce.announce = announceList.announceDetail
+            }
+        }
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
+    
 
+}
+
+extension MasterViewController: UISearchBarDelegate {
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        print("cliçckeed")
+        performSegue(withIdentifier: "filtered", sender: nil)
+        //filterTableViewController.view.isHidden = false
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+   
 }

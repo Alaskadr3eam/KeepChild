@@ -28,6 +28,7 @@
 		31AA9327233E20EE00C88FD1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA9326233E20EE00C88FD1 /* ViewController.swift */; };
 		31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA936B233F4D6200C88FD1 /* MasterViewController.swift */; };
 		31AA936E233F5A2B00C88FD1 /* Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA936D233F5A2B00C88FD1 /* Master.swift */; };
+		31AD6B882341E4BE0044D8BF /* FilterTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AD6B872341E4BE0044D8BF /* FilterTableViewController.swift */; };
 		31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */; };
 		31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */; };
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
@@ -90,6 +91,7 @@
 		31AA9326233E20EE00C88FD1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		31AA936B233F4D6200C88FD1 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 		31AA936D233F5A2B00C88FD1 /* Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Master.swift; sourceTree = "<group>"; };
+		31AD6B872341E4BE0044D8BF /* FilterTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				31D39A5C2330F0BD0050A777 /* Announce */,
 				31261847232B83DF00091AA4 /* AuthViewController.swift */,
 				31AA936B233F4D6200C88FD1 /* MasterViewController.swift */,
+				31AD6B872341E4BE0044D8BF /* FilterTableViewController.swift */,
 				31865B31232CE77F00A52657 /* ProfilTableViewController.swift */,
 				31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */,
 				31AA9326233E20EE00C88FD1 /* ViewController.swift */,
@@ -575,6 +578,7 @@
 				31AA936E233F5A2B00C88FD1 /* Master.swift in Sources */,
 				31547E05232E3CA300698B95 /* AnnounceEdit.swift in Sources */,
 				31AA9321233CA41400C88FD1 /* CurrentUserManager.swift in Sources */,
+				31AD6B882341E4BE0044D8BF /* FilterTableViewController.swift in Sources */,
 				31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */,
 				31AA9325233CEDC200C88FD1 /* Semaine2TableViewController.swift in Sources */,
 				31AA9323233CAF2100C88FD1 /* SemaineTableViewController.swift in Sources */,

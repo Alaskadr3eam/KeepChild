@@ -273,6 +273,18 @@ extension CustomMKMapView {
         self.loadingView.removeFromSuperview()
     }
 }
+
+extension Array {
+    //func to put a word array into a word string
+    func createString() -> String {
+        let array = self
+        var string = String()
+        for i in 0..<array.count {
+            string += "\(array[i])"
+        }
+        return string
+    }
+}
 /*extension UIImage {
     func uploadProfileImage(imageData: Data)
     {

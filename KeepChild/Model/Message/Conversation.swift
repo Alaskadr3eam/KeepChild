@@ -40,20 +40,6 @@ extension Conversation: DatabaseRepresentation {
     
 }
 
-/*struct Message: Codable {
-    let idUserSender: String
-    let message:
-    let timeStamp: String
-}*/
-
-/*extension Message2: MessageType, Codable {}
-
-extension SenderType: Codable {}
-
-extension MessageKind: Codable {
-    
-}*/
-
 struct Message2: MessageType {
     
     var id: String?
@@ -118,13 +104,7 @@ struct Message2: MessageType {
             return nil
         }
     }
-    
-  /*  init(sender: SenderType, messageId: String, sentDate: Date, kind: MessageKind) {
-        self.sender = sender
-        self.messageId = messageId
-        self.sentDate = sentDate
-        self.kind = kind
-    }*/
+
 }
 
 extension Message2: DatabaseRepresentation {

@@ -24,10 +24,6 @@
 		31A861D423448AB300C4127F /* FirstMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D323448AB300C4127F /* FirstMessageTableViewController.swift */; };
 		31A861D623448BAB00C4127F /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D523448BAB00C4127F /* Conversation.swift */; };
 		31A861D92344A02000C4127F /* ConversationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D82344A02000C4127F /* ConversationTableViewController.swift */; };
-		31A861DB2344AB7A00C4127F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861DA2344AB7A00C4127F /* ChatViewController.swift */; };
-		31A861DD2344AC4B00C4127F /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861DC2344AC4B00C4127F /* ChatTableViewCell.swift */; };
-		31A861DF2344AC5800C4127F /* Chat2TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861DE2344AC5800C4127F /* Chat2TableViewCell.swift */; };
-		31A861E12344E49900C4127F /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861E02344E49900C4127F /* CustomLabel.swift */; };
 		31A861E32345D13E00C4127F /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861E22345D13E00C4127F /* MessageViewController.swift */; };
 		31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA931C233B6A2500C88FD1 /* CustomImageView.swift */; };
 		31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */; };
@@ -100,10 +96,6 @@
 		31A861D323448AB300C4127F /* FirstMessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMessageTableViewController.swift; sourceTree = "<group>"; };
 		31A861D523448BAB00C4127F /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		31A861D82344A02000C4127F /* ConversationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewController.swift; sourceTree = "<group>"; };
-		31A861DA2344AB7A00C4127F /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		31A861DC2344AC4B00C4127F /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
-		31A861DE2344AC5800C4127F /* Chat2TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat2TableViewCell.swift; sourceTree = "<group>"; };
-		31A861E02344E49900C4127F /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		31A861E22345D13E00C4127F /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		31AA931C233B6A2500C88FD1 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMKMapView.swift; sourceTree = "<group>"; };
@@ -230,7 +222,6 @@
 			children = (
 				31A861D323448AB300C4127F /* FirstMessageTableViewController.swift */,
 				31A861D82344A02000C4127F /* ConversationTableViewController.swift */,
-				31A861DA2344AB7A00C4127F /* ChatViewController.swift */,
 				31A861E22345D13E00C4127F /* MessageViewController.swift */,
 			);
 			path = Chat;
@@ -248,9 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				31A861D1234485FA00C4127F /* HomeTableViewCell.swift */,
-				31A861E02344E49900C4127F /* CustomLabel.swift */,
-				31A861DC2344AC4B00C4127F /* ChatTableViewCell.swift */,
-				31A861DE2344AC5800C4127F /* Chat2TableViewCell.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -620,7 +608,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				31AA9327233E20EE00C88FD1 /* ViewController.swift in Sources */,
-				31A861E12344E49900C4127F /* CustomLabel.swift in Sources */,
 				31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */,
 				31865B30232CE6CD00A52657 /* Extension.swift in Sources */,
 				31261842232B805600091AA4 /* Announce.swift in Sources */,
@@ -630,7 +617,6 @@
 				3126184A232B8C4400091AA4 /* AnnounceList.swift in Sources */,
 				31A861D623448BAB00C4127F /* Conversation.swift in Sources */,
 				31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */,
-				31A861DB2344AB7A00C4127F /* ChatViewController.swift in Sources */,
 				31B909EB23437DDB0075761A /* UICollectionView+Additions.swift in Sources */,
 				31B909EF23437DFC0075761A /* UIImage+Additions.swift in Sources */,
 				31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */,
@@ -641,7 +627,6 @@
 				31547E03232E3A4A00698B95 /* AnnounceTableView.swift in Sources */,
 				31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */,
 				31A861D92344A02000C4127F /* ConversationTableViewController.swift in Sources */,
-				31A861DF2344AC5800C4127F /* Chat2TableViewCell.swift in Sources */,
 				31865B32232CE77F00A52657 /* ProfilTableViewController.swift in Sources */,
 				31D39A6423321B780050A777 /* ManageFireBase.swift in Sources */,
 				31E2D326232B77D80088E508 /* KeepChild.xcdatamodeld in Sources */,
@@ -664,7 +649,6 @@
 				31D39A672333A3990050A777 /* CustomCell.swift in Sources */,
 				31261846232B81F700091AA4 /* AnnounceSearchTableViewController.swift in Sources */,
 				31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */,
-				31A861DD2344AC4B00C4127F /* ChatTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

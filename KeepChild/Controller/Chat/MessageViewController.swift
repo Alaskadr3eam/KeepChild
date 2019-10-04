@@ -12,6 +12,10 @@ import MessageKit
 import InputBarAccessoryView
 
 class MessageViewController: MessagesViewController {
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     private var messages = [Message2]()
     private var messageDict = [[String : Any]]()
@@ -21,6 +25,8 @@ class MessageViewController: MessagesViewController {
     private var messageListener: ListenerRegistration?
     private var reference: CollectionReference?
     private let db = Firestore.firestore()
+    
+    
     
     deinit {
         messageListener?.remove()
@@ -39,11 +45,16 @@ class MessageViewController: MessagesViewController {
         super.viewDidLoad()
         
         decodeConversationMessage()
+
+        //self.navigationItem.largeTitleDisplayMode = .always
         
-        navigationItem.largeTitleDisplayMode = .never
         
+        
+        messageInputBar.backgroundView.backgroundColor = UIColor(named: "bleu")
+        messageInputBar.inputTextView.backgroundColor = .white
+        messageInputBar.inputTextView.layer.cornerRadius = 20
         maintainPositionOnKeyboardFrameChanged = true
-        messageInputBar.inputTextView.tintColor = .primary
+        //messageInputBar.inputTextView.tintColor = .primary
         messageInputBar.sendButton.setTitleColor(.primary, for: .normal)
         messageInputBar.sendButton.setTitleColor(
             UIColor.primary.withAlphaComponent(0.3),

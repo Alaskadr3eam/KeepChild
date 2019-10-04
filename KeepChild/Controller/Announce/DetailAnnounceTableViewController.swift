@@ -14,7 +14,7 @@ import CodableFirebase
 import CoreLocation
 
 class DetailAnnounceTableViewController: UITableViewController {
-    
+    //MARK: -Properties Outlet
     @IBOutlet weak var image: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -26,39 +26,59 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var mailLabel: UILabel!
     @IBOutlet weak var modifyButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
-    
     @IBOutlet weak var detailTableView: CustomTableView!
-    
-    @IBOutlet var cell: [UITableViewCell]!
 
-    // model for gestion controller
+    //MARK: -Properties models
     var detailAnnounce = DetailAnnounce()
     var mapKitAnnounce = MapKitAnnounce()
     var profilGestion = ProfilGestion()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-   decodeProfilSaved()
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "< Back", style: .plain, target: self, action: #selector(backIsClicked))
+        detailTableView.tableHeaderView?.isHidden = true
+        
+        detailTableView.allowsSelection = false
+        detailTableView.setLoadingScreen()
+        decodeProfilSaved()
         locMapKit.delegate = self
-
         request()
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         request()
     }
+    
+  /*  override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        request()
+    }*/
+    //MARK: -Action func
+    @objc func backIsClicked() {
+        dismiss(animated: true, completion: nil)
+    }
 
-    //MARK: - PrepareMapKit
+    @IBAction func deleteAnnounce() {
+        if detailAnnounce.idUser == detailAnnounce.announce.idUser {
+            guard let id = detailAnnounce.announce.id else { return }
+            detailAnnounce.deleteAnnounce(announceId: id)
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func sendMessage(_ sender: Any) {
+        performSegue(withIdentifier: "SendMessage", sender: nil)
+    }
 
+    //MARK: -PrepareMapKit
     //func for prepare mapKitView
     private func centerMapOnLocation(location: CLLocation, regionRadius: CLLocationDistance) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         locMapKit.setRegion(coordinateRegion, animated: true)
-        //on enleve la page de chargement mapKit
-        locMapKit.removeLoadingScreen()
+        
     }
     //func for create annotation for mapKitView
     private func createAnnotationMapView() {
@@ -80,6 +100,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     //func initialisation MapKitView
     private func initLocMapView() {
         initializeRegionViewMapView()
+        //on enleve la page de chargement mapKit
+        locMapKit.removeLoadingScreen()
     }
 
     private func retrieveCoordinateAnnounce() {
@@ -107,10 +129,10 @@ class DetailAnnounceTableViewController: UITableViewController {
         }
     }
     
-    //MARK: - Prepare Display Announce Detail
+    //MARK: -Prepare Display Announce Detail
     private func request() {
       //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
-        detailTableView.setLoadingScreen()
+        //detailTableView.setLoadingScreen()
         locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
         profilGestion.retrieveProfilAnnounce(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
@@ -138,19 +160,11 @@ class DetailAnnounceTableViewController: UITableViewController {
 
     }
     
-    func telLabelInit() {
+    private func telLabelInit() {
         (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
     }
-    // MARK: - Action Button
-    
-    @IBAction func deleteAnnounce() {
-        if detailAnnounce.idUser == detailAnnounce.announce.idUser {
-            guard let id = detailAnnounce.announce.id else { return }
-            detailAnnounce.deleteAnnounce(announceId: id)
-        }
-        self.navigationController?.popViewController(animated: true)
-    }
-    
+
+    //MARK: -Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SendMessage" {
             if let vcDestination = segue.destination as? FirstMessageTableViewController {
@@ -158,12 +172,8 @@ class DetailAnnounceTableViewController: UITableViewController {
                 vcDestination.announce = detailAnnounce.announce
             }
         }
-       
     }
-
-    @IBAction func sendMessage(_ sender: Any) {
-        performSegue(withIdentifier: "SendMessage", sender: nil)
-    }
+    
     
 }
 
@@ -173,21 +183,22 @@ extension DetailAnnounceTableViewController: MKMapViewDelegate {
         guard let annotation = annotation as? AnnounceLocation else { return nil }
         // 3
         let identifier = "marker"
-        var view: MKMarkerAnnotationView
+        var view: MKPinAnnotationView
         // 4
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-            as? MKMarkerAnnotationView {
+            as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
             // 5
-            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view.canShowCallout = true
             view.calloutOffset = CGPoint(x: -5, y: 5)
             //view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             let mapsButton = UIButton(type: .detailDisclosure)
             view.rightCalloutAccessoryView = mapsButton
         }
+        view.animatesDrop = true
         return view
     }
 }

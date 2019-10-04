@@ -106,6 +106,7 @@ extension CustomTableView {
         //self.addSubview(loadingView)
         self.addSubview(self.loadingView)
         //self.backgroundView = loadingView
+        
     }
     
     func removeLoadingScreen() {
@@ -163,7 +164,8 @@ extension UIViewController {
 }
 extension UIImage {
     enum Quality: CGFloat {
-        case lowest  = 0
+        case lowestHard  = 0
+        case lowest = 0.1
         case low     = 0.25
         case medium  = 0.5
         case high    = 0.75

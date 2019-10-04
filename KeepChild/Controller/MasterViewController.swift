@@ -99,8 +99,8 @@ class MasterViewController: UIViewController {
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
         vc.mapKitAnnounce.announceList = self.master.announceList
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
-        let announce = vc.mapKitAnnounce.announceListLocation
-        vc.mapKitViewAnnounce.addAnnotations(announce)
+        //let announce = vc.mapKitAnnounce.announceListLocation
+        //vc.mapKitViewAnnounce.addAnnotations(announce)
     }
 
      // MARK: - Search Controller
@@ -164,6 +164,8 @@ class MasterViewController: UIViewController {
         announceSearchTableViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 0)
         //announceSearchTableViewController.announceList.announceList = master.announceList
         mapKitAnnounceViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 1)
+        
+        mapKitAnnounceViewController.viewDidAppear(true)
         //mapKitAnnounceViewController.mapKitAnnounce.announceList = master.announceList
     }
 

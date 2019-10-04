@@ -58,7 +58,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             guard let id = user?.uid else { return }
             guard let email = user?.email else { return }
             //create user in singleton for use in app
-            let user = User(id: id, email: email)
+            let user = User(senderId: id, email: email)
             CurrentUserManager.shared.user = user
             //CurrentUserManager.shared.user.id = id
             //CurrentUserManager.shared.user.email = email
@@ -71,7 +71,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     }
     //func retrieve profilUser if existing
     func retrieveProfil() {
-        let idUser2 = CurrentUserManager.shared.user.id
+        let idUser2 = CurrentUserManager.shared.user.senderId
         //guard let idUser = profilGestion.idUser else { return }
         CurrentUserManager.shared.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser2) { (error, profil) in
             guard error == nil else { return }
@@ -136,7 +136,7 @@ extension AuthViewController: AuthViewDelegate {
             guard user != nil else { return }
             guard let id = user?.user.uid else { return }
             guard let email = user?.user.email else { return }
-            CurrentUserManager.shared.user.id = id
+            CurrentUserManager.shared.user.senderId = id
             CurrentUserManager.shared.user.email = email
             //UserDefaults.standard.set(id, forKey: "userID")
             self.retrieveProfil()

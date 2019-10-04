@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import CodableFirebase
 import Firebase
-
+import MessageKit
 //public typealias GeoPoint = CLLocationCoordinate2D
 
 struct Announce: Codable {
@@ -141,7 +141,10 @@ class AnnounceLocation: NSObject, MKAnnotation {
     
 }
 
-struct User {
-    var id: String
+struct User: SenderType, Equatable {
+    var senderId: String
+    var displayName: String {
+        return CurrentUserManager.shared.profil.pseudo
+    }
     var email: String
 }

@@ -34,7 +34,7 @@ class ProfilGestion {
     var imageProfil = UIImage()
     
     //func for encode object in userDefault
-    func encodedProfilUser(semaine: Semaine) {
+  /*  func encodedProfilUser(semaine: Semaine) {
         if let encodedProfil = try? JSONEncoder().encode(profil) {
             UserDefaults.standard.set(encodedProfil, forKey: "Semaine")
         }
@@ -46,7 +46,7 @@ class ProfilGestion {
                 //self.profil = profilLoaded
             }
         }
-    }
+    }*/
 
     func retrieveAnnunceUser(collection: String, field: String, equal: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         manageFireBase.retrieveAnnounceUser(collection: collection, field: field, equal: equal) { [weak self] (error, announce) in

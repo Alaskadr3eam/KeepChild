@@ -137,6 +137,7 @@ class AnnounceSearchTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
         announceList.announceDetail = announceList.announceList[indexPath.row]
+        encodedProfilUser(announce: announceList.announceDetail)
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
     
@@ -175,7 +176,13 @@ class AnnounceSearchTableViewController: UITableViewController {
         return true
     }
     */
-
+    func encodedProfilUser(announce: Announce) {
+        if let encodedProfil = try? JSONEncoder().encode(announce) {
+            UserDefaults.standard.set(encodedProfil, forKey: "announce")
+        }
+    }
+    //func for decode object in userDefault
+    
     
     // MARK: - Navigation
 
@@ -183,7 +190,7 @@ class AnnounceSearchTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailAnnounce" {
             if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
-                vcDestination.detailAnnounce.announce = announceList.announceDetail
+                
             }
         }
         if segue.identifier == "mapKitView" {

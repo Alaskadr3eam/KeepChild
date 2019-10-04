@@ -102,7 +102,7 @@ class EditProfilTableViewController: UITableViewController {
         guard let tel = telTextField.text else { return nil }
         guard let telInt = Int(tel) else { return nil }
         guard let pseudo = pseudoTextField.text else { return nil }
-        let idUser = CurrentUserManager.shared.user.id
+        let idUser = CurrentUserManager.shared.user.senderId
         let postalCode = profilGestion.postalCode
         let city = profilGestion.city
         let email = CurrentUserManager.shared.user.email

@@ -132,7 +132,7 @@ class AnnounceEditTableViewController: UITableViewController {
     //retrieve geoloc, create announce and addData in database.
     func retriveGeoLocForAnnounce() {
         //let number = Int.random(in: 0 ..< 10000000000)
-        let idAnnounce = CurrentUserManager.shared.user.id
+        let idAnnounce = CurrentUserManager.shared.user.senderId
         //guard let semaine = decodeProfilSaved() else { return }
         let adressString = "(\(CurrentUserManager.shared.profil.postalCode) \(CurrentUserManager.shared.profil.city)"
         announceEdit.getCoordinate(addressString: adressString) { [weak self] (coordinate, error) in

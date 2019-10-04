@@ -12,6 +12,7 @@ pod 'Firebase/Firestore'
 pod 'CodableFirebase'
 pod 'Firebase/Database'
 pod 'Firebase/Storage'
+pod 'MessageKit'
 
 
 # add pods for any other desired Firebase products

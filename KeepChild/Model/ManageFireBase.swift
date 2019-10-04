@@ -79,6 +79,33 @@ class ManageFireBase {
                 }
             }
     }
+    
+    func retrieveConversationUser(field: String, completionHandler: @escaping(Error?,[Conversation]?) -> Void) {
+        var arrayConversation = [Conversation]()
+        
+        createQuery(collection: "Conversation", field: field, equal: CurrentUserManager.shared.user.senderId).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error, nil)
+                return
+            }
+            
+            guard let querySnap = querySnapshot else { return }
+            for document in querySnap.documents {
+                let doc = document.data()
+                let name = doc["name"] as! String
+                let idUser1 = doc["idUser1"] as! String
+                let idUser2 = doc["idUser2"] as! String
+                let arrayMessage = doc["message"] as! [[String : Any]]
+                let conversation = Conversation(id: document.documentID, name: name, idUser1: idUser1, idUser2: idUser2, arrayMessage: arrayMessage)
+                arrayConversation.append(conversation)
+            }
+            if arrayConversation.count == 0 {
+                completionHandler(nil,nil)
+            } else {
+                completionHandler(nil,arrayConversation)
+            }
+        }
+    }
 
     func retrieveProfilUser(collection: String, field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         var arrayProfil = [ProfilUser]()
@@ -106,9 +133,9 @@ class ManageFireBase {
     
     func updateData(collection: String, documentID: String, update: [String:Any], completionHandler: @escaping(Error?,Bool?) -> Void) {
         let ref = Firestore.firestore().collection(collection)
-        let profilRef = ref.document(documentID)
+        let docRef = ref.document(documentID)
         
-        profilRef.updateData(update) { err in
+        docRef.updateData(update) { err in
             guard err == nil else {
                 print("error update")
                 completionHandler(err,false)

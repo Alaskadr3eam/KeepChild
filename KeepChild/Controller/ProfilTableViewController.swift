@@ -36,7 +36,7 @@ class ProfilTableViewController: UITableViewController {
 
     func requestInitProfil() {
        // guard let idUser = profilGestion.idUser else { return }
-        let idUser = CurrentUserManager.shared.user.id
+        let idUser = CurrentUserManager.shared.user.senderId
     
         profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
             guard let self = self else { return }

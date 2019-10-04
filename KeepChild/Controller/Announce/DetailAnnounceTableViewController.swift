@@ -38,7 +38,7 @@ class DetailAnnounceTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-   
+   decodeProfilSaved()
         locMapKit.delegate = self
 
         request()
@@ -99,6 +99,14 @@ class DetailAnnounceTableViewController: UITableViewController {
         }
     }
     
+    func decodeProfilSaved(){
+        if let savedProfil = UserDefaults.standard.object(forKey: "announce") as? Data {
+            if let profilLoaded = try? JSONDecoder().decode(Announce.self, from: savedProfil) {
+                self.detailAnnounce.announce = profilLoaded
+            }
+        }
+    }
+    
     //MARK: - Prepare Display Announce Detail
     private func request() {
       //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
@@ -142,7 +150,21 @@ class DetailAnnounceTableViewController: UITableViewController {
         }
         self.navigationController?.popViewController(animated: true)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SendMessage" {
+            if let vcDestination = segue.destination as? FirstMessageTableViewController {
+                vcDestination.idAnnounceUser = detailAnnounce.announce.idUser
+                vcDestination.announce = detailAnnounce.announce
+            }
+        }
+       
+    }
 
+    @IBAction func sendMessage(_ sender: Any) {
+        performSegue(withIdentifier: "SendMessage", sender: nil)
+    }
+    
 }
 
 extension DetailAnnounceTableViewController: MKMapViewDelegate {

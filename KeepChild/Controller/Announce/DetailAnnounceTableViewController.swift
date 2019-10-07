@@ -61,15 +61,19 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
 
     @IBAction func deleteAnnounce() {
-        if detailAnnounce.idUser == detailAnnounce.announce.idUser {
+        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
             guard let id = detailAnnounce.announce.id else { return }
             detailAnnounce.deleteAnnounce(announceId: id)
+        } else {
+            self.presentAlert(title: "Attention", message: "Ceci n'est pas votre annonce.")
         }
         self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func sendMessage(_ sender: Any) {
+        if !itsAnnounceOfUser() {
         performSegue(withIdentifier: "SendMessage", sender: nil)
+        }
     }
 
     //MARK: -PrepareMapKit
@@ -127,6 +131,14 @@ class DetailAnnounceTableViewController: UITableViewController {
                 self.detailAnnounce.announce = profilLoaded
             }
         }
+    }
+    //on verifie que l'annonce n'appartient pas a l'utilisateur avant d'ouvrir l'envoie message
+    private func itsAnnounceOfUser() -> Bool {
+        if detailAnnounce.announce.idUser == CurrentUserManager.shared.user.senderId {
+            self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous envoyer un message.")
+            return true
+        }
+        return false
     }
     
     //MARK: -Prepare Display Announce Detail

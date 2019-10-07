@@ -15,7 +15,6 @@ class AnnounceEditTableViewController: UITableViewController {
     
     //MARK: -Properties Outlet
     @IBOutlet weak var titleAnnounceTextField: UITextField!
-    @IBOutlet weak var descriptionAnnounceTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var priceAnnounceTextField: UITextField!
     @IBOutlet weak var switchTel: UISwitch!
@@ -28,6 +27,9 @@ class AnnounceEditTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        announceEdit.delegate = self
+        //announceEdit.removeUserDefaultObject(forkey: "semaine")
         self.navigationItem.title = "Créer votre annonce"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
         descriptionTextView.layer.borderColor = UIColor.gray.cgColor
@@ -52,13 +54,16 @@ class AnnounceEditTableViewController: UITableViewController {
 
     //MARK: -Action Func
     @objc func saveAnnounce() {
-        retriveGeoLocForAnnounce()
+        if textFieldIsEmpty() == true {
+            retriveGeoLocForAnnounce()
+            
+        }
     }
 
     //MARK: -View Func
     func reinitView() {
         titleAnnounceTextField.text? = ""
-        descriptionAnnounceTextField.text? = ""
+        descriptionTextView.text? = ""
         priceAnnounceTextField.text = ""
     }
 
@@ -69,6 +74,32 @@ class AnnounceEditTableViewController: UITableViewController {
         priceAnnounceTextField.isUserInteractionEnabled = bool
     }*/
 
+    private func textFieldIsEmpty() -> Bool {
+        let title = "Attention"
+        if titleAnnounceTextField.text?.isEmpty == true {
+            let message = "Titre de l'annonce non remplie. Il faut que tout les champs soit renseignés."
+            self.presentAlert(title: title, message: message)
+            return false
+        }
+        if descriptionTextView.text?.isEmpty == true {
+            let message = "Description non remplie. Il faut que tout les champs soit renseignés."
+            self.presentAlert(title: title, message: message)
+            return false
+        }
+        if priceAnnounceTextField.text?.isEmpty == true {
+            let message = "Prix non remplie. Il faut que tout les champs soit renseignés."
+            self.presentAlert(title: title, message: message)
+            return false
+        }
+        let semaine = announceEdit.decodedDataInObject()
+        if semaine == nil {
+            let message = "Attention, vous n'avez pas sélectionné les jours de la semaine ou vous étiez disponnible."
+            self.presentAlert(title: title, message: message)
+            return false
+        }
+       return true
+    }
+
     private func switchTelIsClicked() -> Bool {
         if switchTel.isOn {
             return true
@@ -78,9 +109,6 @@ class AnnounceEditTableViewController: UITableViewController {
 
     //retrieve geoloc, create announce and addData in database.
     private func retriveGeoLocForAnnounce() {
-        //let number = Int.random(in: 0 ..< 10000000000)
-        //let idAnnounce = CurrentUserManager.shared.user.senderId
-        //guard let semaine = decodeProfilSaved() else { return }
         let adressString = "(\(CurrentUserManager.shared.profil.postalCode) \(CurrentUserManager.shared.profil.city)"
         announceEdit.getCoordinate(addressString: adressString) { [weak self] (coordinate, error) in
             guard let self = self else { return }
@@ -88,8 +116,10 @@ class AnnounceEditTableViewController: UITableViewController {
             guard coordinate != nil else { return }
             //creation announce une fois les coordonnées recupérées
             self.createAnnounce()
+            //storage announce
             self.announceEdit.addData(announce: self.announceEdit.announce)
-            //self.announceEdit.addSemaine(semaine: semaine, idDocument: idAnnounce)
+            //remove UserDefault "semaine"
+            self.announceEdit.removeUserDefaultObject(forkey: "semaine")
             self.reinitView()
         }
     }
@@ -214,5 +244,13 @@ class AnnounceEditTableViewController: UITableViewController {
 }
 
 extension AnnounceEditTableViewController: UITextViewDelegate {
+    
+}
+
+extension AnnounceEditTableViewController: AnnounceEditDelegate {
+    func alert(_ title: String, _ message: String) {
+        self.presentAlert(title: title, message: message)
+    }
+    
     
 }

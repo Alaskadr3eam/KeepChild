@@ -14,42 +14,68 @@ import MessageKit
 class FirstMessageTableViewController: UITableViewController {
 
     @IBOutlet weak var messageTxt: UITextView!
-    
+    var manageFireBase = ManageFireBase()
     var idAnnounceUser = String()
     var arrayMessage = [Message2]()
     var arrayMessageRep = [[String: Any]]()
     var announce: Announce!
+    
+    var isExisting: Bool = false
+    var documentID = String()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        messageTxt.delegate = self
+        
+        customTextViewPlaceholder(textView: messageTxt)
+        //customTextView(textView: messageTxt)
+        
+        documentID = CurrentUserManager.shared.user.senderId + idAnnounceUser + announce.id!
+        readConversation(documentID: documentID)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    func readConversation(documentID: String) {
+        manageFireBase.readConversation(documentID: documentID) { (bool) in
+            guard bool == true else {
+                return
+            }
+            self.isExisting = true
+        }
+    }
 
-    // MARK: - Table view data source
-
-  
+    // MARK: -Action Func
     @IBAction func validateMessage(_ sender: Any) {
-        //let timeStamp = NSDate().timeIntervalSince1970
-        //let now = NSDate()
-        //let nowTimeStamp = self.getCurrentTimeStampWOMiliseconds(dateToConvert: now)
-
-        //let message = Message(idUserSender: CurrentUserManager.shared.user.id, message: messageTxt.text, timeStamp: nowTimeStamp)
-      // let message2 = Message2(text: messageTxt.text, senderName: sende, senderId: <#T##SenderType#>, date: <#T##Date#>)
-        let message = Message2(text: messageTxt.text, user: CurrentUserManager.shared.user)
-        arrayMessageRep.append(message.representation)
-        arrayMessage.append(message)
-        let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
-        //let encodedConversation = try! FirestoreEncoder().encode(conversation)
-        Firestore.firestore().collection("Conversation").addDocument(data: conversation.representation)
-       // Firestore.firestore().collection("Message").addDocument(data: message.representation)
+        if textViewIsEmpty() == true {
+            let message = Message2(text: messageTxt.text, user: CurrentUserManager.shared.user)
+            arrayMessageRep.append(message.representation)
+            arrayMessage.append(message)
+            let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
+            if isExisting == true {
+                Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
+            } else {
+                Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)
+            }
+            
+        }
+    }
+    //on verifie que le champs message n'est pas vide
+    private func textViewIsEmpty() -> Bool {
+        guard let text = messageTxt.text else { return false }
+        if text.isEmpty == true || text == "Tapez votre message" || text == " "{
+            self.presentAlert(title: "Attention", message: "Votre message est vide")
+            return false
+        }
+        return true
     }
     
     @IBAction func `return`(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
+       
     }
 
     func getCurrentTimeStampWOMiliseconds(dateToConvert: NSDate) -> String {
@@ -116,4 +142,37 @@ class FirstMessageTableViewController: UITableViewController {
     }
     */
 
+}
+extension FirstMessageTableViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Tapez votre message" {
+            customTextView(textView: textView)
+        }
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty == true {
+            customTextViewPlaceholder(textView: textView)
+        }
+    }
+    
+    func customTextViewPlaceholder(textView: UITextView) {
+        textView.text = "Tapez votre message"
+        textView.textColor = UIColor.lightGray
+        textView.font = UIFont(name: "verdana", size: 13.0)
+        textView.returnKeyType = .done
+    }
+    
+    func customTextView(textView: UITextView) {
+        textView.text = ""
+        textView.textColor = UIColor.black
+        textView.font = UIFont(name: "verdana", size: 18.0)
+    }
 }

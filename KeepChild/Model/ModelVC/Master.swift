@@ -11,6 +11,7 @@ import Foundation
 class Master {
     var manageFireBase = ManageFireBase()
     var announceList = [Announce]()
+    var announceTransition: [Announce]!
 
     func readData(collection: String, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         manageFireBase.readDataAnnounce(collection: collection) { [weak self] (error, announceList) in
@@ -25,8 +26,28 @@ class Master {
             completionHandler(nil,announce)
         }
     }
+    var day: [String:Bool?] = ["semaine.mercredi":true,
+                               "semaine.jeudi": true]
+    func testRequestFilter(completionHandler: @escaping(Error?, [Announce]?) -> Void) {
+        
+        for(key,value) in day {
+        manageFireBase.searchAnnounceWithFilter(dayFilter: key, boolFilter: value) { [weak self] (error, announceList) in
+            guard let self = self else { return }
+            guard error == nil else {
+                completionHandler(error,nil)
+                return
+            }
+            guard let announce = announceList else { return }
+            self.announceTransition = announce
+            
+        }
+            
+        }
+        completionHandler(nil,self.announceTransition)
+        
+    }
     
-    func searchAnnounceFiltered(dayFilter: String, boolFilter: Bool, completionHandler: @escaping(Error?, [Announce]?) -> Void) {
+    func searchAnnounceFiltered(dayFilter: String, boolFilter: Bool?, completionHandler: @escaping(Error?, [Announce]?) -> Void) {
         manageFireBase.searchAnnounceWithFilter(dayFilter: dayFilter, boolFilter: boolFilter) { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else {

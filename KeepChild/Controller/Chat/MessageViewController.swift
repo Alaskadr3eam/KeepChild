@@ -45,7 +45,7 @@ class MessageViewController: MessagesViewController {
         super.viewDidLoad()
         
         decodeConversationMessage()
-
+        navigationItem.title = conversation.name
         //self.navigationItem.largeTitleDisplayMode = .always
         
         

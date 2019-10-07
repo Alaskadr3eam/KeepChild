@@ -42,11 +42,15 @@ class ProfilTableViewController: UITableViewController {
             guard let self = self else { return }
             guard error == nil else { return }
             guard announce != nil else { return }
-            self.tableView.reloadData()
+            if announce!.count == 0 {
+                self.tableView.setEmptyMessage("Vous n'avez pas d'annonce publiée pour le moment.")
+            } else {
+                self.tableView.reloadData()
+            }
         }
 
     }
- 
+    //MARK: -Action Func
     @IBAction func logOut() {
         try! Auth.auth().signOut()
         if let storyboard = self.storyboard {
@@ -55,9 +59,8 @@ class ProfilTableViewController: UITableViewController {
         }
     }
     
-    
+    //MARK: -View
     func initView() {
-        //guard let profil = profilGestion.profil else { return }
         guard let profil = CurrentUserManager.shared.profil else { return }
         profilView.pseudoLabel.text = /*profilGestion.*/profil.pseudo
         profilView.imageProfil.downloadCustom(idUserImage: profil.iDuser, contentMode: .scaleToFill)

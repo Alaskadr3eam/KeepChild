@@ -26,8 +26,6 @@ class ManageFireBase {
     
     //for detail announce
     //var announceDetail: Announce!
-
-    
     
     func createQuery(collection: String, field: String, equal: String) -> Query {
         let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: equal)
@@ -79,7 +77,23 @@ class ManageFireBase {
                 }
             }
     }
-    
+    func readConversation(documentID: String,completionHandler: @escaping(Bool?)->Void) {
+       
+        Firestore.firestore().collection("Conversation").document(documentID).addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot else {
+                print("Error fetching document: \(error!)")
+                completionHandler(false)
+                return
+            }
+            guard let doc = document.data() else {
+                print("Document data was empty.")
+                completionHandler(false)
+                return
+            }
+            completionHandler(true)
+            print("Current data: \(doc)")
+        }
+    }
     func retrieveConversationUser(field: String, completionHandler: @escaping(Error?,[Conversation]?) -> Void) {
         var arrayConversation = [Conversation]()
         
@@ -187,9 +201,24 @@ class ManageFireBase {
         }
         
     }
-
-    func searchAnnounceWithFilter(dayFilter: String, boolFilter: Bool, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+    var filter = ["semaine.lundi":true,
+                  "semaine.mardi":nil,
+                  "semaine.mercredi":nil,
+                  "semaine.jeudi":nil,
+                  "semaine.vendredi":nil,
+                  "semaine.samedi":nil,
+                  "semaine.dimanche":nil]
+    /*var request = Firestore.firestore().collection("Announce2").whereField("semaine.lundi", isEqualTo: true).whereField("semaine.mardi", isEqualTo: nil).whereField("semaine.mercredi", isEqualTo: nil).whereField("semaine.jeudi", isEqualTo: nil).whereField("semaine.vendredi", isEqualTo: nil).whereField("semaine.samedi", isEqualTo: nil).whereField("semaine.dimanche", isEqualTo: nil)*/
+   /* func test -> CollectionReference {
+        var request = Firestore.firestore().collection("Announce2").whereField("semaine.lundi", isEqualTo: true).whereField("semaine.mardi", isEqualTo: nil).whereField("semaine.mercredi", isEqualTo: nil).whereField("semaine.jeudi", isEqualTo: nil).whereField("semaine.vendredi", isEqualTo: nil).whereField("semaine.samedi", isEqualTo: nil).whereField("semaine.dimanche", isEqualTo: nil)
+        for (key,value) in filter {
+            request = request.whereField(key, isEqualTo: value)
+        }
+        return request
+    }*/
+    func searchAnnounceWithFilter(dayFilter: String, boolFilter: Bool?, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         var announceListArray = [Announce]()
+        //let refFilter = test(filter: ["semaine.lundi":true])
         Firestore.firestore().collection("Announce2").whereField(dayFilter, isEqualTo: boolFilter).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 completionHandler(error, nil)
@@ -211,13 +240,16 @@ class ManageFireBase {
 
     
     
-    func addData(announce: Announce) {
+    func addData(announce: Announce, completionHandler: @escaping(Bool?) -> Void) {
         let docData = try! FirestoreEncoder().encode(announce)
         print(docData)
-        Firestore.firestore().collection("Announce2").addDocument(data: docData) { error in
+        Firestore.firestore().collection("Announce2").addDocument(data: docData) { [weak self] error in
+            guard let self = self else { return }
             if let error = error {
+                completionHandler(false)
                 print("Error writing document: \(error)")
             } else {
+                completionHandler(true)
                 print("Document successfully written!")
             }
         }
@@ -313,3 +345,5 @@ class ManageFireBase {
         }
     }*/
 }
+
+

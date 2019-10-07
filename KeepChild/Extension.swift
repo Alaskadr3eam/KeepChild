@@ -15,51 +15,13 @@ import FirebaseStorage
 
 extension UITableView {
     //func to create a view waiting for the request on the tableview
-  /*  func setLoadingScreen(loadingView: UIView,spinner:UIActivityIndicatorView, loadingLabel: UILabel ) {
-        
-        let width: CGFloat = self.bounds.width
-        let height: CGFloat = self.bounds.height
-        let x: CGFloat = 0
-        let y: CGFloat = 0
-        
-        loadingView.frame = CGRect(x: x, y: y, width: width, height: height)
-        loadingView.backgroundColor = UIColor.white
-        
-        // Sets loading text
-        loadingLabel.textColor = .gray
-        loadingLabel.textAlignment = .center
-        loadingLabel.text = "Loading..."
-        //loadingLabel.center = loadingView.center
-        loadingLabel.frame = CGRect(x: 0, y: 0, width: loadingView.bounds.width, height: loadingView.bounds.height - 200)
-        
-        // Sets spinner
-        spinner.style = .gray
-        spinner.frame = CGRect(x: -50, y: 0, width: loadingView.bounds.width, height: loadingView.bounds.height - 200)
-        spinner.startAnimating()
-        
-        // Adds text and spinner to the view
-        loadingView.addSubview(spinner)
-        loadingView.addSubview(loadingLabel)
-        
-        //self.addSubview(loadingView)
-        self.addSubview(loadingView)
-        //self.backgroundView = loadingView
-    }
     
-    func removeLoadingScreen(loadingView: UIView,spinner:UIActivityIndicatorView, loadingLabel: UILabel) {
-        //we stop everything and we hide it
-        spinner.stopAnimating()
-        spinner.isHidden = true
-        loadingLabel.isHidden = true
-        //we remove the view
-        loadingView.removeFromSuperview()
-    }
     
     func setEmptyMessage(_ message: String) {
         //create label for message
         let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
         messageLabel.text = message
-        messageLabel.backgroundColor = UIColor(named: "Fond")
+        messageLabel.backgroundColor = UIColor(named: "bleu")
         messageLabel.textColor = .white
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
@@ -74,7 +36,7 @@ extension UITableView {
         //remove the backgroundView from the tableView
         self.backgroundView = nil
         self.separatorStyle = .singleLine
-    }*/
+    }
 }
 extension CustomTableView {
     func setLoadingScreen() {
@@ -116,27 +78,6 @@ extension CustomTableView {
         self.label.isHidden = true
         //we remove the view
         self.loadingView.removeFromSuperview()
-    }
-    
-    func setEmptyMessage(_ message: String) {
-        //create label for message
-        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
-        messageLabel.text = message
-        messageLabel.backgroundColor = UIColor(named: "Fond")
-        messageLabel.textColor = .white
-        messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .center
-        messageLabel.font = UIFont(name: "TrebuchetMS", size: 18)
-        messageLabel.sizeToFit()
-        //add label in backgroundView
-        self.backgroundView = messageLabel
-        self.separatorStyle = .none
-    }
-    
-    func restore() {
-        //remove the backgroundView from the tableView
-        self.backgroundView = nil
-        self.separatorStyle = .singleLine
     }
 }
 
@@ -204,10 +145,13 @@ extension CustomImageView {
         let x: CGFloat = 0
         let y: CGFloat = 0
         
-        self.loadingView.frame = CGRect(x: x, y: y, width: width, height: height)
+        //self.loadingView.frame = CGRect(x: x, y: y, width: width, height: height)
+        self.loadingView.center = self.center
         self.loadingView.backgroundColor = UIColor.white
         // Sets spinner
+        self.spinner.center = self.center
         self.spinner.style = .gray
+        
         self.spinner.frame = CGRect(x: 0, y: 0, width: loadingView.bounds.width, height: loadingView.bounds.height)
         self.spinner.startAnimating()
         // Add spinner to the view

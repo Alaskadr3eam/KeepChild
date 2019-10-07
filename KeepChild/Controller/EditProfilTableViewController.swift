@@ -17,9 +17,11 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var telTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var postalCodeTextField: UITextField!
+    
     @IBOutlet weak var pictureProfil: CustomImageView!
     @IBOutlet weak var editProfilTableView: CustomTableView!
     
+    @IBOutlet weak var saveButtonEdit: UIBarButtonItem!
     //MARK: -Propertie model
     var profilGestion = ProfilGestion()
     
@@ -38,7 +40,17 @@ class EditProfilTableViewController: UITableViewController {
         pickPicture()
     }
 
+    @IBAction func saveNewProfil(_ sender: Any) {
+        textFieldIsEmpty()
+        if pictureProfil.image == UIImage(named: "addUser") {
+            saveProfilNoPicture()
+        } else {
+            saveProfilWithPicture()
+        }
+        navigationController?.popViewController(animated: true)
+    }
     @objc func saveProfilUser() {
+        textFieldIsEmpty()
         if pictureProfil.image == UIImage(named: "addUser") {
             saveProfilNoPicture()
         } else {
@@ -48,6 +60,7 @@ class EditProfilTableViewController: UITableViewController {
     }
     
     @objc func updateProfilButton() {
+        textFieldIsEmpty()
         let update: [String: Any] = [
             "name": nameTextField.text as Any,
             "prenom": prenomTextField.text as Any,
@@ -94,6 +107,33 @@ class EditProfilTableViewController: UITableViewController {
     }
     
     //MARK: -Helpers Func
+    private func textFieldIsEmpty() -> Void {
+        let title = "Attention"
+        if nameTextField.text?.isEmpty == true {
+            let message = "Champs du nom non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+        if prenomTextField.text?.isEmpty == true {
+            let message = "Champs du prénom non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+        if telTextField.text?.isEmpty == true {
+            let message = "Champs du téléphone non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+        if pseudoTextField.text?.isEmpty == true {
+            let message = "Champs du pseudo non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+        if cityTextField.text?.isEmpty == true {
+            let message = "Champs de la ville non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+        if postalCodeTextField.text?.isEmpty == true {
+            let message = "Champs du code postal non remplie. Il faut que tout les champs soit renseignés."
+            return self.presentAlert(title: title, message: message)
+        }
+    }
     private func createProfilUser() -> ProfilUser? {
         guard let name = nameTextField.text else { return nil }
         guard let prenom = prenomTextField.text else { return nil }

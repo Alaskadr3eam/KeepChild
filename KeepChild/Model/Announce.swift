@@ -52,45 +52,9 @@ struct Semaine: Codable {
     var dimanche: Bool?
     
 }
-/*struct DayItem: Codable {
-    private var item: Day
-    var isSelected = false
-    var title: String {
-        return item.title
-    }
-    
-    init(item: Day) {
-        self.item = item
-    }
-}
-struct Day: Codable {
-    var title: String
-}*/
 
 extension GeoPoint: GeoPointType {}
 
-/*
-struct Coordinate: Codable {
-    let lat: Double
-    let long: Double
-    
-    init(lat: Double, long: Double) {
-        self.lat = lat
-        self.long = long
-    }
-}
- */
-/*
-struct Adresse: Codable {
-    var lat: Int?
-    var long: Int?
-}
- */
-/*
-struct AnnounceListData: Codable {
-    var announce: [Announce]
-}
-*/
 struct ProfilUser: Codable {
     var id: String?
     var iDuser: String

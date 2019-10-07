@@ -42,13 +42,15 @@ class MasterViewController: UIViewController {
 
         setupView()
         initSearchController()
-        request()
         //request()
+        //request()
+        requestWithFilter()
         // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+       // request()
         requestWithFilter()
     }
     
@@ -65,13 +67,20 @@ class MasterViewController: UIViewController {
     }
     
     func requestWithFilter() {
-        if FilterSearch.shared.day != nil || FilterSearch.shared.boolDay != nil {
-            master.searchAnnounceFiltered(dayFilter: FilterSearch.shared.day, boolFilter: FilterSearch.shared.boolDay) { [weak self] (error, announceList) in
+       // if FilterSearch.shared.day != nil || FilterSearch.shared.boolDay != nil {
+         /*   master.searchAnnounceFiltered(dayFilter: "semaine.jeudi", boolFilter: nil) { [weak self] (error, announceList) in
                 guard let self = self else { return }
                 guard error == nil else { return }
                 guard announceList != nil else { return }
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
-            }
+         //   }
+        }*/
+        master.testRequestFilter { [weak self] (error, announceList) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard announceList != nil else { return }
+            self.master.announceList = self.master.announceTransition
+            self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
         }
     }
     

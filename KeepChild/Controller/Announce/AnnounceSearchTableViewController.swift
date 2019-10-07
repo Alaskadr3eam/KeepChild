@@ -135,7 +135,7 @@ class AnnounceSearchTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
+       /* let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell*/
         announceList.announceDetail = announceList.announceList[indexPath.row]
         encodedProfilUser(announce: announceList.announceDetail)
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)

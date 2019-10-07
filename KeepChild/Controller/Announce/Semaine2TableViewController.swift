@@ -11,8 +11,7 @@ import UIKit
 class Semaine2TableViewController: UITableViewController {
 
     @IBOutlet var switchDay: [UISwitch]!
-    @IBOutlet weak var jourSwitch: UISwitch!
-    @IBOutlet weak var mommentDayLabel: UILabel!
+    var navigationBar: UINavigationBar!
     
     var jour = [String]()
     var announceEdit = AnnounceEdit()
@@ -20,13 +19,6 @@ class Semaine2TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
@@ -67,17 +59,13 @@ class Semaine2TableViewController: UITableViewController {
         let semaine = Semaine(idUser: nil, lundi: switchTelIsClicked(switchDay[0]), mardi: switchTelIsClicked(switchDay[1]), mercredi: switchTelIsClicked(switchDay[2]), jeudi: switchTelIsClicked(switchDay[3]), vendredi: switchTelIsClicked(switchDay[4]), samedi: switchTelIsClicked(switchDay[5]), dimanche: switchTelIsClicked(switchDay[6]))
         return semaine
     }
-    
-    @objc func saveAnnounce() {
-        //jour.removeAll()
-        //createJourForKeep()
-        //print(jour.enumerated())
-        announceEdit.encodeObjectInData(semaine: createSemaine())
-        //UserDefaults.standard.set(jour, forKey: "jour")
-        self.navigationController?.popViewController(animated: true)
-        
-
+    @IBAction func saveSemaineSelection(_ sender: UIBarButtonItem) {
+    announceEdit.encodeObjectInData(semaine: createSemaine())
+    //UserDefaults.standard.set(jour, forKey: "jour")
+    dismiss(animated: true, completion: nil)
+    self.navigationController?.popViewController(animated: true)
     }
+ 
 
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

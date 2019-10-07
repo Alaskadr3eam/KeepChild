@@ -58,16 +58,27 @@ class ConversationTableViewController: UITableViewController {
             guard let self = self else { return }
             guard error == nil else { return }
             guard conversation != nil else {
-                 self.tableView.reloadData()
+                //if no conversation -> display message
+                self.tableViewIsEmpty()
+                 //self.tableView.reloadData()
                 return }
             guard let resulConv = conversation else { return }
             for conv in resulConv {
                 self.arrayConversation.append(conv)
             }
-            self.tableView.reloadData()
+            self.tableViewIsEmpty()
+            
         }
     }
 
+    private func tableViewIsEmpty() {
+        if self.arrayConversation.count == 0 {
+            //if no conversation -> display message
+            self.tableView.setEmptyMessage("Aucune conversation en cours pour le moment.")
+        } else {
+            self.tableView.reloadData()
+        }
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

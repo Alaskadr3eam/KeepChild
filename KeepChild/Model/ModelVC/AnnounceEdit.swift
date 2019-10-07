@@ -13,7 +13,8 @@ import CoreLocation
 
 class AnnounceEdit {
     var manageFireBase = ManageFireBase()
-    var idUser = UserDefaults.standard.string(forKey: "userID")
+    //var idUser = UserDefaults.standard.string(forKey: "userID")
+    var delegate: AnnounceEditDelegate?
     
     var announce: Announce!
     var location: CLLocationCoordinate2D!
@@ -27,28 +28,35 @@ class AnnounceEdit {
     }
     
     func decodedDataInObject() -> Semaine? {
-        let decoded = UserDefaults.standard.data(forKey: "semaine")!
+        guard let decodeUserDefault = UserDefaults.standard.data(forKey: "semaine") else { return nil }
+        let decoded = decodeUserDefault
         if let loadedSemaine = try? JSONDecoder().decode(Semaine.self, from: decoded) {
             return loadedSemaine
         }
         return nil
     }
+
+    func removeUserDefaultObject(forkey: String) {
+        UserDefaults.standard.removeObject(forKey: forkey)
+    }
+    
     func addData(announce: Announce) {
-        manageFireBase.addData(announce: announce)
+        manageFireBase.addData(announce: announce) { bool in
+            guard bool == true else {
+                self.delegate?.alert("Annonce non envoyé", "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
+                return
+            }
+            self.delegate?.alert("Annonce envoyé", "Félicitation, votre annonce a été enregistré.")
+        }
     }
 
     func createAnnounce(title: String, description: String,price: String, tel: Bool, day: Bool, night: Bool) {
       
-        guard let idUser = idUser else { return }
-        //let title = title
-        //let description = description
-        //let price = price
+        let idUser = CurrentUserManager.shared.user.senderId
         let latitude = location.latitude
         let longitute = location.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
-        //let tel = tel
         let semaine = decodedDataInObject()!
-        //guard let jour = UserDefaults.standard.stringArray(forKey: "jour") else { return }
         let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
         announce = announceCreate
     }
@@ -74,4 +82,8 @@ class AnnounceEdit {
     }*/
     
    
+}
+
+protocol AnnounceEditDelegate {
+    func alert(_ title: String,_ message: String)
 }

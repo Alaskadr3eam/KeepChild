@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import CodableFirebase
 
 class MasterViewController: UIViewController {
     
@@ -37,24 +39,25 @@ class MasterViewController: UIViewController {
         return viewController
     }()
     
+    let group = DispatchGroup()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filtered"), style: .plain, target: self, action: #selector(filteredButtonIsClicked))
         setupView()
         initSearchController()
-        //request()
-        //request()
-        requestWithFilter()
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-       // request()
         requestWithFilter()
+        
     }
     
-    func request() {
+    @objc func filteredButtonIsClicked() {
+        performSegue(withIdentifier: "filtered", sender: nil)
+    }
+    // MARK: - Request
+    private func request() {
         
             announceSearchTableViewController.searchTableView.setLoadingScreen()
         master.readData(collection: "Announce2") { [weak self] (error, announceList) in
@@ -65,35 +68,78 @@ class MasterViewController: UIViewController {
         }
         
     }
-    
-    func requestWithFilter() {
-       // if FilterSearch.shared.day != nil || FilterSearch.shared.boolDay != nil {
-         /*   master.searchAnnounceFiltered(dayFilter: "semaine.jeudi", boolFilter: nil) { [weak self] (error, announceList) in
+
+    private func requestWithFilter() {
+        //let myGroup = DispatchGroup()
+        if FilterSearch.shared.lesserGeopoint != nil && FilterSearch.shared.greaterGeopoint != nil {
+        let lesserGeopoint = FilterSearch.shared.lesserGeopoint
+        let greaterGeopoint = FilterSearch.shared.greaterGeopoint
+       /* for (day,bool) in dayFilter {
+            myGroup.enter()*/
+            self.master.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint!, greaterGeopoint: greaterGeopoint!) { [weak self] (error, announceList) in
                 guard let self = self else { return }
                 guard error == nil else { return }
                 guard announceList != nil else { return }
+                //print("Finished request\(day)")
+                //myGroup.leave()
+                self.filteredAnnounce()
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
-         //   }
-        }*/
-        master.testRequestFilter { [weak self] (error, announceList) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard announceList != nil else { return }
-            self.master.announceList = self.master.announceTransition
+                }
+              //  myGroup.leave()
+                //self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
+            
+            }
+        
+       /* myGroup.notify(queue: .main) {
+            print("Finished all request")
+            self.filteredAnnounce()
+            //self.master.announceList = self.master.announceTransition.removeDuplicates()
+            print(self.master.announceTransition.count)
+            print(self.master.announceList.count)
             self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
-        }
+        
+        }*/
     }
     
-   /* func requestWithFilter() {
-        if FilterSearch.shared.day != nil || FilterSearch.shared.momentDay != nil {
-            master.searchAnnounceFiltered(searchDay: FilterSearch.shared.day) { [weak self] (error, announceList) in
-                guard let self = self else { return }
-                guard error == nil else { return }
-                guard announceList != nil else { return }
-                self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
+    private func filteredAnnounce() {
+        let dayFilter = FilterSearch.shared.dayFilter
+        let momentDay = FilterSearch.shared.momentDay
+        var announceWithFilterDay = [Announce]()
+        var announceWithAllFilter = [Announce]()
+        for announce in master.announceTransition {
+            if announce.semaine.lundi == dayFilter["lundi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.mardi == dayFilter["mardi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.mercredi == dayFilter["mercredi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.jeudi == dayFilter["jeudi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.vendredi == dayFilter["vendredi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.samedi == dayFilter["samedi"] {
+                announceWithFilterDay.append(announce)
+            }
+            if announce.semaine.dimanche == dayFilter["dimanche"] {
+                announceWithFilterDay.append(announce)
             }
         }
-    }*/
+        for announce in announceWithFilterDay {
+            if announce.day == momentDay["day"] {
+                announceWithAllFilter.append(announce)
+            }
+            if announce.night == momentDay["night"] {
+                announceWithAllFilter.append(announce)
+            }
+        }
+        master.announceList = announceWithAllFilter.removeDuplicates()
+    }
+
      // MARK: - prepare ViewController
     private func prepareViewForChildViewController(vc1: AnnounceSearchTableViewController, vc2: MapKitAnnounceViewController) {
         prepareSearchTableView(vc: vc1)
@@ -115,19 +161,14 @@ class MasterViewController: UIViewController {
      // MARK: - Search Controller
     
     private func initSearchController() {
-        
-        //searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = true
+        searchController.dimsBackgroundDuringPresentation = true
         searchController.searchBar.placeholder = "Search Announce"
         navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.tintColor = UIColor.black
         searchController.searchBar.barTintColor = UIColor.black
-        //searchController.searchBar.text
-        //searchController.searchBar.showsBookmarkButton = true
-        //searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
-        createButtonForFiltered()
+      //  createButtonForFiltered()
     }
 
     private func createButtonForFiltered() {
@@ -135,7 +176,6 @@ class MasterViewController: UIViewController {
         searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
         // MARK: You may change position of bookmark button.
         //searchController.searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
-        
     }
     
     @objc func buttonFilteredIsClicked() {
@@ -165,7 +205,6 @@ class MasterViewController: UIViewController {
     
     private func setupView() {
         setupSegmentedControl()
-        
         updateView()
     }
     
@@ -173,8 +212,7 @@ class MasterViewController: UIViewController {
         announceSearchTableViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 0)
         //announceSearchTableViewController.announceList.announceList = master.announceList
         mapKitAnnounceViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 1)
-        
-        mapKitAnnounceViewController.viewDidAppear(true)
+        mapKitAnnounceViewController.viewWillAppear(true)
         //mapKitAnnounceViewController.mapKitAnnounce.announceList = master.announceList
     }
 
@@ -183,7 +221,6 @@ class MasterViewController: UIViewController {
         segmentedControl.insertSegment(withTitle: "Liste", at: 0, animated: false)
         segmentedControl.insertSegment(withTitle: "Map", at: 1, animated: false)
         segmentedControl.addTarget(self, action: #selector(selectionDidChange(sender:)), for: .valueChanged)
-        
         segmentedControl.selectedSegmentIndex = 0
     }
     
@@ -192,35 +229,19 @@ class MasterViewController: UIViewController {
     }
     
     private func addViewControllerAsChildViewController(childController: UIViewController) {
-        addChild(childController)
-        
+        //addChild(childController)
         view.addSubview(childController.view)
-        
         childController.view.frame = view.bounds
         childController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        childController.didMove(toParent: self)
+        //childController.didMove(toParent: self)
     }
     
     private func removeViewControllerAsChildViewController(childController: UIViewController) {
         childController.willMove(toParent: nil)
-        
         childController.view.removeFromSuperview()
-        
         childController.removeFromParent()
     }
-   /* internal override func addChildViewController(_ childController: UIViewController) {
-        addChild(childController)
-        
-        view.addSubview(childController.view)
-        
-        childController.view.frame = view.bounds
-        childController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        childController.didMove(toParent: self)
-    }*/
 
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -239,7 +260,6 @@ class MasterViewController: UIViewController {
 
 extension MasterViewController: UISearchBarDelegate {
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        print("cliçckeed")
         performSegue(withIdentifier: "filtered", sender: nil)
         //filterTableViewController.view.isHidden = false
     }

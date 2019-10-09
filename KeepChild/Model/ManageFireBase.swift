@@ -10,6 +10,11 @@ import Foundation
 import Firebase
 import CodableFirebase
 
+
+
+
+
+
 class ManageFireBase {
     
     //var arrayProfilAnnounce = [Announce]()
@@ -180,10 +185,51 @@ class ManageFireBase {
             }
             //self.delegateManageFireBaseAnnounceSearch?.resultForRequestAnnounceSearch()
     }
-
-    func searchAnnounceWithFilter(dayFilter: [String], completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+ /*   func testBoucle(completionHandler: @escaping(Error?,[Announce]?) -> Void) {
         var announceListArray = [Announce]()
-        Firestore.firestore().collection("Announce2").whereField("dayList", arrayContains: dayFilter[0]).getDocuments { (querySnapshot, error) in
+        var announceListArrayCompleted = [Announce]()
+        var isOK = false
+        let group = DispatchGroup()
+       //  group.enter()
+        for (day,bool) in filter {
+           
+            searchAnnounceWithFilter(dayFilter: day, boolFilter: bool) { (error, announceList) in
+                guard error == nil else {
+                    return
+                }
+                guard let announceArray = announceList else { return }
+                for announce in announceArray {
+                    announceListArrayCompleted.append(announce)
+                }
+            }
+        }
+       //group.leave()
+        
+        
+    }*/
+    
+    
+    func getDocumentAnnounceNearby(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint) {
+        let docRef = Firestore.firestore().collection("locations")
+        let query = docRef.whereField("location", isGreaterThan: lesserGeopoint).whereField("location", isLessThan: greaterGeopoint)
+        
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in snapshot!.documents {
+                    print("\(document.documentID) => \(document.data())")
+                }
+            }
+        }
+        
+    }
+
+    
+
+    func searchAnnounceWithFilter(completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+        var announceListArray = [Announce]()
+        Firestore.firestore().collection("Announce2").whereField("semaine.jeudi", isEqualTo: true).whereField("semaine.mercredi", isEqualTo: true).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 completionHandler(error, nil)
                 return
@@ -201,13 +247,8 @@ class ManageFireBase {
         }
         
     }
-    var filter = ["semaine.lundi":true,
-                  "semaine.mardi":nil,
-                  "semaine.mercredi":nil,
-                  "semaine.jeudi":nil,
-                  "semaine.vendredi":nil,
-                  "semaine.samedi":nil,
-                  "semaine.dimanche":nil]
+    var filter = ["semaine.mercredi":true,
+                  "semaine.jeudi":true]
     /*var request = Firestore.firestore().collection("Announce2").whereField("semaine.lundi", isEqualTo: true).whereField("semaine.mardi", isEqualTo: nil).whereField("semaine.mercredi", isEqualTo: nil).whereField("semaine.jeudi", isEqualTo: nil).whereField("semaine.vendredi", isEqualTo: nil).whereField("semaine.samedi", isEqualTo: nil).whereField("semaine.dimanche", isEqualTo: nil)*/
    /* func test -> CollectionReference {
         var request = Firestore.firestore().collection("Announce2").whereField("semaine.lundi", isEqualTo: true).whereField("semaine.mardi", isEqualTo: nil).whereField("semaine.mercredi", isEqualTo: nil).whereField("semaine.jeudi", isEqualTo: nil).whereField("semaine.vendredi", isEqualTo: nil).whereField("semaine.samedi", isEqualTo: nil).whereField("semaine.dimanche", isEqualTo: nil)
@@ -216,10 +257,12 @@ class ManageFireBase {
         }
         return request
     }*/
-    func searchAnnounceWithFilter(dayFilter: String, boolFilter: Bool?, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
+    
+    
+    func searchAnnounceWithFilter(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint, completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         var announceListArray = [Announce]()
         //let refFilter = test(filter: ["semaine.lundi":true])
-        Firestore.firestore().collection("Announce2").whereField(dayFilter, isEqualTo: boolFilter).getDocuments { (querySnapshot, error) in
+        Firestore.firestore().collection("Announce2").whereField("coordinate", isGreaterThan: lesserGeopoint).whereField("coordinate", isLessThan: greaterGeopoint).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 completionHandler(error, nil)
                 return
@@ -243,8 +286,8 @@ class ManageFireBase {
     func addData(announce: Announce, completionHandler: @escaping(Bool?) -> Void) {
         let docData = try! FirestoreEncoder().encode(announce)
         print(docData)
-        Firestore.firestore().collection("Announce2").addDocument(data: docData) { [weak self] error in
-            guard let self = self else { return }
+        Firestore.firestore().collection("Announce2").addDocument(data: docData) {  error in
+            
             if let error = error {
                 completionHandler(false)
                 print("Error writing document: \(error)")

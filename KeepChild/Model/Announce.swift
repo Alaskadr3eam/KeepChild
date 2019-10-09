@@ -13,7 +13,13 @@ import Firebase
 import MessageKit
 //public typealias GeoPoint = CLLocationCoordinate2D
 
-struct Announce: Codable {
+struct Announce: Codable, Equatable {
+    static func == (lhs: Announce, rhs: Announce) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+  
+    
     
 
     var id: String?

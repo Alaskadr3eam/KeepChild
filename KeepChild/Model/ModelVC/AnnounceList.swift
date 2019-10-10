@@ -30,6 +30,7 @@ class AnnounceList {
     //private var listener: ListenerRegistration?
     //var documents: [DocumentSnapshot] = []
     //var didChangeData: ((AnnounceListData) -> Void)?
+    var announceSearch: [Announce]!
     var announceDetail: Announce!
     var announceList = [Announce]()
     var idUser = UserDefaults.standard.string(forKey: "userID")

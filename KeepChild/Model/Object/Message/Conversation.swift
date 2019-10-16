@@ -13,12 +13,17 @@ import MessageKit
 import FirebaseFirestore
 
 
-struct Conversation {
+struct Conversation: Equatable {
+    
     var id: String?
     let name: String
     let idUser1: String
     let idUser2: String
     let arrayMessage: [[String:Any]]?
+    
+    static func == (lhs: Conversation, rhs: Conversation) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 extension Conversation: DatabaseRepresentation {

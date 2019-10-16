@@ -20,7 +20,7 @@ class MessageViewController: MessagesViewController {
     private var messages = [Message]()
     private var messageDict = [[String : Any]]()
     private var conversation: Conversation
-    private var manageFireBase = ManageFireBase()
+   // private var manageFireBase = ManageFireBase()
     
     private var messageListener: ListenerRegistration?
     private var reference: CollectionReference?

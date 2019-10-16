@@ -17,10 +17,8 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var telTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var postalCodeTextField: UITextField!
-    
     @IBOutlet weak var pictureProfil: CustomImageView!
     @IBOutlet weak var editProfilTableView: CustomTableView!
-    
     @IBOutlet weak var saveButtonEdit: UIBarButtonItem!
     //MARK: -Propertie model
     var profilGestion = ProfilGestion()
@@ -157,22 +155,40 @@ class EditProfilTableViewController: UITableViewController {
     }
 
     private func updateProfil(collection: String, documentID: String, update: [String:Any]) {
-        profilGestion.updateProfil(collection: collection, documentID: documentID, update: update) { (error, bool) in
+        profilGestion.updateProfil(documentID: documentID, update: update) { (error, bool) in
             guard error == nil else { return }
             guard bool != nil else { return }
         }
+      /*  profilGestion.updateProfil(collection: collection, documentID: documentID, update: update) { (error, bool) in
+            guard error == nil else { return }
+            guard bool != nil else { return }
+        }*/
     }
     
     private func saveProfilWithPicture() {
         guard let profilUserSave = createProfilUser() else { return }
-        profilGestion.addDataProfil(profil: profilUserSave)
+        profilGestion.addDataProfil(profil: profilUserSave) { (bool) in
+            guard bool == true else {
+                //alert erreur
+                return
+            }
+            // alerte reussite
+        }
+        //profilGestion.addDataProfil(profil: profilUserSave)
         uploadPictureProfil()
         dismiss(animated: true, completion: nil)
     }
     
     private func saveProfilNoPicture() {
         guard let profilUserSave = createProfilUser() else { return }
-        profilGestion.addDataProfil(profil: profilUserSave)
+        profilGestion.addDataProfil(profil: profilUserSave) { (bool) in
+            guard bool == true else {
+                //alert erreur
+                return
+            }
+            // alerte reussite
+        }
+        //profilGestion.addDataProfil(profil: profilUserSave)
         dismiss(animated: true, completion: nil)
     }
 

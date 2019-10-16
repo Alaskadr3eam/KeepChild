@@ -25,7 +25,8 @@ class AnnounceSearchTableViewController: UITableViewController {
         default:break
         }
     }*/
-    var announceList = AnnounceList()
+    var announceList = AnnounceEdit()
+   // var announceList = AnnounceList()
    // var manageFireBase = ManageFireBase()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +95,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         return searchController.isActive && !searchBarIsEmpty()
     }*/
     
-    func request() {
+   /* func request() {
         searchTableView.setLoadingScreen()
         announceList.readData(collection: "Announce2") { [weak self] (error, announceList) in
             guard let self = self else { return }
@@ -104,7 +105,7 @@ class AnnounceSearchTableViewController: UITableViewController {
             self.searchTableView.removeLoadingScreen()
         }
         
-    }
+    }*/
 
     @objc func mapAccess() {
         announceList.announceList = announceList.announceList
@@ -136,8 +137,9 @@ class AnnounceSearchTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        /* let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell*/
-        announceList.announceDetail = announceList.announceList[indexPath.row]
-        encodedProfilUser(announce: announceList.announceDetail)
+        //announceList.announceDetail = announceList.announceList[indexPath.row]
+        announceList.announce = announceList.announceList[indexPath.row]
+        encodedProfilUser(announce: announceList.announce)
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
     

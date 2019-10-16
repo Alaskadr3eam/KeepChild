@@ -28,6 +28,16 @@
 		315EC80D234F272D00E27653 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC80C234F272D00E27653 /* Array+Extension.swift */; };
 		315EC80F234F27FB00E27653 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC80E234F27FB00E27653 /* UIViewController+Extension.swift */; };
 		315EC811234F299900E27653 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC810234F299900E27653 /* Filter.swift */; };
+		315EC813234F729400E27653 /* ManageConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC812234F729400E27653 /* ManageConversation.swift */; };
+		315EC815235070FC00E27653 /* FirebaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC814235070FC00E27653 /* FirebaseProtocol.swift */; };
+		315EC8172350722100E27653 /* ManageFirebase2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8162350722100E27653 /* ManageFirebase2.swift */; };
+		315EC81A2350760500E27653 /* FirestoreTestsCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8192350760500E27653 /* FirestoreTestsCase.swift */; };
+		315EC8212354B5F700E27653 /* MockObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8202354B5F700E27653 /* MockObject.swift */; };
+		315EC8232354B92A00E27653 /* MockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8222354B92A00E27653 /* MockDataManager.swift */; };
+		315EC8282355C57D00E27653 /* AnnounceEditTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8272355C57D00E27653 /* AnnounceEditTest.swift */; };
+		315EC82C2355F51F00E27653 /* ProfilGestionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */; };
+		315EC82E235654BF00E27653 /* ManagerFirebase3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82D235654BF00E27653 /* ManagerFirebase3.swift */; };
+		315EC83023566AD700E27653 /* MapKitAnnounceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */; };
 		31865B32232CE77F00A52657 /* ProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B31232CE77F00A52657 /* ProfilTableViewController.swift */; };
 		31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B35232CE7CB00A52657 /* ProfilView.swift */; };
 		31865B38232CE9B400A52657 /* ProfilGestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B37232CE9B400A52657 /* ProfilGestion.swift */; };
@@ -108,6 +118,16 @@
 		315EC80C234F272D00E27653 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		315EC80E234F27FB00E27653 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		315EC810234F299900E27653 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		315EC812234F729400E27653 /* ManageConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageConversation.swift; sourceTree = "<group>"; };
+		315EC814235070FC00E27653 /* FirebaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProtocol.swift; sourceTree = "<group>"; };
+		315EC8162350722100E27653 /* ManageFirebase2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFirebase2.swift; sourceTree = "<group>"; };
+		315EC8192350760500E27653 /* FirestoreTestsCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreTestsCase.swift; sourceTree = "<group>"; };
+		315EC8202354B5F700E27653 /* MockObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObject.swift; sourceTree = "<group>"; };
+		315EC8222354B92A00E27653 /* MockDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataManager.swift; sourceTree = "<group>"; };
+		315EC8272355C57D00E27653 /* AnnounceEditTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceEditTest.swift; sourceTree = "<group>"; };
+		315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilGestionTest.swift; sourceTree = "<group>"; };
+		315EC82D235654BF00E27653 /* ManagerFirebase3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerFirebase3.swift; sourceTree = "<group>"; };
+		315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitAnnounceTest.swift; sourceTree = "<group>"; };
 		31865B31232CE77F00A52657 /* ProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilTableViewController.swift; sourceTree = "<group>"; };
 		31865B35232CE7CB00A52657 /* ProfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilView.swift; sourceTree = "<group>"; };
 		31865B37232CE9B400A52657 /* ProfilGestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilGestion.swift; sourceTree = "<group>"; };
@@ -191,6 +211,7 @@
 		31261840232B804800091AA4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				315EC8312356F9BB00E27653 /* ModelVC1 */,
 				315EC803234F243600E27653 /* DatabaseManager */,
 				315EC7FC234F22C800E27653 /* Singleton */,
 				315EC7F3234F217400E27653 /* Object */,
@@ -280,6 +301,9 @@
 			isa = PBXGroup;
 			children = (
 				31D39A6323321B780050A777 /* ManageFireBase.swift */,
+				315EC814235070FC00E27653 /* FirebaseProtocol.swift */,
+				315EC8162350722100E27653 /* ManageFirebase2.swift */,
+				315EC82D235654BF00E27653 /* ManagerFirebase3.swift */,
 			);
 			path = DatabaseManager;
 			sourceTree = "<group>";
@@ -288,10 +312,10 @@
 			isa = PBXGroup;
 			children = (
 				31E2D31D232B77D80088E508 /* AppDelegate.swift */,
+				31E2D34E232B78010088E508 /* GoogleService-Info.plist */,
 				31E2D327232B77D80088E508 /* Assets.xcassets */,
 				31E2D329232B77D80088E508 /* LaunchScreen.storyboard */,
 				31E2D32C232B77D80088E508 /* Info.plist */,
-				31E2D34E232B78010088E508 /* GoogleService-Info.plist */,
 				31E2D324232B77D80088E508 /* KeepChild.xcdatamodeld */,
 			);
 			path = SupportingFiles;
@@ -311,6 +335,23 @@
 				31B909E82343780E0075761A /* UIColor+Extension.swift */,
 			);
 			path = UtilityExt;
+			sourceTree = "<group>";
+		};
+		315EC818235075D400E27653 /* FirestoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				315EC8192350760500E27653 /* FirestoreTestsCase.swift */,
+			);
+			path = FirestoreTests;
+			sourceTree = "<group>";
+		};
+		315EC8312356F9BB00E27653 /* ModelVC1 */ = {
+			isa = PBXGroup;
+			children = (
+				31865B37232CE9B400A52657 /* ProfilGestion.swift */,
+				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
+			);
+			path = ModelVC1;
 			sourceTree = "<group>";
 		};
 		31A861D72344A00100C4127F /* ChatVC */ = {
@@ -355,10 +396,9 @@
 		31D39A6523335CCB0050A777 /* ModelVC */ = {
 			isa = PBXGroup;
 			children = (
-				31865B37232CE9B400A52657 /* ProfilGestion.swift */,
 				315EC810234F299900E27653 /* Filter.swift */,
 				31261849232B8C4400091AA4 /* AnnounceList.swift */,
-				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
+				315EC812234F729400E27653 /* ManageConversation.swift */,
 				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
 				31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */,
 				31AA936D233F5A2B00C88FD1 /* Master.swift */,
@@ -412,7 +452,13 @@
 		31E2D334232B77D80088E508 /* KeepChildTests */ = {
 			isa = PBXGroup;
 			children = (
+				315EC818235075D400E27653 /* FirestoreTests */,
 				31E2D335232B77D90088E508 /* KeepChildTests.swift */,
+				315EC8202354B5F700E27653 /* MockObject.swift */,
+				315EC8222354B92A00E27653 /* MockDataManager.swift */,
+				315EC8272355C57D00E27653 /* AnnounceEditTest.swift */,
+				315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */,
+				315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */,
 				31E2D337232B77D90088E508 /* Info.plist */,
 			);
 			path = KeepChildTests;
@@ -699,6 +745,7 @@
 				315EC811234F299900E27653 /* Filter.swift in Sources */,
 				315EC7F5234F21A600E27653 /* AnnounceLocation.swift in Sources */,
 				31261842232B805600091AA4 /* Announce.swift in Sources */,
+				315EC815235070FC00E27653 /* FirebaseProtocol.swift in Sources */,
 				31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */,
 				31B909E92343780E0075761A /* UIColor+Extension.swift in Sources */,
 				3126184A232B8C4400091AA4 /* AnnounceList.swift in Sources */,
@@ -706,6 +753,7 @@
 				31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */,
 				31B909EB23437DDB0075761A /* UICollectionView+Extension.swift in Sources */,
 				31B909EF23437DFC0075761A /* UIImage+Extension.swift in Sources */,
+				315EC82E235654BF00E27653 /* ManagerFirebase3.swift in Sources */,
 				315EC802234F23BB00E27653 /* DatabaseRepresentation.swift in Sources */,
 				315EC809234F263700E27653 /* UIImageView+Extension.swift in Sources */,
 				31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */,
@@ -735,6 +783,7 @@
 				31AA9325233CEDC200C88FD1 /* SemaineTableViewController.swift in Sources */,
 				315EC80F234F27FB00E27653 /* UIViewController+Extension.swift in Sources */,
 				315EC7F7234F222000E27653 /* Semaine.swift in Sources */,
+				315EC813234F729400E27653 /* ManageConversation.swift in Sources */,
 				31A861D423448AB300C4127F /* FirstMessageTableViewController.swift in Sources */,
 				31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */,
 				31261848232B83DF00091AA4 /* AuthViewController.swift in Sources */,
@@ -742,6 +791,7 @@
 				315EC7F9234F225900E27653 /* ProfilUser.swift in Sources */,
 				315EC7FE234F22E000E27653 /* CurrentFilterSearch.swift in Sources */,
 				31D39A672333A3990050A777 /* CustomCell.swift in Sources */,
+				315EC8172350722100E27653 /* ManageFirebase2.swift in Sources */,
 				31261846232B81F700091AA4 /* AnnounceSearchTableViewController.swift in Sources */,
 				31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */,
 				315EC7FB234F229B00E27653 /* User.swift in Sources */,
@@ -752,7 +802,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				315EC83023566AD700E27653 /* MapKitAnnounceTest.swift in Sources */,
+				315EC82C2355F51F00E27653 /* ProfilGestionTest.swift in Sources */,
 				31E2D336232B77D90088E508 /* KeepChildTests.swift in Sources */,
+				315EC8212354B5F700E27653 /* MockObject.swift in Sources */,
+				315EC8282355C57D00E27653 /* AnnounceEditTest.swift in Sources */,
+				315EC81A2350760500E27653 /* FirestoreTestsCase.swift in Sources */,
+				315EC8232354B92A00E27653 /* MockDataManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

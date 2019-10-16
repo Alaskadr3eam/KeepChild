@@ -15,8 +15,9 @@ class MasterViewController: UIViewController {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     let searchController = UISearchController(searchResultsController: nil)
     //model for vc
-    var announceList = AnnounceList()
-    var master = Master()
+    var announceList = AnnounceEdit()
+    //var announceList = AnnounceList()
+    //var announceList = Master()
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -59,7 +60,7 @@ class MasterViewController: UIViewController {
     private func request() {
         //view for loading result
         announceSearchTableViewController.searchTableView.setLoadingScreen()
-        master.readData(collection: "Announce2") { [weak self] (error, announceList) in
+        announceList.readData { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard announceList != nil else { return }
@@ -74,17 +75,17 @@ class MasterViewController: UIViewController {
             let greaterGeopoint = FilterSearch.shared.greaterGeopoint
             //view for loading result
             announceSearchTableViewController.searchTableView.setLoadingScreen()
-            self.master.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint!, greaterGeopoint: greaterGeopoint!) { [weak self] (error, announceList) in
+            self.announceList.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint!, greaterGeopoint: greaterGeopoint!) { [weak self] (error, announceList) in
                 guard let self = self else { return }
                 guard error == nil else { return }
                 guard announceList != nil else { return }
-                self.filteredAnnounce()
+                self.announceList.filteredAnnounce()
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
                 }
             }
     }
     //MARK: -Helpers for filters announce
-    private func filteredAnnounce() {
+  /*  private func filteredAnnounce() {
         //filter of the search
         let dayFilter = FilterSearch.shared.dayFilter
         let momentDay = FilterSearch.shared.momentDay
@@ -125,7 +126,7 @@ class MasterViewController: UIViewController {
             }
         }
         master.announceList = announceWithAllFilter.removeDuplicates()
-    }
+    }*/
 
      // MARK: - prepare ViewController
     private func prepareViewForChildViewController(vc1: AnnounceSearchTableViewController, vc2: MapKitAnnounceViewController) {
@@ -134,13 +135,13 @@ class MasterViewController: UIViewController {
     }
     
     private func prepareSearchTableView(vc: AnnounceSearchTableViewController) {
-        vc.announceList.announceList = master.announceList
+        vc.announceList.announceList = announceList.announceList
         vc.searchTableView.reloadData()
         //remove view loading
         vc.searchTableView.removeLoadingScreen()
     }
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
-        vc.mapKitAnnounce.announceList = self.master.announceList
+        vc.mapKitAnnounce.announceList = self.announceList.announceList
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
     }
 

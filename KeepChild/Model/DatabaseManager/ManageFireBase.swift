@@ -8,7 +8,10 @@
 
 import Foundation
 import Firebase
+import FirebaseFirestore
 import CodableFirebase
+import FirebaseAuth
+
 
 
 
@@ -17,24 +20,21 @@ import CodableFirebase
 
 class ManageFireBase {
     
-    //var arrayProfilAnnounce = [Announce]()
-    //var profilRetrieve: ProfilUser!
+ /*   var collectionAnnounce: String
+    var collectionProfil: String
+    var collectionConversation: String*/
+
     
-    //var queryAnnounceProfil: Query!
-    //var queryProfil: Query!
-    //var idUser = String()
-    //var profil: ProfilUser!
-    //var announceProfil = [Announce]()
+  /*  init(collectionAnnounce: String) {
+        self.collectionAnnounce = collectionAnnounce
+    }*/
     
-    //var queryAnnounceAll: Query!
-    //var announceListData = [Announce]()
+ 
     
-    //for detail announce
-    //var announceDetail: Announce!
     
     func createQuery(collection: String, field: String, equal: String) -> Query {
         let query = Firestore.firestore().collection(collection).whereField(field, isEqualTo: equal)
-       
+        //let query = db.collection(collection).whereField(field, isEqualTo: equal)
         return query
     }
 
@@ -42,6 +42,7 @@ class ManageFireBase {
         let query = Firestore.firestore().collection(collection)
         return query
     }
+
     
     func retrieveIdUserConnected(completion: @escaping(Error?, String?) -> Void) {
         
@@ -323,11 +324,6 @@ class ManageFireBase {
     }
 
     func uploadProfileImage(imageData: Data, completionHandler: @escaping (Error?,StorageMetadata?) -> Void) {
-        /*let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
-         activityIndicator.startAnimating()
-         activityIndicator.center = self.view.center
-         self.view.addSubview(activityIndicator)*/
-        
         
         let storageReference = Storage.storage().reference()
         let currentUser = Auth.auth().currentUser

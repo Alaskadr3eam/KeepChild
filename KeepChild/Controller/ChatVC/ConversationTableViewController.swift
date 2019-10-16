@@ -11,68 +11,51 @@ import MessageKit
 import InputBarAccessoryView
 
 class ConversationTableViewController: UITableViewController {
-
-    var manageFireBase = ManageFireBase()
     
-    var arrayConversation = [Conversation]()
-
-    var arrayMessage = [Message]()
-    
-    var conversation: Conversation!
+    var manageConversation = ManageConversation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-       
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        requestInit()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestConversation()
     }
-    func requestInit() {
+
+    func requestConversation() {
         requestIdUser1()
     }
+
     func requestIdUser1() {
-        arrayConversation.removeAll()
-        manageFireBase.retrieveConversationUser(field: "idUser1") { [weak self] (error, conversation) in
+        manageConversation.arrayConversation.removeAll()
+        manageConversation.retrieveConversion(field: "idUser1") { [weak self] (error, bool) in
             guard let self = self else { return }
             guard error == nil else { return }
-            guard conversation != nil else {
+            guard bool == true else {
                 self.requestIdUser2()
-                return }
-            guard let resulConv = conversation else { return }
-            self.arrayConversation = resulConv
+                return
+            }
             self.requestIdUser2()
         }
     }
     
     func requestIdUser2() {
-        manageFireBase.retrieveConversationUser(field: "idUser2") { [weak self] (error, conversation) in
+        manageConversation.retrieveConversion(field: "idUser2") { [weak self] (error, bool) in
             guard let self = self else { return }
             guard error == nil else { return }
-            guard conversation != nil else {
+            guard bool == true else {
                 //if no conversation -> display message
                 self.tableViewIsEmpty()
-                 //self.tableView.reloadData()
-                return }
-            guard let resulConv = conversation else { return }
-            for conv in resulConv {
-                self.arrayConversation.append(conv)
+                return
             }
-            self.tableViewIsEmpty()
             
+            self.tableViewIsEmpty()
         }
     }
 
     private func tableViewIsEmpty() {
-        if self.arrayConversation.count == 0 {
+        if manageConversation.arrayConversation.count == 0 {
             //if no conversation -> display message
             self.tableView.setEmptyMessage("Aucune conversation en cours pour le moment.")
         } else {
@@ -88,14 +71,14 @@ class ConversationTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return arrayConversation.count
+        return manageConversation.arrayConversation.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
-        cell.textLabel!.text = arrayConversation[indexPath.row].name
+        cell.textLabel!.text = manageConversation.arrayConversation[indexPath.row].name
 
         return cell
     }
@@ -109,7 +92,7 @@ class ConversationTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
@@ -119,7 +102,7 @@ class ConversationTableViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     /*
     // Override to support rearranging the table view.
@@ -136,8 +119,8 @@ class ConversationTableViewController: UITableViewController {
     }
     */
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       conversation = arrayConversation[indexPath.row]
-        let vc = MessageViewController(conversation: conversation)
+       manageConversation.conversation = manageConversation.arrayConversation[indexPath.row]
+        let vc = MessageViewController(conversation: manageConversation.conversation)
         navigationController?.pushViewController(vc, animated: true)
        // performSegue(withIdentifier: "Chat", sender: nil)
     }

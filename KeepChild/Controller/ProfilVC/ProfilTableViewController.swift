@@ -30,11 +30,9 @@ class ProfilTableViewController: UITableViewController {
         requestInitProfil()
     }
 
-    func requestInitProfil() {
-       // guard let idUser = profilGestion.idUser else { return }
+    private func requestInitProfil() {
         let idUser = CurrentUserManager.shared.user.senderId
-    
-        profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
+        profilGestion.retrieveAnnounceUser(field: "idUser", equal: idUser) { [weak self] (error, announce) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard announce != nil else { return }
@@ -44,7 +42,16 @@ class ProfilTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
-
+      /*  profilGestion.retrieveAnnunceUser(collection: "Announce2", field: "idUser", equal: idUser) { [weak self] (error,announce) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard announce != nil else { return }
+            if announce!.count == 0 {
+                self.tableView.setEmptyMessage("Vous n'avez pas d'annonce publiée pour le moment.")
+            } else {
+                self.tableView.reloadData()
+            }
+        }*/
     }
     //MARK: -Action Func
     @IBAction func logOut() {
@@ -63,45 +70,32 @@ class ProfilTableViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        
         return profilGestion.arrayProfilAnnounce.count
-        
     }
-    
-   
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellAnnounce", for: indexPath)
         if profilGestion.arrayProfilAnnounce.count == 0 {
             return cell
         } else {
         let announce = profilGestion.arrayProfilAnnounce[indexPath.row]
-
         cell.textLabel!.text = announce.title
         cell.detailTextLabel!.text = announce.price
-
         return cell
         }
     }
     
-
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         profilGestion.announceDetail = profilGestion.arrayProfilAnnounce[indexPath.row]
         performSegue(withIdentifier: "DetailAnnounce", sender: nil)
     }
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EditProfil" {
             if segue.destination is EditProfilTableViewController {

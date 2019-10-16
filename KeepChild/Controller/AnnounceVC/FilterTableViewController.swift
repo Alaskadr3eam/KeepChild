@@ -34,8 +34,8 @@ class FilterTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initView()
-       initViewButton()
+       // initView()
+       //initViewButton()
     }
     // MARK: -Action
     @IBAction func buttonResetIsClicked(_ sender: UIBarButtonItem) {
@@ -70,11 +70,16 @@ class FilterTableViewController: UITableViewController {
     }
 
     @IBAction func searchButtonIsClicked(_ sender: UIBarButtonItem) {
-        !FilterSearch.shared.filterSearchIsComplete() ? prepareSearchList() : self.presentAlert(title: "Attention", message: "Vous n'avez pas choisie tout les critères de recherche.")
-      /*  FilterSearch.shared.initFilterSearch()
+        if FilterSearch.shared.latChoice == nil && FilterSearch.shared.longChoice == nil {
+            presentAlert(title: "Attention", message: "Parametre de localisation manquant, recherche impossible.")
+            return
+        }
+        //!FilterSearch.shared.filterSearchIsComplete() ? prepareSearchList() : self.presentAlert(title: "Attention", message: "Vous n'avez pas choisie tout les critères de recherche.")
+        FilterSearch.shared.initFilterSearch()
         prepareQueryLoc(latitude: Double(FilterSearch.shared.latChoice), longitude: Double(FilterSearch.shared.longChoice), distanceMile: distanceMile)
         createDayFilterForKeep()
-        dismiss(animated: true, completion: nil)*/
+        dismiss(animated: true, completion: nil)
+        
     }
 
     func prepareSearchList() {
@@ -139,25 +144,25 @@ class FilterTableViewController: UITableViewController {
     private func returnForSwitch(_ sender: UISwitch) -> [String:Bool] {
         switch sender.tag {
         case 0:
-            sender.setValue("lundi", forKey: "lundi")
+            //sender.setValue("lundi", forKey: "lundi")
             return ["lundi":true]
         case 1:
-            sender.setValue("mardi", forKey: "mardi")
+            //sender.setValue("mardi", forKey: "mardi")
             return ["mardi":true]
         case 2:
-            sender.setValue("mercredi", forKey: "mercredi")
+            //sender.setValue("mercredi", forKey: "mercredi")
             return ["mercredi":true]
         case 3:
-            sender.setValue("jeudi", forKey: "jeudi")
+            //sender.setValue("jeudi", forKey: "jeudi")
             return ["jeudi":true]
         case 4:
-            sender.setValue("vendredi", forKey: "vendredi")
+            //sender.setValue("vendredi", forKey: "vendredi")
             return ["vendredi":true]
         case 5:
-            sender.setValue("samedi", forKey: "samedi")
+            //sender.setValue("samedi", forKey: "samedi")
             return ["samedi":true]
         case 6:
-            sender.setValue("dimanche", forKey: "dimanche")
+            //sender.setValue("dimanche", forKey: "dimanche")
             return ["dimanche":true]
         case 7:
             return ["day":true]
@@ -262,6 +267,7 @@ class FilterTableViewController: UITableViewController {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
            // locationManager.distanceFilter = 100000
             guard let lat = locationManager.location?.coordinate.latitude else {
+                presentAlert(title: "Attention Probleme", message: "Impossible de vous localiser, vérifiez vos parametres.")
                 buttonSearch.isEnabled = true
                 return }
             guard let long = locationManager.location?.coordinate.longitude else {

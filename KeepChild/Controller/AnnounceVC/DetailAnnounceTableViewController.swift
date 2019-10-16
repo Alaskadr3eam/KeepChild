@@ -29,7 +29,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var detailTableView: CustomTableView!
 
     //MARK: -Properties models
-    var detailAnnounce = DetailAnnounce()
+    var detailAnnounce = AnnounceEdit()
+    //var detailAnnounce = DetailAnnounce()
     var mapKitAnnounce = MapKitAnnounce()
     var profilGestion = ProfilGestion()
     
@@ -61,12 +62,21 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
 
     @IBAction func deleteAnnounce() {
+        //metter a l'initView
         if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
             guard let id = detailAnnounce.announce.id else { return }
-            detailAnnounce.deleteAnnounce(announceId: id)
+            detailAnnounce.deleteAnnounce(announceId: id) { (error) in
+                guard error == nil else {
+                    self.presentAlert(title: "Erreur Suppression.", message: "Annonce non supprimée, vérifiez votre connexion internet.")
+                    return
+                }
+                self.presentAlert(title: "Annonce Supprimée.", message: "Announce supprimé avec success.")
+            }
+        }
+          /*  detailAnnounce.deleteAnnounce(announceId: id)
         } else {
             self.presentAlert(title: "Attention", message: "Ceci n'est pas votre annonce.")
-        }
+        }*/
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -86,7 +96,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     //func for create annotation for mapKitView
     private func createAnnotationMapView() {
-        let announceLoc = mapKitAnnounce.transformAnnounceIntoAnnounceLocation(announce: detailAnnounce.announce)
+        guard let announceLoc = mapKitAnnounce.transformAnnounceIntoAnnounceLocation(announce: detailAnnounce.announce) else { return }
         mapKitAnnounce.announceDetailLocation = announceLoc
         locMapKit.addAnnotation(announceLoc)
     }
@@ -147,13 +157,20 @@ class DetailAnnounceTableViewController: UITableViewController {
         //detailTableView.setLoadingScreen()
         locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
-        profilGestion.retrieveProfilAnnounce(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
+        profilGestion.retrieveProfilAnnounce(field: "iDuser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard profil != nil else { return }
             //une fois le prfil trouvé on trouve les coordonnées grace a l'adresse du profil
             self.retrieveCoordinateAnnounce()
         }
+      /*  profilGestion.retrieveProfilAnnounce(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard profil != nil else { return }
+            //une fois le prfil trouvé on trouve les coordonnées grace a l'adresse du profil
+            self.retrieveCoordinateAnnounce()
+        }*/
     }
     // MARK: - Prepare the view for display
     private func initView() {
@@ -168,12 +185,21 @@ class DetailAnnounceTableViewController: UITableViewController {
         telLabelInit()
         mailLabel.text = profilGestion.profil.mail
         image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
+        buttonDeleteInitView()
        // self.detailTableView.removeLoadingScreen()
 
     }
     
     private func telLabelInit() {
         (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
+    }
+
+    private func buttonDeleteInitView() {
+        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
+            deleteButton.isHidden = false
+        } else {
+            deleteButton.isHidden = true
+        }
     }
 
     //MARK: -Navigation

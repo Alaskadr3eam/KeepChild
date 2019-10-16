@@ -9,7 +9,7 @@
 import Foundation
 import CodableFirebase
 
-struct Semaine: Codable {
+struct Semaine: Codable, Equatable {
     var idUser: String?
     var lundi: Bool?
     var mardi: Bool?

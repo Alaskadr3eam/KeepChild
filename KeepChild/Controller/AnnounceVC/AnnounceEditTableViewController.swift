@@ -117,10 +117,23 @@ class AnnounceEditTableViewController: UITableViewController {
             //creation announce une fois les coordonnées recupérées
             self.createAnnounce()
             //storage announce
-            self.announceEdit.addData(announce: self.announceEdit.announce)
+            //self.announceEdit.addData(announce: self.announceEdit.announce)
+            self.addAnnounceInFirebase()
             //remove UserDefault "semaine"
             self.announceEdit.removeUserDefaultObject(forkey: "semaine")
             self.reinitView()
+        }
+    }
+
+    //request for addAnnounce in firebase
+    private func addAnnounceInFirebase() {
+        announceEdit.addData(announce: self.announceEdit.announce) { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {
+                self.presentAlert(title: "Annonce non envoyé", message: "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
+                return
+            }
+            self.presentAlert(title: "Annonce envoyé", message: "Félicitation, votre annonce a été enregistré.")
         }
     }
 

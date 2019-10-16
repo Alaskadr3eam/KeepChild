@@ -9,7 +9,7 @@
 import Foundation
 import CodableFirebase
 
-struct ProfilUser: Codable {
+struct ProfilUser: Codable, Equatable {
     var id: String?
     var iDuser: String
     var nom: String

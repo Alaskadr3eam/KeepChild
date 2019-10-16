@@ -64,7 +64,7 @@
 		31D39A672333A3990050A777 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A662333A3990050A777 /* CustomCell.swift */; };
 		31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */; };
 		31D39A6C2333C0F60050A777 /* MapKitAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */; };
-		31D39A6E2338DCE70050A777 /* EditAnnounceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */; };
+		31D39A6E2338DCE70050A777 /* AnnounceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */; };
 		31D39A702338E4740050A777 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6F2338E4740050A777 /* CustomTableView.swift */; };
 		31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31D232B77D80088E508 /* AppDelegate.swift */; };
 		31E2D323232B77D80088E508 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E2D321232B77D80088E508 /* Main.storyboard */; };
@@ -151,11 +151,11 @@
 		31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
 		31D39A6323321B780050A777 /* ManageFireBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFireBase.swift; sourceTree = "<group>"; };
-		31D39A662333A3990050A777 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomCell.swift; path = ../../../../../Documents/CustomCell.swift; sourceTree = "<group>"; };
-		31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounceViewController.swift; path = ../../../../../../Documents/MapKitAnnounceViewController.swift; sourceTree = "<group>"; };
+		31D39A662333A3990050A777 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounceViewController.swift; path = ../MapKitAnnounceViewController.swift; sourceTree = "<group>"; };
 		31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounce.swift; path = ../../../../../../Documents/MapKitAnnounce.swift; sourceTree = "<group>"; };
-		31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditAnnounceTableView.swift; path = ../../../../../Documents/EditAnnounceTableView.swift; sourceTree = "<group>"; };
-		31D39A6F2338E4740050A777 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTableView.swift; path = ../../../../../Documents/CustomTableView.swift; sourceTree = "<group>"; };
+		31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceTableView.swift; sourceTree = "<group>"; };
+		31D39A6F2338E4740050A777 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
 		31E2D31A232B77D80088E508 /* KeepChild.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepChild.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31E2D31D232B77D80088E508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		31E2D322232B77D80088E508 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -244,7 +244,7 @@
 				31547E02232E3A4A00698B95 /* AnnounceTableView.swift */,
 				31AA931C233B6A2500C88FD1 /* CustomImageView.swift */,
 				31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */,
-				31D39A6D2338DCE70050A777 /* EditAnnounceTableView.swift */,
+				31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */,
 				31D39A6F2338E4740050A777 /* CustomTableView.swift */,
 			);
 			path = View;
@@ -758,7 +758,7 @@
 				315EC809234F263700E27653 /* UIImageView+Extension.swift in Sources */,
 				31AA936C233F4D6200C88FD1 /* MasterViewController.swift in Sources */,
 				315EC800234F237000E27653 /* Message.swift in Sources */,
-				31D39A6E2338DCE70050A777 /* EditAnnounceTableView.swift in Sources */,
+				31D39A6E2338DCE70050A777 /* AnnounceTableView.swift in Sources */,
 				31A861E32345D13E00C4127F /* MessageViewController.swift in Sources */,
 				31D39A702338E4740050A777 /* CustomTableView.swift in Sources */,
 				315EC807234F251D00E27653 /* UITableView+Extension.swift in Sources */,

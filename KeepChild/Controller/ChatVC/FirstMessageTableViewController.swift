@@ -15,76 +15,31 @@ import MessageKit
 class FirstMessageTableViewController: UITableViewController {
     //MARK: - Properties
     @IBOutlet weak var messageTxt: UITextView!
-
-   // var manageFireBase = ManageFireBase()
-    var idAnnounceUser = String()
-    var arrayMessage = [Message]()
-    var arrayMessageRep = [[String: Any]]()
-    var announce: Announce!
     
-    var isExisting: Bool = false
-    var documentID = String()
+    var manageConversation = ManageConversation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         messageTxt.delegate = self
-        //navItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(validateMessage1))
         customTextViewPlaceholder(textView: messageTxt)
-        documentID = CurrentUserManager.shared.user.senderId + idAnnounceUser + announce.id!
-        readConversation(documentID: documentID)
+        manageConversation.createOrRetrieveDocumentID()
+        manageConversation.readConversation()
     }
 
     // MARK: -Action Func
-    @objc func validateMessage1() {
-        if textViewIsEmpty() == true {
-            let message = Message(text: messageTxt.text, user: CurrentUserManager.shared.user)
-            arrayMessageRep.append(message.representation)
-            arrayMessage.append(message)
-            let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
-            if isExisting == true {
-                Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
-            } else {
-                Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)
-            }
-            
-        }
-    }
+  
     @IBAction func validateMessage(_ sender: Any) {
         if textViewIsEmpty() == true {
-            let message = Message(text: messageTxt.text, user: CurrentUserManager.shared.user)
-            arrayMessageRep.append(message.representation)
-            arrayMessage.append(message)
-            let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
-            if isExisting == true {
-                Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
-            } else {
-                Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)
-            }
-            
+            manageConversation.prepareSendMessage(text: messageTxt.text)
+            //alert mesaage bien envoyé
+            dismiss(animated: true, completion: nil)
         }
     }
 
     @IBAction func `return`(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
-        
+       dismiss(animated: true, completion: nil)
     }
     //MARK: - Helpers
-    private func readConversation(documentID: String) {
-        DependencyInjection.shared.dataManager.readConversation(documentID: documentID) { [weak self] (bool) in
-            guard let self = self else { return }
-            guard bool == true else {
-                return
-            }
-            self.isExisting = true
-        }
-        
-       /* manageFireBase.readConversation(documentID: documentID) { (bool) in
-            guard bool == true else {
-                return
-            }
-            self.isExisting = true
-        }*/
-    }
     //on verifie que le champs message n'est pas vide
     private func textViewIsEmpty() -> Bool {
         guard let text = messageTxt.text else { return false }
@@ -126,6 +81,6 @@ extension FirstMessageTableViewController: UITextViewDelegate {
     func customTextView(textView: UITextView) {
         textView.text = ""
         textView.textColor = UIColor.black
-        textView.font = UIFont(name: "verdana", size: 18.0)
+        textView.font = UIFont(name: "verdana", size: 15.0)
     }
 }

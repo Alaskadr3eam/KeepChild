@@ -38,6 +38,8 @@
 		315EC82C2355F51F00E27653 /* ProfilGestionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */; };
 		315EC82E235654BF00E27653 /* ManagerFirebase3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82D235654BF00E27653 /* ManagerFirebase3.swift */; };
 		315EC83023566AD700E27653 /* MapKitAnnounceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */; };
+		315EC83523579ED500E27653 /* MapKitAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC83423579ED500E27653 /* MapKitAnnounce.swift */; };
+		315EC83E2358826A00E27653 /* MapKitAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC83D2358826A00E27653 /* MapKitAnnounceViewController.swift */; };
 		31865B32232CE77F00A52657 /* ProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B31232CE77F00A52657 /* ProfilTableViewController.swift */; };
 		31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B35232CE7CB00A52657 /* ProfilView.swift */; };
 		31865B38232CE9B400A52657 /* ProfilGestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B37232CE9B400A52657 /* ProfilGestion.swift */; };
@@ -62,8 +64,6 @@
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
 		31D39A6423321B780050A777 /* ManageFireBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6323321B780050A777 /* ManageFireBase.swift */; };
 		31D39A672333A3990050A777 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A662333A3990050A777 /* CustomCell.swift */; };
-		31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */; };
-		31D39A6C2333C0F60050A777 /* MapKitAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */; };
 		31D39A6E2338DCE70050A777 /* AnnounceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */; };
 		31D39A702338E4740050A777 /* CustomTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A6F2338E4740050A777 /* CustomTableView.swift */; };
 		31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31E2D31D232B77D80088E508 /* AppDelegate.swift */; };
@@ -128,6 +128,8 @@
 		315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilGestionTest.swift; sourceTree = "<group>"; };
 		315EC82D235654BF00E27653 /* ManagerFirebase3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagerFirebase3.swift; sourceTree = "<group>"; };
 		315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitAnnounceTest.swift; sourceTree = "<group>"; };
+		315EC83423579ED500E27653 /* MapKitAnnounce.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapKitAnnounce.swift; sourceTree = "<group>"; };
+		315EC83D2358826A00E27653 /* MapKitAnnounceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapKitAnnounceViewController.swift; sourceTree = "<group>"; };
 		31865B31232CE77F00A52657 /* ProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilTableViewController.swift; sourceTree = "<group>"; };
 		31865B35232CE7CB00A52657 /* ProfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilView.swift; sourceTree = "<group>"; };
 		31865B37232CE9B400A52657 /* ProfilGestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilGestion.swift; sourceTree = "<group>"; };
@@ -152,8 +154,6 @@
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
 		31D39A6323321B780050A777 /* ManageFireBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFireBase.swift; sourceTree = "<group>"; };
 		31D39A662333A3990050A777 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
-		31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounceViewController.swift; path = ../MapKitAnnounceViewController.swift; sourceTree = "<group>"; };
-		31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapKitAnnounce.swift; path = ../../../../../../Documents/MapKitAnnounce.swift; sourceTree = "<group>"; };
 		31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceTableView.swift; sourceTree = "<group>"; };
 		31D39A6F2338E4740050A777 /* CustomTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableView.swift; sourceTree = "<group>"; };
 		31E2D31A232B77D80088E508 /* KeepChild.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KeepChild.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -211,6 +211,7 @@
 		31261840232B804800091AA4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				315EC8382358503100E27653 /* aDelete */,
 				315EC8312356F9BB00E27653 /* ModelVC1 */,
 				315EC803234F243600E27653 /* DatabaseManager */,
 				315EC7FC234F22C800E27653 /* Singleton */,
@@ -223,11 +224,11 @@
 		31261843232B81B800091AA4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				315EC83C235881D400E27653 /* MapKitVC */,
 				315EC7F2234F212100E27653 /* MasterVC */,
 				315EC7F1234F20C000E27653 /* ProfilVC */,
 				315EC7F0234F20A100E27653 /* AuthVC */,
 				31A861D72344A00100C4127F /* ChatVC */,
-				31D39A682333B53A0050A777 /* MapKitAnnounceVC */,
 				31D39A5C2330F0BD0050A777 /* AnnounceVC */,
 			);
 			path = Controller;
@@ -348,10 +349,26 @@
 		315EC8312356F9BB00E27653 /* ModelVC1 */ = {
 			isa = PBXGroup;
 			children = (
-				31865B37232CE9B400A52657 /* ProfilGestion.swift */,
-				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
 			);
 			path = ModelVC1;
+			sourceTree = "<group>";
+		};
+		315EC8382358503100E27653 /* aDelete */ = {
+			isa = PBXGroup;
+			children = (
+				31261849232B8C4400091AA4 /* AnnounceList.swift */,
+				31AA936D233F5A2B00C88FD1 /* Master.swift */,
+				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
+			);
+			path = aDelete;
+			sourceTree = "<group>";
+		};
+		315EC83C235881D400E27653 /* MapKitVC */ = {
+			isa = PBXGroup;
+			children = (
+				315EC83D2358826A00E27653 /* MapKitAnnounceViewController.swift */,
+			);
+			path = MapKitVC;
 			sourceTree = "<group>";
 		};
 		31A861D72344A00100C4127F /* ChatVC */ = {
@@ -396,22 +413,13 @@
 		31D39A6523335CCB0050A777 /* ModelVC */ = {
 			isa = PBXGroup;
 			children = (
+				31865B37232CE9B400A52657 /* ProfilGestion.swift */,
+				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
 				315EC810234F299900E27653 /* Filter.swift */,
-				31261849232B8C4400091AA4 /* AnnounceList.swift */,
 				315EC812234F729400E27653 /* ManageConversation.swift */,
-				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
-				31D39A6B2333C0F60050A777 /* MapKitAnnounce.swift */,
-				31AA936D233F5A2B00C88FD1 /* Master.swift */,
+				315EC83423579ED500E27653 /* MapKitAnnounce.swift */,
 			);
 			path = ModelVC;
-			sourceTree = "<group>";
-		};
-		31D39A682333B53A0050A777 /* MapKitAnnounceVC */ = {
-			isa = PBXGroup;
-			children = (
-				31D39A692333B5570050A777 /* MapKitAnnounceViewController.swift */,
-			);
-			path = MapKitAnnounceVC;
 			sourceTree = "<group>";
 		};
 		31E2D311232B77D80088E508 = {
@@ -746,7 +754,6 @@
 				315EC7F5234F21A600E27653 /* AnnounceLocation.swift in Sources */,
 				31261842232B805600091AA4 /* Announce.swift in Sources */,
 				315EC815235070FC00E27653 /* FirebaseProtocol.swift in Sources */,
-				31D39A6A2333B5570050A777 /* MapKitAnnounceViewController.swift in Sources */,
 				31B909E92343780E0075761A /* UIColor+Extension.swift in Sources */,
 				3126184A232B8C4400091AA4 /* AnnounceList.swift in Sources */,
 				31A861D623448BAB00C4127F /* Conversation.swift in Sources */,
@@ -770,7 +777,6 @@
 				31D39A6423321B780050A777 /* ManageFireBase.swift in Sources */,
 				315EC80D234F272D00E27653 /* Array+Extension.swift in Sources */,
 				31E2D326232B77D80088E508 /* KeepChild.xcdatamodeld in Sources */,
-				31D39A6C2333C0F60050A777 /* MapKitAnnounce.swift in Sources */,
 				31865B38232CE9B400A52657 /* ProfilGestion.swift in Sources */,
 				31B909ED23437DEC0075761A /* UIView+Extension.swift in Sources */,
 				31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */,
@@ -792,7 +798,9 @@
 				315EC7FE234F22E000E27653 /* CurrentFilterSearch.swift in Sources */,
 				31D39A672333A3990050A777 /* CustomCell.swift in Sources */,
 				315EC8172350722100E27653 /* ManageFirebase2.swift in Sources */,
+				315EC83523579ED500E27653 /* MapKitAnnounce.swift in Sources */,
 				31261846232B81F700091AA4 /* AnnounceSearchTableViewController.swift in Sources */,
+				315EC83E2358826A00E27653 /* MapKitAnnounceViewController.swift in Sources */,
 				31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */,
 				315EC7FB234F229B00E27653 /* User.swift in Sources */,
 			);

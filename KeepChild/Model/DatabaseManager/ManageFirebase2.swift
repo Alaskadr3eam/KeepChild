@@ -212,6 +212,13 @@ extension ManagerFirebase: DataManagerProtocol {
         <#code#>
     }*/
     //MARK: - Conversation
+  /*  func retrieveConversationUser2(completionHandler: @escaping(Error?, [Conversation]?) -> Void) {
+        let idUser = CurrentUserManager.shared.user.senderId
+        var arrayConversation = [Conversation]()
+        queryConversation.whereField("idUser1", isEqualTo: idUser).whereField("idUser2", isEqualTo: idUser).getDocuments { (<#QuerySnapshot?#>, <#Error?#>) in
+            <#code#>
+        }
+    }*/
     func retrieveConversationUser(field: String, completionHandler: @escaping (Error?, [Conversation]?) -> Void) {
         var idUser = CurrentUserManager.shared.user.senderId
         var arrayConversation = [Conversation]()

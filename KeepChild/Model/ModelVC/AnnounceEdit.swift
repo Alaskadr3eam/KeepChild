@@ -119,9 +119,7 @@ class AnnounceEdit {
     }
     
     func searchAnnounceFiltered(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint, completionHandler: @escaping(Error?, [Announce]?) -> Void) {
-        
-        var arrayAnnounceFinal = [Announce]()
-        
+        announceTransition = [Announce]()
         DependencyInjection.shared.dataManager.searchAnnounceWithFilter(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else {
@@ -132,7 +130,6 @@ class AnnounceEdit {
             for announceD in announce {
                 self.announceTransition.append(announceD)
             }
-            
             completionHandler(nil,announceList)
         }
     }

@@ -163,101 +163,40 @@ class AnnounceEditTableViewController: UITableViewController {
         //return false
     }
 
-   /* private func profilOrNot() {
-        if CurrentUserManager.shared.profil == nil {
-            enableTextfield(bool: false)
-           // self.tableView.setEmptyMessage("Impossible d'éditer une annonce sans créer son profil.")
-        } else {
-            enableTextfield(bool: true)
-           // self.tableView.restore()
-        }
-    }*/
-    
-   /* private func requestProfil() {
-        guard let idUser = profilGestion.idUser else { return }
-        profilGestion.retrieveProfilUser2(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profil) in
-            guard let self = self else { return }
-            guard error == nil else {
-                return
-            }
-            guard profil != nil else {
-                self.setEmptyMessage("essaie")
-                return
-                
-            }
-            self.tableView.restore()
-            self.enableTextfield(bool: true)
-        }
-        //self.profilOrNot()
-    }*/
-    
-
-    
-    
-    
-    
-    
-    
-    
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension AnnounceEditTableViewController: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Tapez votre description" {
+            customTextView(textView: textView)
+        }
+    }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty == true {
+            customTextViewPlaceholder(textView: textView)
+        }
+    }
+    
+    func customTextViewPlaceholder(textView: UITextView) {
+        textView.text = "Tapez votre description"
+        textView.textColor = UIColor.lightGray
+        textView.font = UIFont(name: "verdana", size: 13.0)
+        textView.returnKeyType = .done
+    }
+    
+    func customTextView(textView: UITextView) {
+        textView.text = ""
+        textView.textColor = UIColor.black
+        textView.font = UIFont(name: "verdana", size: 15.0)
+    }
 }
 
 extension AnnounceEditTableViewController: AnnounceEditDelegate {

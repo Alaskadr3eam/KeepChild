@@ -41,7 +41,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         
         detailTableView.allowsSelection = false
         detailTableView.setLoadingScreen()
-        decodeProfilSaved()
+        //decodeProfilSaved()
         locMapKit.delegate = self
         request()
         
@@ -135,13 +135,13 @@ class DetailAnnounceTableViewController: UITableViewController {
         }
     }
     
-    func decodeProfilSaved(){
+    /*func decodeProfilSaved(){
         if let savedProfil = UserDefaults.standard.object(forKey: "announce") as? Data {
             if let profilLoaded = try? JSONDecoder().decode(Announce.self, from: savedProfil) {
                 self.detailAnnounce.announce = profilLoaded
             }
         }
-    }
+    }*/
     //on verifie que l'annonce n'appartient pas a l'utilisateur avant d'ouvrir l'envoie message
     private func itsAnnounceOfUser() -> Bool {
         if detailAnnounce.announce.idUser == CurrentUserManager.shared.user.senderId {
@@ -206,8 +206,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SendMessage" {
             if let vcDestination = segue.destination as? FirstMessageTableViewController {
-                vcDestination.idAnnounceUser = detailAnnounce.announce.idUser
-                vcDestination.announce = detailAnnounce.announce
+                //vcDestination.idAnnounceUser = detailAnnounce.announce.idUser
+                vcDestination.manageConversation.announce = detailAnnounce.announce
             }
         }
     }

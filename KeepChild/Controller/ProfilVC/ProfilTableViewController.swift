@@ -102,9 +102,9 @@ class ProfilTableViewController: UITableViewController {
             }
         }
         if segue.identifier == "DetailAnnounce" {
-            if let vcDestination = segue.destination as? DetailAnnounceTableViewController {
-                vcDestination.detailAnnounce.announce = profilGestion.announceDetail
-            }
+            let navVC = segue.destination as! UINavigationController
+            let detailAnnounceVC = navVC.viewControllers.first as! DetailAnnounceTableViewController
+            detailAnnounceVC.detailAnnounce.announce = profilGestion.announceDetail
         }
     }
     

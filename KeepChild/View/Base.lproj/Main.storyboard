@@ -37,10 +37,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p1E-r0-R2e">
-                                <rect key="frame" x="90" y="354" width="235" height="30"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="p1E-r0-R2e">
+                                <rect key="frame" x="0.0" y="354" width="414" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="235" id="ndu-zg-Tq7"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="Q49-0l-f4I"/>
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -49,20 +50,21 @@
                                     <outlet property="delegate" destination="ry9-Co-rWg" id="Tdz-9P-7O7"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Jf-c1-ASU">
-                                <rect key="frame" x="90" y="401" width="235" height="30"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Jf-c1-ASU">
+                                <rect key="frame" x="0.0" y="404" width="414" height="50"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="t6k-T9-V2f"/>
+                                    <constraint firstAttribute="height" constant="50" id="LZv-Jz-E7U"/>
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="ry9-Co-rWg" id="Cgn-dC-4yA"/>
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yfQ-sB-cfT">
-                                <rect key="frame" x="90" y="512" width="235" height="38"/>
+                                <rect key="frame" x="90" y="535" width="235" height="38"/>
                                 <color key="backgroundColor" red="0.26512891049999998" green="0.57870304579999998" blue="0.3658396304" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38" id="VQA-rt-fb3"/>
@@ -84,7 +86,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vq-nh-TwO">
-                                <rect key="frame" x="90" y="574" width="235" height="38"/>
+                                <rect key="frame" x="90" y="597" width="235" height="38"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38" id="ukH-qF-ahI"/>
@@ -102,15 +104,15 @@
                             <constraint firstItem="0mD-sy-nGv" firstAttribute="centerX" secondItem="sF4-Ev-NuF" secondAttribute="centerX" id="8Dl-C5-3cs"/>
                             <constraint firstItem="0mD-sy-nGv" firstAttribute="top" secondItem="df3-iq-T0t" secondAttribute="top" constant="60" id="AIY-X4-JtR"/>
                             <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="7vq-nh-TwO" secondAttribute="trailing" constant="89" id="Em8-84-Xax"/>
-                            <constraint firstItem="5Jf-c1-ASU" firstAttribute="top" secondItem="p1E-r0-R2e" secondAttribute="bottom" constant="17" id="H9A-cd-dMf"/>
+                            <constraint firstItem="5Jf-c1-ASU" firstAttribute="top" secondItem="p1E-r0-R2e" secondAttribute="bottom" id="H9A-cd-dMf"/>
                             <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="yfQ-sB-cfT" secondAttribute="trailing" constant="89" id="LYA-FP-tmg"/>
-                            <constraint firstItem="p1E-r0-R2e" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" constant="90" id="MEb-P1-dhy"/>
+                            <constraint firstItem="p1E-r0-R2e" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" id="MEb-P1-dhy"/>
                             <constraint firstItem="7vq-nh-TwO" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" constant="90" id="PCn-yj-1Wb"/>
                             <constraint firstItem="yfQ-sB-cfT" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" constant="90" id="PRG-ZN-PnR"/>
                             <constraint firstItem="yfQ-sB-cfT" firstAttribute="top" secondItem="5Jf-c1-ASU" secondAttribute="bottom" constant="81" id="SRJ-Ca-B89"/>
-                            <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="5Jf-c1-ASU" secondAttribute="trailing" constant="89" id="Zp8-MQ-beh"/>
-                            <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="p1E-r0-R2e" secondAttribute="trailing" constant="89" id="ghL-Dy-HY9"/>
-                            <constraint firstItem="5Jf-c1-ASU" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" constant="90" id="t7J-Gy-OHh"/>
+                            <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="5Jf-c1-ASU" secondAttribute="trailing" id="Zp8-MQ-beh"/>
+                            <constraint firstItem="df3-iq-T0t" firstAttribute="trailing" secondItem="p1E-r0-R2e" secondAttribute="trailing" id="ghL-Dy-HY9"/>
+                            <constraint firstItem="5Jf-c1-ASU" firstAttribute="leading" secondItem="df3-iq-T0t" secondAttribute="leading" id="t7J-Gy-OHh"/>
                             <constraint firstItem="7vq-nh-TwO" firstAttribute="top" secondItem="yfQ-sB-cfT" secondAttribute="bottom" constant="24" id="tJs-Zv-42L"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="df3-iq-T0t"/>
@@ -542,14 +544,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="bleu"/>
+                        <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="w8b-8x-iCN">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem title="Title" id="kRB-8B-L9D"/>
+                            </items>
+                        </navigationBar>
                         <view key="tableFooterView" contentMode="scaleToFill" id="kCb-Bv-oqk">
-                            <rect key="frame" x="0.0" y="124" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="168" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" name="bleu"/>
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="96" id="TAI-6r-tgb" customClass="CustomCell" customModule="KeepChild" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="96"/>
+                                <rect key="frame" x="0.0" y="72" width="414" height="96"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="TAI-6r-tgb" id="pDP-wi-vZx">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="95.5"/>
@@ -931,7 +940,7 @@
         <!--Annonce-->
         <scene sceneID="pVh-m1-eZa">
             <objects>
-                <tableViewController id="1RQ-uG-WVW" customClass="DetailAnnounceTableViewController" customModule="KeepChild" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DetailAnnounceTableViewController" id="1RQ-uG-WVW" customClass="DetailAnnounceTableViewController" customModule="KeepChild" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mG0-Ei-RPe" customClass="CustomTableView" customModule="KeepChild" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1194,7 +1203,7 @@
                         <barButtonItem title="tel" width="96" id="cy5-25-xEf"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Annonce" id="iQD-Kb-B9U">
-                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="50i-Rh-PWM"/>
+                        <barButtonItem key="leftBarButtonItem" title="&lt; Retour" id="50i-Rh-PWM"/>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -1209,6 +1218,7 @@
                         <outlet property="pseudoLabel" destination="Rcl-0g-pJm" id="jM9-I3-1af"/>
                         <outlet property="telLabel" destination="uSF-LD-Axt" id="MJq-na-EHs"/>
                         <outlet property="titleLabel" destination="hHR-F9-qz4" id="YHB-79-HdY"/>
+                        <segue destination="3vG-TA-KJJ" kind="presentation" identifier="SendMessage" id="Zpf-3U-HMX"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="byT-zX-NEn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1242,16 +1252,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="bleu"/>
+                        <color key="tintColor" name="bleu"/>
+                        <color key="separatorColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="sectionIndexColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="sectionIndexBackgroundColor" name="bleu"/>
                         <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="Lev-2j-Wlp">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="barTintColor" name="bleu"/>
+                            <textAttributes key="titleTextAttributes">
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </textAttributes>
                             <items>
                                 <navigationItem title="Votre message" id="CFO-N3-Vqm">
-                                    <barButtonItem key="leftBarButtonItem" title="Item" id="eCk-5i-y8X"/>
-                                    <barButtonItem key="rightBarButtonItem" title="Item" id="w1v-ne-akh"/>
+                                    <barButtonItem key="leftBarButtonItem" title="&lt;Retour" id="eCk-5i-y8X">
+                                        <connections>
+                                            <action selector="return:" destination="3vG-TA-KJJ" id="cnl-nl-FFx"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem key="rightBarButtonItem" title="Envoyer" id="w1v-ne-akh">
+                                        <connections>
+                                            <action selector="validateMessage:" destination="3vG-TA-KJJ" id="Uiy-ri-ati"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </navigationItem>
                             </items>
                         </navigationBar>
@@ -1300,11 +1324,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="tRj-Jz-fmi">
-                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="L6Q-kS-nR1">
-                            <connections>
-                                <action selector="return:" destination="3vG-TA-KJJ" id="nlp-5u-9Zz"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="L6Q-kS-nR1"/>
                     </navigationItem>
                     <connections>
                         <outlet property="messageTxt" destination="iuP-iU-0yR" id="VbR-do-BlL"/>
@@ -1690,8 +1710,13 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Moc-8n-2vv">
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Moc-8n-2vv">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="lundiIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="smi-If-HgQ"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1718,8 +1743,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="smz-jJ-OmW">
+                                                <switch opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="smz-jJ-OmW">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="mardiIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="Wzv-hZ-lgb"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1746,8 +1775,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AE9-2J-VrC">
+                                                <switch opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="AE9-2J-VrC">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="mercrediIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="GSC-Hm-9xU"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1774,8 +1807,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gHn-wf-c3J">
+                                                <switch opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="gHn-wf-c3J">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="jeudiIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="Xmc-Qv-OQp"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1802,8 +1839,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j9k-NW-MaT">
+                                                <switch opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="j9k-NW-MaT">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="vendrediIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="pvj-ah-0IS"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1830,8 +1871,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="5" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F1Z-Gs-lxL">
+                                                <switch opaque="NO" tag="5" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="F1Z-Gs-lxL">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="samediIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="WW6-Ew-zNx"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1858,8 +1903,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dGi-K0-Vhx">
+                                                <switch opaque="NO" tag="6" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="dGi-K0-Vhx">
                                                     <rect key="frame" x="345" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="dimancheIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="dbi-45-yhg"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1916,6 +1965,7 @@
                                             <subviews>
                                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="50" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Hqv-Bh-hbt">
                                                     <rect key="frame" x="18" y="7" width="378" height="31"/>
+                                                    <color key="tintColor" red="1" green="0.52073164500000002" blue="0.096525615199999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
                                                         <action selector="sliderValueChanged:" destination="eYL-pC-7m3" eventType="valueChanged" id="ngC-Eq-TBG"/>
                                                     </connections>
@@ -1968,8 +2018,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="7" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lyv-ju-ev8">
+                                                <switch opaque="NO" tag="7" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lyv-ju-ev8">
                                                     <rect key="frame" x="343" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="jourIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="o9n-6f-J39"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -1996,8 +2050,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" tag="8" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C2Z-18-PEK">
+                                                <switch opaque="NO" tag="8" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="C2Z-18-PEK">
                                                     <rect key="frame" x="343" y="6" width="51" height="31"/>
+                                                    <color key="tintColor" red="0.54505026339999996" green="0.54512965680000003" blue="0.54502516980000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <connections>
+                                                        <action selector="nuitIsSwitched:" destination="eYL-pC-7m3" eventType="valueChanged" id="RN5-DC-yTJ"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -2045,21 +2103,30 @@
                     <connections>
                         <outlet property="buttonSearch" destination="iVJ-ec-MY2" id="5Eq-NX-EJf"/>
                         <outlet property="cancelButton" destination="DeN-yv-uuf" id="eXM-XV-gx4"/>
+                        <outlet property="dimancheSwitch" destination="dGi-K0-Vhx" id="GlY-wn-9Eg"/>
                         <outlet property="distanceLabel" destination="wjh-R0-1Ad" id="xNg-IG-QfC"/>
+                        <outlet property="jeudiSwitch" destination="gHn-wf-c3J" id="JQZ-uk-5Tn"/>
+                        <outlet property="jourSwitch" destination="lyv-ju-ev8" id="hlc-qt-EHo"/>
+                        <outlet property="lundiSwitch" destination="Moc-8n-2vv" id="1J2-Gb-Y3D"/>
+                        <outlet property="mardiSwitch" destination="smz-jJ-OmW" id="yHr-zD-pXH"/>
+                        <outlet property="mercrediSwitch" destination="AE9-2J-VrC" id="RF8-IG-JzR"/>
+                        <outlet property="nuitSwitch" destination="C2Z-18-PEK" id="hin-kQ-vOK"/>
                         <outlet property="positionActuelleButton" destination="F8R-g7-1ZK" id="Uc2-IO-1Q7"/>
                         <outlet property="positionProfilButton" destination="NfX-C9-aea" id="jdW-Hs-tsq"/>
                         <outlet property="resetButton" destination="H1D-GV-zBe" id="4ra-Rn-Mhf"/>
+                        <outlet property="samediSwitch" destination="F1Z-Gs-lxL" id="quT-vc-q75"/>
                         <outlet property="sliderDistance" destination="Hqv-Bh-hbt" id="0Uk-e7-M9V"/>
+                        <outlet property="vendrediSwitch" destination="j9k-NW-MaT" id="8w0-qA-AMo"/>
                         <outlet property="view" destination="5BJ-OH-eAt" id="YBR-GN-9Il"/>
-                        <outletCollection property="switchDay" destination="Moc-8n-2vv" collectionClass="NSMutableArray" id="MIu-fC-BHR"/>
-                        <outletCollection property="switchDay" destination="smz-jJ-OmW" collectionClass="NSMutableArray" id="8If-9G-4b5"/>
-                        <outletCollection property="switchDay" destination="AE9-2J-VrC" collectionClass="NSMutableArray" id="RQN-FX-pp5"/>
-                        <outletCollection property="switchDay" destination="gHn-wf-c3J" collectionClass="NSMutableArray" id="ccM-m6-zNJ"/>
-                        <outletCollection property="switchDay" destination="j9k-NW-MaT" collectionClass="NSMutableArray" id="eGh-el-3e7"/>
-                        <outletCollection property="switchDay" destination="F1Z-Gs-lxL" collectionClass="NSMutableArray" id="NjD-Qv-m2d"/>
-                        <outletCollection property="switchDay" destination="dGi-K0-Vhx" collectionClass="NSMutableArray" id="nfK-tH-prh"/>
-                        <outletCollection property="switchJourNuit" destination="lyv-ju-ev8" collectionClass="NSMutableArray" id="YEx-l0-byL"/>
-                        <outletCollection property="switchJourNuit" destination="C2Z-18-PEK" collectionClass="NSMutableArray" id="hrK-Iz-R8W"/>
+                        <outletCollection property="switchAll" destination="Moc-8n-2vv" collectionClass="NSMutableArray" id="XV4-Gl-Qgb"/>
+                        <outletCollection property="switchAll" destination="smz-jJ-OmW" collectionClass="NSMutableArray" id="Xw0-O4-pb2"/>
+                        <outletCollection property="switchAll" destination="AE9-2J-VrC" collectionClass="NSMutableArray" id="mjl-Lv-Ius"/>
+                        <outletCollection property="switchAll" destination="gHn-wf-c3J" collectionClass="NSMutableArray" id="g1f-Ov-sar"/>
+                        <outletCollection property="switchAll" destination="j9k-NW-MaT" collectionClass="NSMutableArray" id="ms9-N7-v8B"/>
+                        <outletCollection property="switchAll" destination="F1Z-Gs-lxL" collectionClass="NSMutableArray" id="cc9-BV-h0f"/>
+                        <outletCollection property="switchAll" destination="dGi-K0-Vhx" collectionClass="NSMutableArray" id="2zt-42-eOK"/>
+                        <outletCollection property="switchAll" destination="lyv-ju-ev8" collectionClass="NSMutableArray" id="b0P-PS-abJ"/>
+                        <outletCollection property="switchAll" destination="C2Z-18-PEK" collectionClass="NSMutableArray" id="rZ8-9V-ar3"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qD5-sg-5td" userLabel="First Responder" sceneMemberID="firstResponder"/>

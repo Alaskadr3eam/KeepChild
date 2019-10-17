@@ -13,27 +13,26 @@ import InputBarAccessoryView
 
 class MessageViewController: MessagesViewController {
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-
-    private var messages = [Message]()
-    private var messageDict = [[String : Any]]()
-    private var conversation: Conversation
-   // private var manageFireBase = ManageFireBase()
+    var manageConversation = ManageConversation()
     
     private var messageListener: ListenerRegistration?
     private var reference: CollectionReference?
     private let db = Firestore.firestore()
     
+    let refreshControl = UIRefreshControl()
     
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
     
     deinit {
         messageListener?.remove()
     }
 
     init(conversation: Conversation) {
-        self.conversation = conversation
+        self.manageConversation.conversation = conversation
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,34 +42,15 @@ class MessageViewController: MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        decodeConversationMessage()
-        navigationItem.title = conversation.name
-        //self.navigationItem.largeTitleDisplayMode = .always
-        
-        
-        
-        messageInputBar.backgroundView.backgroundColor = UIColor(named: "bleu")
-        messageInputBar.inputTextView.backgroundColor = .white
-        messageInputBar.inputTextView.layer.cornerRadius = 20
-        maintainPositionOnKeyboardFrameChanged = true
-        //messageInputBar.inputTextView.tintColor = .primary
-        messageInputBar.sendButton.setTitleColor(.primary, for: .normal)
-        messageInputBar.sendButton.setTitleColor(
-            UIColor.primary.withAlphaComponent(0.3),
-            for: .highlighted)
-        messageInputBar.delegate = self
-        messagesCollectionView.messagesDataSource = self
-        messagesCollectionView.messagesLayoutDelegate = self
-        messagesCollectionView.messagesDisplayDelegate = self
-        
-        messageInputBar.leftStackView.alignment = .center
-        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
-        
-        guard let id = conversation.id else { return }
+
+        manageConversation.decodeConversationMessage()
+        navigationItem.title = manageConversation.conversation.name
+
+        initInputBar()
+
+        guard let id = manageConversation.conversation.id else { return }
         
         reference = db.collection(["Conversation", id, "message"].joined(separator: "/"))
-        
         messageListener = reference?.addSnapshotListener { querySnapshot, error in
             guard let snapshot = querySnapshot else {
                 print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
@@ -84,7 +64,28 @@ class MessageViewController: MessagesViewController {
         
         
     }
-
+    private func initInputBar() {
+        messageInputBar.delegate = self
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
+        messagesCollectionView.messageCellDelegate = self
+        messageInputBar.backgroundView.backgroundColor = UIColor(named: "bleu")
+        messageInputBar.inputTextView.backgroundColor = .white
+        messageInputBar.inputTextView.layer.cornerRadius = 20
+        maintainPositionOnKeyboardFrameChanged = true
+        messageInputBar.inputTextView.allowsEditingTextAttributes = true
+        scrollsToBottomOnKeyboardBeginsEditing = true
+        messageInputBar.sendButton.setTitleColor(.primary, for: .normal)
+        messageInputBar.sendButton.setTitleColor(
+            UIColor.primary.withAlphaComponent(0.3),
+            for: .highlighted)
+        
+        
+        messageInputBar.leftStackView.alignment = .center
+        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
+    }
+    
     private func handleDocumentChange(_ change: DocumentChange) {
         guard let message = Message(document: change.document) else {
             return
@@ -112,54 +113,23 @@ class MessageViewController: MessagesViewController {
             break
         }
     }
-    
-    private func transformeMessageInDic() {
-        for message in messages {
-            messageDict.append(message.representation)
-        }
-    
-    }
-    
 
     private func save(_ message: Message) {
-        transformeMessageInDic()
-        guard let id = conversation.id else { return }
-        let arrayMessage = messageDict as Any
+        manageConversation.transformeMessageInDic()
+       // guard let id = manageConversation.conversation.id else { return }
+        let arrayMessage = manageConversation.messageDict as Any
         let update = ["message":arrayMessage]
-        
-        Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
+        manageConversation.updateConversation(update: update, action: self.messagesCollectionView.scrollToBottom())
+      /*  Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
             if let e = error {
                 print("Error sending message: \(e.localizedDescription)")
                 return
             }
             
             self.messagesCollectionView.scrollToBottom()
-        }
+        }*/
     }
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-    func decodeConversationMessage() {
-        for message in conversation.arrayMessage! {
-            let messageText = message["message"] as! String
-            let id = message["senderID"] as! String
-            let name = message["senderName"] as! String
-            let timeInterval = message["created"] as! Timestamp
-            //let converted = NSDate(timeIntervalSince1970: timeInterval / 1000)
-            let date = timeInterval.dateValue()
-            //let date = Date(timeIntervalSince1970: timeInterval)
-           /* let dateFormatter = DateFormatter()
-            dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
-            dateFormatter.locale = NSLocale.current
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"*/
-            let message2 = Message(created: date, message: messageText, senderID: id, senderName: name)
-            messages.append(message2)
-        }
-    }
+    
 }
 
 extension MessageViewController: MessagesDisplayDelegate {
@@ -181,10 +151,6 @@ extension MessageViewController: MessagesDisplayDelegate {
 
 extension MessageViewController: MessagesLayoutDelegate {
     
-    func avatarSize(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
-        return .zero
-    }
-    
     func footerViewSize(for message: Message, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGSize {
         return CGSize(width: 0, height: 8)
     }
@@ -193,6 +159,7 @@ extension MessageViewController: MessagesLayoutDelegate {
         
         return 0
     }
+
 }
 
 extension MessageViewController: MessagesDataSource {
@@ -201,59 +168,48 @@ extension MessageViewController: MessagesDataSource {
     }
     
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
-        return messages.count
+        return manageConversation.messages.count
     }
     
-    
-    /*func currentSender() -> Sender {
-        return Sender(id: CurrentUserManager.shared.user.senderId, displayName: CurrentUserManager.shared.profil.pseudo)
-    }*/
-    
-    /*func numberOfMessages(in messagesCollectionView: MessagesCollectionView) -> Int {
-        return messages.count
-    }*/
-    
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
-        return messages[indexPath.section]
+        return manageConversation.messages[indexPath.section]
     }
     
     func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        let name = message.sender.displayName
-        return NSAttributedString(
-            string: name,
-            attributes: [
-                .font: UIFont.preferredFont(forTextStyle: .caption1),
-                .foregroundColor: UIColor(white: 0.3, alpha: 1)
-            ]
-        )
+        if indexPath.section % 3 == 0 {
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        }
+        return nil
     }
+
+    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        let name = message.sender.displayName
+        return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+    }
+
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        
+        return 12
+    }
+
+    func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        return NSAttributedString(string: "Read", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+    }
+
+    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        let dateString = formatter.string(from: message.sentDate)
+        return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
+    }
+    
+    
     
 }
-
-// MARK: - MessageInputBarDelegate
-
-/*extension MessageViewController: MessageInputBarDelegate {
-    
-    func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-        let message = Message2(text: text, user: CurrentUserManager.shared.user)
-        messageInputBar.sendButton.startAnimating()
-        save(message)
-        inputBar.inputTextView.text = ""
-    }
-    
-}*/
 
 extension MessageViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-       /* let message = Message2(text: text, user: CurrentUserManager.shared.user)
-        messageInputBar.sendButton.startAnimating()
-        
-        
-        let components = messageInputBar.inputTextView.components
-        inputBar.inputTextView.text = ""
-        insertMessages(components)
-        save(message)*/
+       
         let message = Message(text: text, user: CurrentUserManager.shared.user)
         // Here we can parse for which substrings were autocompleted
         let attributedText = messageInputBar.inputTextView.attributedText!
@@ -268,8 +224,6 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
         let components = inputBar.inputTextView.components
         messageInputBar.inputTextView.text = String()
         messageInputBar.invalidatePlugins()
-        
-        // Send button activity animation
         messageInputBar.sendButton.startAnimating()
         messageInputBar.inputTextView.placeholder = "Sending..."
         DispatchQueue.global(qos: .default).async {
@@ -288,28 +242,24 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
 
     private func insertMessages(_ data: [Any]) {
         for component in data {
-            //let user = SampleData.shared.currentSender
             if let str = component as? String {
                 let message = Message(text: str, user: CurrentUserManager.shared.user)
                 insertMessage(message)
-            } /*else if let img = component as? UIImage {
-                let message = Message2(image: img, user: user, messageId: UUID().uuidString, date: Date())
-                insertMessage(message)
-            }*/
+            }
         }
     }
 
     func insertMessage(_ message: Message) {
-        guard messages.contains(message) else {
+        guard manageConversation.messages.contains(message) else {
             print("message present")
             return }
-        messages.append(message)
+        manageConversation.messages.append(message)
         //messages.sort()
         // Reload last section to update header/footer labels and insert a new one
         messagesCollectionView.performBatchUpdates({
-            messagesCollectionView.insertSections([messages.count - 1])
-            if messages.count >= 2 {
-                messagesCollectionView.reloadSections([messages.count - 2])
+            messagesCollectionView.insertSections([manageConversation.messages.count - 1])
+            if manageConversation.messages.count >= 2 {
+                messagesCollectionView.reloadSections([manageConversation.messages.count - 2])
             }
         }, completion: { [weak self] _ in
             if self?.isLastSectionVisible() == true {
@@ -319,12 +269,66 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
     }
     
     func isLastSectionVisible() -> Bool {
-        
-        guard !messages.isEmpty else { return false }
-        
-        let lastIndexPath = IndexPath(item: 0, section: messages.count - 1)
-        
+        guard !manageConversation.messages.isEmpty else { return false }
+        let lastIndexPath = IndexPath(item: 0, section: manageConversation.messages.count - 1)
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
     }
  
+}
+
+extension MessageViewController: MessageCellDelegate {
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        choiceInitial(message: message, avatarView: avatarView)
+    }
+    
+    private func choiceInitial(message: MessageType, avatarView: AvatarView) {
+        if isFromCurrentSender(message: message) {
+            selectFirstChar(message: message, avatarView: avatarView)
+        } else {
+            selectFirstChar(message: message, avatarView: avatarView)
+        }
+    }
+    
+    private func selectFirstChar(message: MessageType, avatarView: AvatarView) {
+        guard let letter = message.sender.displayName.first else { return }
+        let letterString = String(letter)
+        avatarView.initials = letterString
+    }
+
+}
+
+extension MessageViewController {
+    
+    /*func configureMessageCollectionView() {
+        
+        /*messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messageCellDelegate = self*/
+        
+        scrollsToBottomOnKeyboardBeginsEditing = true // default false
+        maintainPositionOnKeyboardFrameChanged = true // default false
+        
+        messagesCollectionView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
+    }
+
+    @objc func loadMoreMessages() {
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+            let documentID = self.manageConversation.conversation.id
+            self.db.collection("Conversation").doc
+            self.db.collection("Conversation").document(documentID!).addSnapshotListener { documentSnapshot, error in
+                    guard let document = documentSnapshot else {
+                        print("Error fetching document: \(error!)")
+                        return
+                    }
+                    guard let data = document.data() else {
+                        print("Document data was empty.")
+                        return
+                    }
+                    print("Current data: \(data)")
+            }
+        }
+    }*/
+
+    
 }

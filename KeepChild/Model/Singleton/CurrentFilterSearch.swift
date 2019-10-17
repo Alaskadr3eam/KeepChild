@@ -25,11 +25,14 @@ class FilterSearch {
     var regionRadius: CLLocationDistance!
     var profilLocIsSelected = false
     
-    func initFilterSearch() {
-        dayFilter = [String:Bool]()
-        momentDay = [String:Bool]()
+    func initLocFilterSearch() {
         greaterGeopoint = nil
         lesserGeopoint = nil
+    }
+    
+    func initFilterDayAndMoment() {
+        dayFilter = [String:Bool]()
+        momentDay = [String:Bool]()
     }
 
     func removeLocationValue() {

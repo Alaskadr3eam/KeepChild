@@ -16,8 +16,6 @@ class MasterViewController: UIViewController {
     let searchController = UISearchController(searchResultsController: nil)
     //model for vc
     var announceList = AnnounceEdit()
-    //var announceList = AnnounceList()
-    //var announceList = Master()
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -148,18 +146,13 @@ class MasterViewController: UIViewController {
      // MARK: - Search Controller
     private func initSearchController() {
         searchController.searchBar.delegate = self
-        searchController.dimsBackgroundDuringPresentation = true
+        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Announce"
         navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.tintColor = UIColor.black
         searchController.searchBar.barTintColor = UIColor.black
     }
-
-    /*private func createButtonForFiltered() {
-        searchController.searchBar.showsBookmarkButton = true
-        searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
-    }*/
 
     private func searchBarIsEmpty() -> Bool {
         return searchController.searchBar.text?.isEmpty ?? true

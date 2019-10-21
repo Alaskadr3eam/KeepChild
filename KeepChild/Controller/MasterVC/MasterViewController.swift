@@ -123,9 +123,11 @@ class MasterViewController: UIViewController {
         vc.viewWillAppear(true)
         vc.searchTableView.reloadData()
     }
+
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
         vc.mapKitAnnounce.announceList = self.announceList.announceList
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
+        vc.viewWillAppear(true)
     }
 
      // MARK: - Search Controller
@@ -158,7 +160,6 @@ class MasterViewController: UIViewController {
     }
     
      // MARK: - View
-    
     private func setupView() {
         setupSegmentedControl()
         updateView()
@@ -168,7 +169,7 @@ class MasterViewController: UIViewController {
         announceSearchTableViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 0)
         mapKitAnnounceViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 1)
         //active viewWillAppear in launch vc for animation mapkit
-        mapKitAnnounceViewController.viewWillAppear(true)
+        //mapKitAnnounceViewController.viewWillAppear(true)
     }
 
     private func setupSegmentedControl() {

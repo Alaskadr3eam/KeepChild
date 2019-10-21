@@ -71,8 +71,9 @@ class EditProfilTableViewController: UITableViewController {
             "postalCode": profilGestion.postalCode,
             "ville": profilGestion.city
         ]
-        guard let documentID = profilGestion.profil.id else { return }
+        guard let documentID = CurrentUserManager.shared.profil.id else { return }
         updateProfil(collection: "ProfilUser", documentID: documentID, update: update)
+        retrieveProfil()
     }
 
     //MARK: -View Func
@@ -170,7 +171,20 @@ class EditProfilTableViewController: UITableViewController {
             guard bool != nil else { return }
         }*/
     }
-    
+    private func retrieveProfil() {
+         CurrentUserManager.shared.profil = nil
+        let idUser = CurrentUserManager.shared.user.senderId
+        DependencyInjection.shared.dataManager.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            guard let profil = profilUser else {
+                self.performSegue(withIdentifier: "EditProfil", sender: nil)
+                return }
+            CurrentUserManager.shared.addProfil(profilUser: profil[0])
+            self.dismiss(animated: true, completion: nil)
+            }
+    }
+        
     
     private func saveProfilWithPicture() {
         guard let profilUserSave = createProfilUser() else { return }

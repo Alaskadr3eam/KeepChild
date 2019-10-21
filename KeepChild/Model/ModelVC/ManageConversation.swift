@@ -104,6 +104,7 @@ class ManageConversation {
     }
     //create new conversation
     private func createNewConversation() -> Conversation {
+        idAnnounceUser = announce.idUser
         let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
         return conversation
     }
@@ -111,6 +112,7 @@ class ManageConversation {
     private func addMessageInConversation() {
         Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
     }
+
     private func addConversation(conversation: Conversation) {
         Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)
     }

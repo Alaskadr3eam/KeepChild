@@ -32,25 +32,14 @@ class ConversationTableViewController: UITableViewController {
     private func requestIdUser1() {
         manageConversation.arrayConversation.removeAll()
         manageConversation.retrieveConversion(field: "idUser1") { [weak self] (error, bool) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard bool == true else {
-                self.requestIdUser2()
-                return
-            }
+            guard let self = self, error == nil else { return }
             self.requestIdUser2()
         }
     }
     
     private func requestIdUser2() {
         manageConversation.retrieveConversion(field: "idUser2") { [weak self] (error, bool) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard bool == true else {
-                //if no conversation -> display message
-                self.tableViewIsEmpty()
-                return
-            }
+            guard let self = self, error == nil else { return }
             self.tableViewIsEmpty()
         }
     }
@@ -67,7 +56,11 @@ class ConversationTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        if manageConversation.arrayMessage.count == nil {
+            return 0
+        } else {
+            return 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,7 +70,6 @@ class ConversationTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
         cell.textLabel!.text = manageConversation.arrayConversation[indexPath.row].name
         if let messageArray = manageConversation.arrayConversation[indexPath.row].arrayMessage {
             if let lastMessage = messageArray.last {

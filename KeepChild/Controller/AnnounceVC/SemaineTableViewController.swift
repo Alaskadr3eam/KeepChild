@@ -24,8 +24,8 @@ class SemaineTableViewController: UITableViewController {
     // MARK: - Action
     @IBAction func saveSemaineSelection(_ sender: UIBarButtonItem) {
         announceEdit.encodeObjectInData(semaine: createSemaine())
-        //dismiss(animated: true, completion: nil)
-        self.navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
+        //self.navigationController?.popViewController(animated: true)
     }
 
     //MARK: - Helpers

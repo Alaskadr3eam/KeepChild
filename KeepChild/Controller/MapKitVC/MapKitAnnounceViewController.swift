@@ -20,21 +20,19 @@ class MapKitAnnounceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapKitViewAnnounce.delegate = self
-      
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        centerMapOnLocation()
+       // centerMapOnLocation()
     }
     
     func centerMapOnLocation() {
-        if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
+            if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
             let initialLocation = CLLocation(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!)
             let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
                                                       latitudinalMeters: mapKitAnnounce.filter.regionRadius!, longitudinalMeters: mapKitAnnounce.filter.regionRadius!)

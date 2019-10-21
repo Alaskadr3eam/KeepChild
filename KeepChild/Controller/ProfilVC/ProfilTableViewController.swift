@@ -16,8 +16,6 @@ class ProfilTableViewController: UITableViewController {
     //MARK: - Properties
     @IBOutlet weak var profilView: ProfilView!
     
-
-
     //model for vc
     var profilGestion = ProfilGestion()
     var manageConversation = ManageConversation()
@@ -31,14 +29,12 @@ class ProfilTableViewController: UITableViewController {
         requestInitProfil()
         requestConversation()
         initView()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         requestInitProfil()
         requestConversation()
-        
     }
     //MARK: - Request
     private func requestInitProfil() {

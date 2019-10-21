@@ -12,7 +12,8 @@ class CustomCell: UITableViewCell {
     
     @IBOutlet weak var imageProfil: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var semaineDayLabel: UILabel!
+    @IBOutlet weak var momentDayLabel: UILabel!
     
 
     override func awakeFromNib() {

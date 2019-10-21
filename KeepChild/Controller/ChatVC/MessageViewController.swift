@@ -42,10 +42,10 @@ class MessageViewController: MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         manageConversation.decodeConversationMessage()
         navigationItem.title = manageConversation.conversation.name
-
+        Constants.configureTilteTextNavigationBar(view: self, title: .chatMessaging(manageConversation.conversation.name))
         initInputBar()
 
         guard let id = manageConversation.conversation.id else { return }

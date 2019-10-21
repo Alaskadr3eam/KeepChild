@@ -75,6 +75,33 @@ class AnnounceEditTest: XCTestCase {
         XCTAssertEqual(announceEdit.announce.title, "test")
     }
     
+    func testTransformeSemaineInString() {
+        //Given
+        var semaineString: String!
+        var semaineString2: String!
+        XCTAssertNil(semaineString)
+        XCTAssertNil(semaineString2)
+        //When
+        semaineString = "\(announceEdit.transformateSemaineInString(semaine: semaine1))"
+        semaineString2 = "\(announceEdit.transformateSemaineInString(semaine: semaine2))"
+        //Then
+        XCTAssertEqual(semaineString, "lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche")
+        XCTAssertEqual(semaineString2, "vendredi")
+    }
+
+    func testTransformeMomentDayInString() {
+        //Given
+        var momentString: String!
+        var momentString2: String!
+        XCTAssertNil(momentString)
+        XCTAssertNil(momentString2)
+        //When
+        momentString = "\(announceEdit.transformeMomentDayInString(announce: announce1))"
+        momentString2 = "\(announceEdit.transformeMomentDayInString(announce: announce2))"
+        //Then
+        XCTAssertEqual(momentString, "Jour")
+        XCTAssertEqual(momentString2, "Nuit")
+    }
     func testGeocoderSuccess() {
         let expect = expectation(description: "Wait for geocode")
         announceEdit.getCoordinate(addressString: "Infinite Loop 1, Cupertino") { (coordinate, error) in

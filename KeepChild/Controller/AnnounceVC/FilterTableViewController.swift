@@ -13,8 +13,7 @@ import CoreLocation
 
 class FilterTableViewController: UITableViewController {
     
-    //MARK: - Properie
-    let tabBar = UITabBar()
+    //MARK: - Outlet
     //outlet bar button item
     @IBOutlet weak var buttonSearch: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
@@ -41,12 +40,15 @@ class FilterTableViewController: UITableViewController {
     
     @IBOutlet var switchAll: [UISwitch]!
     
-    
-    
-    var filter = Filter()
+    //MARK: - Properties
+    var delegate: isAbleToReceiveFilter?
+    var filter = FilterGestion()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Constants.configureTilteTextNavigationBar(view: self, title: .filterAnnounce)
+        self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
+        self.navigationItem.leftBarButtonItem?.tintColor = Constants.Color.titleNavBar
         initView()
        initViewButton()
     }
@@ -83,10 +85,7 @@ class FilterTableViewController: UITableViewController {
     
     
     @IBAction func buttonResetIsClicked(_ sender: UIBarButtonItem) {
-        resetSwitchAll(senderArray: switchAll)
-        sliderDistance.setValue(50.0, animated: true)
-        distanceLabel.text = "\(Int(sliderDistance.value)) Km"
-        FilterSearch.shared.initLocFilterSearch()
+        resetSwitchAllAndSlider(senderArray: switchAll)
     }
     
     @IBAction func buttonCancelIsClicked(_ sender: UIBarButtonItem) {
@@ -96,52 +95,36 @@ class FilterTableViewController: UITableViewController {
     @IBAction func buttonIsClicked(_ sender: UIButton) {
         switch sender {
         case positionActuelleButton:
-            positionActuelleButton.backgroundColor = UIColor.green
             location()
-            
-            positionProfilButton.backgroundColor = UIColor.white
-            //checkLocationAuthorizationStatus()
-            FilterSearch.shared.profilLocIsSelected = false
         case positionProfilButton:
-            positionProfilButton.backgroundColor = UIColor.green
-            positionActuelleButton.backgroundColor = UIColor.white
+            positionProfilButton.isSelected = true
+            positionActuelleButton.isSelected = false
             locationWithProfil()
-            FilterSearch.shared.profilLocIsSelected = true
+            filter.profilLocIsSelected = true
         default:break
         }
     }
 
     @IBAction func sliderValueChanged(_ sender: UISlider) {
-        FilterSearch.shared.regionRadius = nil
         let currentValue = Int(sender.value)
         distanceLabel.text = "\(currentValue) Km"
-        filter.distanceInMile(value: currentValue)
-        /*distanceMile = Double(currentValue) / 1.60934
-        FilterSearch.shared.regionRadius = Double(currentValue) * 1000*/
+        filter.distanceInMile(value: sender.value)
+        filter.distanceInMetersForRegionRadiusMapKit(value: sender.value)
     }
 
     @IBAction func searchButtonIsClicked(_ sender: UIBarButtonItem) {
-        if FilterSearch.shared.latChoice == nil && FilterSearch.shared.longChoice == nil {
-            presentAlert(title: "Attention", message: "Parametre de localisation manquant, recherche impossible.")
-            return
+        if filter.filter != nil {
+            delegate?.pass(filter: filter.filter)
+            dismiss(animated: true, completion: nil)
+        } else {
+        filter.prepareQueryIsPossibleOrNot() ? filter.prepareQueryLoc() : presentAlert(title: "Attention", message: "Parametre de localisation manquant, recherche impossible.")
+        filterIsComplete()
         }
-
-        prepareSearchList()
-        print(FilterSearch.shared.dayFilter)
-        print(FilterSearch.shared.momentDay)
-        FilterSearch.shared.filterSearchIsComplete() ? dismiss(animated: true, completion: nil) : self.presentAlert(title: "Attention", message: "Vous n'avez pas choisie tout les critères de recherche.")
-    }
-
-    func prepareSearchList() {
-        FilterSearch.shared.initLocFilterSearch()
-        filter.prepareQueryLoc()
-        //createDayFilterForKeep()
     }
 
     // MARK: -Location With Profil
     //retrieve lat and long with profil adress
     func locationWithProfil() {
-        FilterSearch.shared.removeLocationValue()
         let adressString = CurrentUserManager.shared.profil.city + CurrentUserManager.shared.profil.postalCode
         filter.getCoordinate(addressString: adressString) { (coordinate, error) in
             guard error == nil else { return }
@@ -149,53 +132,92 @@ class FilterTableViewController: UITableViewController {
             self.presentAlert(title: "Location", message: "Votre localisation à été trouvé.")
         }
     }
+    //use coreLoc
+    private func location() {
+        filter.checkLocationAuthorizationStatus { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {
+                self.presentAlert(title: "Attention Probleme", message: "Impossible de vous localiser, vérifiez vos parametres.")
+                self.positionActuelleButton.isSelected = false
+                self.positionProfilButton.isSelected = true
+                return
+            }
+            self.positionProfilButton.isSelected = false
+            self.positionActuelleButton.isSelected = false
+        }
+    }
 
     // MARK: - Helpers Func for UISwitch
-
     private func isDaySwitched(_ sender: UISwitch, day: String) {
         if sender.isOn {
-            FilterSearch.shared.dayFilter[day] = true
+            filter.dayFilter[day] = true
         } else {
-            guard let index = FilterSearch.shared.dayFilter.index(forKey: day) else { return }
-            FilterSearch.shared.dayFilter.remove(at: index)
+            guard let index1 = filter.dayFilter.index(forKey: day) else { return }
+            filter.dayFilter.remove(at: index1)
         }
     }
     
     private func isMomentDaySwitched(_ sender: UISwitch, moment: String) {
         if sender.isOn {
-            FilterSearch.shared.momentDay[moment] = true
+            filter.momentDay[moment] = true
         } else {
-            guard let index = FilterSearch.shared.momentDay.index(forKey: moment) else { return }
-            FilterSearch.shared.momentDay.remove(at: index)
+            guard let index1 = filter.momentDay.index(forKey: moment) else { return }
+            filter.momentDay.remove(at: index1)
         }
     }
+    //MARK: - Helpers
+    private func resetSwitchAllAndSlider(senderArray: [UISwitch]) {
+        filter.filter = nil
+        for sender in senderArray {
+            sender.setOn(false, animated: true)
+        }
+        sliderDistance.setValue(50.0, animated: true)
+        filter.distanceInMetersForRegionRadiusMapKit(value: 50.0)
+        filter.distanceInMile(value: 50.0)
+        distanceLabel.text = "\(Int(sliderDistance.value)) Km"
+    }
 
+    private func filterOkPassAndDismiss() {
+        filter.createFilterForSearch()
+        delegate?.pass(filter: filter.filter)
+        dismiss(animated: true, completion: nil)
+    }
+    
+    private func filterIsComplete() {
+        filter.filterSearchIsComplete() ? filterOkPassAndDismiss() : presentAlert(title: "Attention", message: "Vous n'avez pas choisie tout les critères de recherche.")
+        
+    }
     // MARK: - Init View
     private func initView() {
-        initViewSwitchDay()
-        initViewSwitchMomentDay()
-        if FilterSearch.shared.regionRadius != nil {
-            let value: Float = filter.disTanceForSlider()
+        if filter.filter != nil {
+            initViewSwitchDay()
+            initViewSwitchMomentDay()
+            if filter.filter.profilLocIsSelected == true {
+                positionProfilButton.isSelected = true
+            } else {
+                positionActuelleButton.isSelected = true
+            }
+            guard let value = filter.disTanceForSlider() else { return }
             sliderDistance.setValue(value, animated: true)
             distanceLabel.text = "\(Int(value)) Km"
         } else {
-        sliderDistance.setValue(50.0, animated: true)
-        distanceLabel.text = "\(Int(sliderDistance.value)) Km"
+            sliderDistance.setValue(50.0, animated: true)
+            filter.distanceInMetersForRegionRadiusMapKit(value: 50.0)
+            filter.distanceInMile(value: 50.0)
+            distanceLabel.text = "\(Int(sliderDistance.value)) Km"
         }
     }
+
     private func initViewButton() {
         if CLLocationManager.authorizationStatus() != .authorizedWhenInUse {
             //positionActuelleButton.isEnabled = true
             positionActuelleButton.isHidden = true
             positionProfilButton.isSelected = true
         }
-        
-        //FilterSearch.shared.filterSearchIsComplete() ? (buttonSearch.isEnabled = true) : (buttonSearch.isEnabled = false)
     }
-//var day = ["lundi","mardi","mercredi","jeudi","vendredi","samedi" "dimanche"]
+
     private func initViewSwitchDay() {
-        for key in FilterSearch.shared.dayFilter {
-            
+        for key in filter.filter.dayFilter {
             keyEqualSwitch(key: key.key, day: "lundi", sender: lundiSwitch)
             keyEqualSwitch(key: key.key, day: "mardi", sender: mardiSwitch)
             keyEqualSwitch(key: key.key, day: "mercredi", sender: mercrediSwitch)
@@ -207,51 +229,28 @@ class FilterTableViewController: UITableViewController {
     }
 
     private func initViewSwitchMomentDay() {
-        for key in FilterSearch.shared.momentDay {
+        for key in filter.filter.momentDay {
             keyEqualSwitch(key: key.key, day: "day", sender: jourSwitch)
             keyEqualSwitch(key: key.key, day: "night", sender: nuitSwitch)
         }
     }
+
     private func keyEqualSwitch(key: String,day: String, sender: UISwitch) {
         if key == day {
             sender.setOn(true, animated: true)
         }
     }
-    private func resetSwitchAll(senderArray: [UISwitch]) {
-        for sender in senderArray {
-        sender.setOn(false, animated: true)
-        }
-        FilterSearch.shared.initFilterDayAndMoment()
-    }
-    
-    
-    private func location() {
-        filter.checkLocationAuthorizationStatus { [weak self] (bool) in
-            guard let self = self else { return }
-            guard bool == true else {
-                self.presentAlert(title: "Attention Probleme", message: "Impossible de vous localiser, vérifiez vos parametres.")
-                self.positionActuelleButton.backgroundColor = .white
-                return
-            }
+    //MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.Segue.segueSearch {
+            let navVC = segue.destination as! UINavigationController
+            let masterVC = navVC.viewControllers.first as! MasterViewController
+            masterVC.announceList.filter = filter.filter
         }
     }
-    //prepare queryLoc for request
-    private func prepareQueryLoc(latitude: Double, longitude: Double, distanceMile: Double) {
-        let lat = 0.0144927536231884
-        let lon = 0.0181818181818182
-        
-        let lowerLat = latitude - (lat * distanceMile)
-        let lowerLon = longitude - (lon * distanceMile)
-        
-        let greaterLat = latitude + (lat * distanceMile)
-        let greaterLon = longitude + (lon * distanceMile)
-        
-        let lesserGeopoint = GeoPoint(latitude: lowerLat, longitude: lowerLon)
-        let greaterGeopoint = GeoPoint(latitude: greaterLat, longitude: greaterLon)
-        FilterSearch.shared.lesserGeopoint = lesserGeopoint
-        FilterSearch.shared.greaterGeopoint = greaterGeopoint
-    }
-
 }
 
+protocol isAbleToReceiveFilter {
+    func pass(filter: Filter)
+}
 

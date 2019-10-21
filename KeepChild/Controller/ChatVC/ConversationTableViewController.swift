@@ -16,6 +16,8 @@ class ConversationTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Constants.configureTilteTextNavigationBar(view: self, title: .conversation)
+        tableView.setBackgroundView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,7 +58,7 @@ class ConversationTableViewController: UITableViewController {
      private func tableViewIsEmpty() {
         if manageConversation.arrayConversation.count == 0 {
             //if no conversation -> display message
-            self.tableView.setEmptyMessage("Aucune conversation en cours pour le moment.")
+            self.tableView.setEmptyMessage("Aucune conversation en cours pour le moment.", messageEnd: "", imageName: "smileyContent")
         } else {
             self.tableView.reloadData()
         }
@@ -75,10 +77,20 @@ class ConversationTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
+        
         cell.textLabel!.text = manageConversation.arrayConversation[indexPath.row].name
-
+        if let messageArray = manageConversation.arrayConversation[indexPath.row].arrayMessage {
+            if let lastMessage = messageArray.last {
+                cell.detailTextLabel?.text = (lastMessage["message"] as! String)
+            }
+        }
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        footerView.backgroundColor = Constants.Color.bleu
+        return footerView
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

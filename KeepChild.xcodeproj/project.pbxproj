@@ -27,7 +27,7 @@
 		315EC80B234F26B500E27653 /* MKMapView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC80A234F26B500E27653 /* MKMapView+Extension.swift */; };
 		315EC80D234F272D00E27653 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC80C234F272D00E27653 /* Array+Extension.swift */; };
 		315EC80F234F27FB00E27653 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC80E234F27FB00E27653 /* UIViewController+Extension.swift */; };
-		315EC811234F299900E27653 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC810234F299900E27653 /* Filter.swift */; };
+		315EC811234F299900E27653 /* FilterGestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC810234F299900E27653 /* FilterGestion.swift */; };
 		315EC813234F729400E27653 /* ManageConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC812234F729400E27653 /* ManageConversation.swift */; };
 		315EC815235070FC00E27653 /* FirebaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC814235070FC00E27653 /* FirebaseProtocol.swift */; };
 		315EC8172350722100E27653 /* ManageFirebase2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315EC8162350722100E27653 /* ManageFirebase2.swift */; };
@@ -44,6 +44,10 @@
 		31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B35232CE7CB00A52657 /* ProfilView.swift */; };
 		31865B38232CE9B400A52657 /* ProfilGestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B37232CE9B400A52657 /* ProfilGestion.swift */; };
 		31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */; };
+		319FC6BE23590223003801DE /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319FC6BD23590223003801DE /* Constant.swift */; };
+		319FC6C023590308003801DE /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319FC6BF23590308003801DE /* CustomTextField.swift */; };
+		319FC6C2235A1834003801DE /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319FC6C1235A1834003801DE /* DashboardView.swift */; };
+		319FC6C4235B0F6E003801DE /* Geocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319FC6C3235B0F6D003801DE /* Geocoder.swift */; };
 		31A861D423448AB300C4127F /* FirstMessageTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D323448AB300C4127F /* FirstMessageTableViewController.swift */; };
 		31A861D623448BAB00C4127F /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D523448BAB00C4127F /* Conversation.swift */; };
 		31A861D92344A02000C4127F /* ConversationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A861D82344A02000C4127F /* ConversationTableViewController.swift */; };
@@ -59,6 +63,8 @@
 		31B909EB23437DDB0075761A /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B909EA23437DDB0075761A /* UICollectionView+Extension.swift */; };
 		31B909ED23437DEC0075761A /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B909EC23437DEC0075761A /* UIView+Extension.swift */; };
 		31B909EF23437DFC0075761A /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B909EE23437DFC0075761A /* UIImage+Extension.swift */; };
+		31D12F34235C478900DB6B7F /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D12F33235C478900DB6B7F /* Filter.swift */; };
+		31D12F36235C541800DB6B7F /* FilterTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D12F35235C541800DB6B7F /* FilterTest.swift */; };
 		31D39A5B2330C7F80050A777 /* EditProfilTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */; };
 		31D39A5E2330F0E00050A777 /* DetailAnnounceTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */; };
 		31D39A602330F7030050A777 /* DetailAnnounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D39A5F2330F7030050A777 /* DetailAnnounce.swift */; };
@@ -117,7 +123,7 @@
 		315EC80A234F26B500E27653 /* MKMapView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extension.swift"; sourceTree = "<group>"; };
 		315EC80C234F272D00E27653 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		315EC80E234F27FB00E27653 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		315EC810234F299900E27653 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		315EC810234F299900E27653 /* FilterGestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterGestion.swift; sourceTree = "<group>"; };
 		315EC812234F729400E27653 /* ManageConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageConversation.swift; sourceTree = "<group>"; };
 		315EC814235070FC00E27653 /* FirebaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProtocol.swift; sourceTree = "<group>"; };
 		315EC8162350722100E27653 /* ManageFirebase2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageFirebase2.swift; sourceTree = "<group>"; };
@@ -134,6 +140,10 @@
 		31865B35232CE7CB00A52657 /* ProfilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilView.swift; sourceTree = "<group>"; };
 		31865B37232CE9B400A52657 /* ProfilGestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilGestion.swift; sourceTree = "<group>"; };
 		31865B39232CEE2600A52657 /* AnnounceEditTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnounceEditTableViewController.swift; sourceTree = "<group>"; };
+		319FC6BD23590223003801DE /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		319FC6BF23590308003801DE /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		319FC6C1235A1834003801DE /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		319FC6C3235B0F6D003801DE /* Geocoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoder.swift; sourceTree = "<group>"; };
 		31A861D323448AB300C4127F /* FirstMessageTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMessageTableViewController.swift; sourceTree = "<group>"; };
 		31A861D523448BAB00C4127F /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		31A861D82344A02000C4127F /* ConversationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +159,8 @@
 		31B909EA23437DDB0075761A /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		31B909EC23437DEC0075761A /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		31B909EE23437DFC0075761A /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		31D12F33235C478900DB6B7F /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		31D12F35235C541800DB6B7F /* FilterTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTest.swift; sourceTree = "<group>"; };
 		31D39A5A2330C7F80050A777 /* EditProfilTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfilTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5D2330F0E00050A777 /* DetailAnnounceTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounceTableViewController.swift; sourceTree = "<group>"; };
 		31D39A5F2330F7030050A777 /* DetailAnnounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAnnounce.swift; sourceTree = "<group>"; };
@@ -217,6 +229,7 @@
 				315EC7FC234F22C800E27653 /* Singleton */,
 				315EC7F3234F217400E27653 /* Object */,
 				31D39A6523335CCB0050A777 /* ModelVC */,
+				319FC6BD23590223003801DE /* Constant.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -240,6 +253,7 @@
 				31E2D321232B77D80088E508 /* Main.storyboard */,
 				31B909F22343877F0075761A /* Chat */,
 				3133EFE1232C1AB800691182 /* AuthView.swift */,
+				319FC6C1235A1834003801DE /* DashboardView.swift */,
 				31865B35232CE7CB00A52657 /* ProfilView.swift */,
 				31D39A662333A3990050A777 /* CustomCell.swift */,
 				31547E02232E3A4A00698B95 /* AnnounceTableView.swift */,
@@ -247,6 +261,7 @@
 				31AA931E233B72FD00C88FD1 /* CustomMKMapView.swift */,
 				31D39A6D2338DCE70050A777 /* AnnounceTableView.swift */,
 				31D39A6F2338E4740050A777 /* CustomTableView.swift */,
+				319FC6BF23590308003801DE /* CustomTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -284,6 +299,7 @@
 				315EC7F4234F21A600E27653 /* AnnounceLocation.swift */,
 				315EC7F6234F222000E27653 /* Semaine.swift */,
 				315EC7F8234F225900E27653 /* ProfilUser.swift */,
+				31D12F33235C478900DB6B7F /* Filter.swift */,
 				31B909E3234373810075761A /* Message */,
 			);
 			path = Object;
@@ -293,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				31AA9320233CA41400C88FD1 /* CurrentUserManager.swift */,
-				315EC7FD234F22E000E27653 /* CurrentFilterSearch.swift */,
 			);
 			path = Singleton;
 			sourceTree = "<group>";
@@ -358,6 +373,7 @@
 			children = (
 				31261849232B8C4400091AA4 /* AnnounceList.swift */,
 				31AA936D233F5A2B00C88FD1 /* Master.swift */,
+				315EC7FD234F22E000E27653 /* CurrentFilterSearch.swift */,
 				31D39A5F2330F7030050A777 /* DetailAnnounce.swift */,
 			);
 			path = aDelete;
@@ -414,8 +430,9 @@
 			isa = PBXGroup;
 			children = (
 				31865B37232CE9B400A52657 /* ProfilGestion.swift */,
+				319FC6C3235B0F6D003801DE /* Geocoder.swift */,
 				31547E04232E3CA300698B95 /* AnnounceEdit.swift */,
-				315EC810234F299900E27653 /* Filter.swift */,
+				315EC810234F299900E27653 /* FilterGestion.swift */,
 				315EC812234F729400E27653 /* ManageConversation.swift */,
 				315EC83423579ED500E27653 /* MapKitAnnounce.swift */,
 			);
@@ -466,6 +483,7 @@
 				315EC8222354B92A00E27653 /* MockDataManager.swift */,
 				315EC8272355C57D00E27653 /* AnnounceEditTest.swift */,
 				315EC82B2355F51F00E27653 /* ProfilGestionTest.swift */,
+				31D12F35235C541800DB6B7F /* FilterTest.swift */,
 				315EC82F23566AD700E27653 /* MapKitAnnounceTest.swift */,
 				31E2D337232B77D90088E508 /* Info.plist */,
 			);
@@ -750,7 +768,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				31865B36232CE7CB00A52657 /* ProfilView.swift in Sources */,
-				315EC811234F299900E27653 /* Filter.swift in Sources */,
+				315EC811234F299900E27653 /* FilterGestion.swift in Sources */,
 				315EC7F5234F21A600E27653 /* AnnounceLocation.swift in Sources */,
 				31261842232B805600091AA4 /* Announce.swift in Sources */,
 				315EC815235070FC00E27653 /* FirebaseProtocol.swift in Sources */,
@@ -777,7 +795,9 @@
 				31D39A6423321B780050A777 /* ManageFireBase.swift in Sources */,
 				315EC80D234F272D00E27653 /* Array+Extension.swift in Sources */,
 				31E2D326232B77D80088E508 /* KeepChild.xcdatamodeld in Sources */,
+				319FC6C023590308003801DE /* CustomTextField.swift in Sources */,
 				31865B38232CE9B400A52657 /* ProfilGestion.swift in Sources */,
+				31D12F34235C478900DB6B7F /* Filter.swift in Sources */,
 				31B909ED23437DEC0075761A /* UIView+Extension.swift in Sources */,
 				31E2D31E232B77D80088E508 /* AppDelegate.swift in Sources */,
 				315EC80B234F26B500E27653 /* MKMapView+Extension.swift in Sources */,
@@ -787,6 +807,7 @@
 				31AD6B882341E4BE0044D8BF /* FilterTableViewController.swift in Sources */,
 				31865B3A232CEE2600A52657 /* AnnounceEditTableViewController.swift in Sources */,
 				31AA9325233CEDC200C88FD1 /* SemaineTableViewController.swift in Sources */,
+				319FC6C4235B0F6E003801DE /* Geocoder.swift in Sources */,
 				315EC80F234F27FB00E27653 /* UIViewController+Extension.swift in Sources */,
 				315EC7F7234F222000E27653 /* Semaine.swift in Sources */,
 				315EC813234F729400E27653 /* ManageConversation.swift in Sources */,
@@ -794,6 +815,7 @@
 				31AA931F233B72FD00C88FD1 /* CustomMKMapView.swift in Sources */,
 				31261848232B83DF00091AA4 /* AuthViewController.swift in Sources */,
 				3133EFE2232C1AB800691182 /* AuthView.swift in Sources */,
+				319FC6C2235A1834003801DE /* DashboardView.swift in Sources */,
 				315EC7F9234F225900E27653 /* ProfilUser.swift in Sources */,
 				315EC7FE234F22E000E27653 /* CurrentFilterSearch.swift in Sources */,
 				31D39A672333A3990050A777 /* CustomCell.swift in Sources */,
@@ -801,6 +823,7 @@
 				315EC83523579ED500E27653 /* MapKitAnnounce.swift in Sources */,
 				31261846232B81F700091AA4 /* AnnounceSearchTableViewController.swift in Sources */,
 				315EC83E2358826A00E27653 /* MapKitAnnounceViewController.swift in Sources */,
+				319FC6BE23590223003801DE /* Constant.swift in Sources */,
 				31AA931D233B6A2500C88FD1 /* CustomImageView.swift in Sources */,
 				315EC7FB234F229B00E27653 /* User.swift in Sources */,
 			);
@@ -811,6 +834,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				315EC83023566AD700E27653 /* MapKitAnnounceTest.swift in Sources */,
+				31D12F36235C541800DB6B7F /* FilterTest.swift in Sources */,
 				315EC82C2355F51F00E27653 /* ProfilGestionTest.swift in Sources */,
 				31E2D336232B77D90088E508 /* KeepChildTests.swift in Sources */,
 				315EC8212354B5F700E27653 /* MockObject.swift in Sources */,

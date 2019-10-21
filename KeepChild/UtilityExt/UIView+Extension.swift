@@ -20,4 +20,13 @@ extension UIView {
     layer.mask = maskLayer
   }
   
+    func setGradientLayer() {
+        var gradientLayer: CAGradientLayer!
+        gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.bounds
+        guard let bleu = Constants.Color.bleu else { return }
+        gradientLayer.colors = [bleu.cgColor, UIColor.white.cgColor, bleu.cgColor]
+        self.layer.addSublayer(gradientLayer)
+        //self.layer.addSublayer(gradientLayer)
+    }
 }

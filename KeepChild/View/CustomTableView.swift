@@ -13,6 +13,7 @@ class CustomTableView: UITableView {
     var loadingView = UIView()
     var spinner = UIActivityIndicatorView()
     var label = UILabel()
+    var image = UIImageView()
     
     
 

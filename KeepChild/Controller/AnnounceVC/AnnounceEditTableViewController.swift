@@ -30,11 +30,11 @@ class AnnounceEditTableViewController: UITableViewController {
         
         announceEdit.delegate = self
         //announceEdit.removeUserDefaultObject(forkey: "semaine")
-        self.navigationItem.title = "Créer votre annonce"
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
-        descriptionTextView.layer.borderColor = UIColor.gray.cgColor
-        descriptionTextView.layer.borderWidth = 1
-        descriptionTextView.layer.cornerRadius = 10
+        Constants.configureTilteTextNavigationBar(view: self, title: .editAnnounce)
+        self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
+        customTextViewPlaceholder(textView: descriptionTextView)
         descriptionTextView.delegate = self
         tableView.footerView(forSection: 1)
         
@@ -56,24 +56,35 @@ class AnnounceEditTableViewController: UITableViewController {
     @objc func saveAnnounce() {
         if textFieldIsEmpty() == true {
             retriveGeoLocForAnnounce()
-            
+        }
+    }
+    
+    @IBAction func switchDiurneTapped(sender: UISwitch) {
+        if sender.isOn {
+        } else {
+            if nocturneSwitch.isOn == false {
+                nocturneSwitch.setOn(true, animated: true)
+            }
+        }
+    }
+    @IBAction func switchNocturneTapped(sender: UISwitch) {
+        if sender.isOn {
+        } else {
+            if diurneSwitch.isOn == false {
+                diurneSwitch.setOn(true, animated: true)
+            }
         }
     }
 
     //MARK: -View Func
-    func reinitView() {
+    
+    private func initView() {
         titleAnnounceTextField.text? = ""
-        descriptionTextView.text? = ""
+        customTextViewPlaceholder(textView: descriptionTextView)
         priceAnnounceTextField.text = ""
     }
 
     //MARK: -Helpers Func
-   /* private func enableTextfield(bool: Bool) {
-        titleAnnounceTextField.isUserInteractionEnabled = bool
-        descriptionAnnounceTextField.isUserInteractionEnabled = bool
-        priceAnnounceTextField.isUserInteractionEnabled = bool
-    }*/
-
     private func textFieldIsEmpty() -> Bool {
         let title = "Attention"
         if titleAnnounceTextField.text?.isEmpty == true {
@@ -116,12 +127,10 @@ class AnnounceEditTableViewController: UITableViewController {
             guard coordinate != nil else { return }
             //creation announce une fois les coordonnées recupérées
             self.createAnnounce()
-            //storage announce
-            //self.announceEdit.addData(announce: self.announceEdit.announce)
-            self.addAnnounceInFirebase()
             //remove UserDefault "semaine"
             self.announceEdit.removeUserDefaultObject(forkey: "semaine")
-            self.reinitView()
+            //storage announce
+            self.addAnnounceInFirebase()
         }
     }
 
@@ -130,10 +139,12 @@ class AnnounceEditTableViewController: UITableViewController {
         announceEdit.addData(announce: self.announceEdit.announce) { [weak self] (bool) in
             guard let self = self else { return }
             guard bool == true else {
-                self.presentAlert(title: "Annonce non envoyé", message: "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
+                self.presentAlert(title: "Annonce non envoyé", message: "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet. Si le problème persiste contactez le développeur.")
                 return
             }
-            self.presentAlert(title: "Annonce envoyé", message: "Félicitation, votre annonce a été enregistré.")
+            self.presentAlertWithActionSegue(title: "Annonce envoyé", message: "Félicitation, votre annonce a été enregistré.", withIdentifier: Constants.Segue.segueProfil)
+            self.initView()
+            //self.performSegue(withIdentifier: Constants.Segue.segueProfil, sender: nil)
         }
     }
 
@@ -152,15 +163,18 @@ class AnnounceEditTableViewController: UITableViewController {
     private func momentDaySwitch(_ sender: UISwitch) -> Bool {
         
         if sender.isOn {
-            //sender.thumbTintColor = UIColor.yellow
-            //mommentDayLabel.text = "Jour"
             return true
         } else {
-            // sender.thumbTintColor = UIColor.black
-            //mommentDayLabel.text = "Nuit"
             return false
         }
-        //return false
+    }
+
+    //MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.Segue.segueProfil {
+            if segue.destination is ProfilTableViewController {
+            }
+        }
     }
 
 }
@@ -187,15 +201,15 @@ extension AnnounceEditTableViewController: UITextViewDelegate {
     
     func customTextViewPlaceholder(textView: UITextView) {
         textView.text = "Tapez votre description"
-        textView.textColor = UIColor.lightGray
-        textView.font = UIFont(name: "verdana", size: 13.0)
+        textView.textColor = Constants.Color.placeHolder
+        textView.font = Constants.FontText.editText
         textView.returnKeyType = .done
     }
     
     func customTextView(textView: UITextView) {
         textView.text = ""
         textView.textColor = UIColor.black
-        textView.font = UIFont(name: "verdana", size: 15.0)
+        textView.font = Constants.FontText.editText
     }
 }
 

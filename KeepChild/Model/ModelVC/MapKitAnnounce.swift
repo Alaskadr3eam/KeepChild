@@ -12,6 +12,7 @@ import Firebase
 
 class MapKitAnnounce {
     var announceDetail: Announce!
+    var filter: Filter!
     var announceDetailLocation: AnnounceLocation!
     var announceList = [Announce]()
     var announceListLocation = [AnnounceLocation]()

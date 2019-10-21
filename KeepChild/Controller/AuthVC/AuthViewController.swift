@@ -19,10 +19,13 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
    // var profilGestion = ProfilGestion()
 
     var loginToList = "LoginToList"
-
+    var gradientLayer: CAGradientLayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.isHidden = true
+        hideKeyboardWhenTappedAround()
+        authView.setDesign()
         authView.authViewDelegate = self
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
             //Auth.auth().signIn(withEmail: "test@gmail.com", password: "test@test")
@@ -32,11 +35,22 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        authView.createGradientLayer()
         if CurrentUserManager.shared.profil != nil {
             performSegue(withIdentifier: loginToList, sender: nil)
         } else {
             retrieveUserAuth()
         }
+    }
+
+    func createGradientLayer() {
+        gradientLayer = CAGradientLayer()
+        
+        gradientLayer.frame = self.view.bounds
+        guard let bleu = Constants.Color.bleu else { return }
+        gradientLayer.colors = [bleu.cgColor, UIColor.white.cgColor, bleu.cgColor]
+        self.authView.layer.addSublayer(gradientLayer)
+        //self.view.layer.addSublayer(gradientLayer)
     }
 
     private func retrieveUserAuth() {
@@ -113,7 +127,59 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
 
 }
 extension AuthViewController: AuthViewDelegate {
-    func loginButtonIsListenner() {
+    func errorDetected(error: String) {
+        presentAlert(title: "Attention", message: error)
+    }
+    
+    func authenticateUser() {
+        guard
+            let email = authView.emailLoginTextField.text,
+            let  password = authView.passwordLoginTextField.text,
+            email.count > 0,
+            password.count > 0
+            else { return }
+        /*DependencyInjection.shared.dataManager.signIn(withEmail: email, password: password) { (user) in
+         guard user != nil else {
+         let alert = UIAlertController(title: "Sign In Failed", message: "Echec de l'authentification", preferredStyle: .alert)
+         alert.addAction(UIAlertAction(title: "OK", style: .default))
+         self.present(alert, animated: true, completion: nil)
+         return
+         }
+         self.retrieveProfil()
+         }*/
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            guard error == nil else {
+                let alert = UIAlertController(title: "Sign In Failed", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            guard user != nil else { return }
+            guard let id = user?.user.uid else { return }
+            guard let email = user?.user.email else { return }
+            CurrentUserManager.shared.addUser(senderId: id, mail: email)
+            //retrieve profilUser if existing
+            self.retrieveProfil()
+        }
+    }
+    
+    func createUser() {
+        guard
+            let email = authView.emailLoginTextField.text,
+            let  password = authView.passwordLoginTextField.text,
+            email.count > 0,
+            password.count > 0
+            else { return }
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+            if error == nil {
+                guard let email = self.authView.emailLoginTextField.text else { return }
+                guard let password = self.authView.passwordLoginTextField.text else { return }
+                Auth.auth().signIn(withEmail: email, password: password)
+            }
+        }
+    }
+    
+   /* func loginButtonIsListenner() {
         guard
             let email = authView.emailLoginTextField.text,
             let  password = authView.passwordLoginTextField.text,
@@ -176,16 +242,18 @@ extension AuthViewController: AuthViewDelegate {
         alert.addAction(cancelAction)
         
         present(alert, animated: true, completion: nil)
-    }
+    }*/
 }
 
 extension AuthViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == authView.emailLoginTextField {
+        switch textField {
+        case authView.emailLoginTextField:
+            authView.emailLoginTextField.becomeFirstResponder()
+        case authView.passwordLoginTextField:
             authView.passwordLoginTextField.becomeFirstResponder()
-        }
-        if textField == authView.passwordLoginTextField {
-            textField.resignFirstResponder()
+        default:
+            authView.passwordLoginTextField.becomeFirstResponder()
         }
         return true
     }

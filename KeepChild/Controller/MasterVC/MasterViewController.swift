@@ -19,41 +19,61 @@ class MasterViewController: UIViewController {
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "AnnounceSearchTableViewController") as! AnnounceSearchTableViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.VCIdentifier.announceSearchTableViewController) as! AnnounceSearchTableViewController
         self.addViewControllerAsChildViewController(childController: viewController)
         return viewController
     }()
     
     lazy var mapKitAnnounceViewController: MapKitAnnounceViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "MapKitAnnounceViewController") as! MapKitAnnounceViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.VCIdentifier.mapKitAnnounceViewController) as! MapKitAnnounceViewController
         self.addViewControllerAsChildViewController(childController: viewController)
         return viewController
     }()
 
-    lazy var filterTableViewController: FilterTableViewController = {
+    /*lazy var filterTableViewController: FilterTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let viewController = storyboard.instantiateViewController(withIdentifier: "FilterTableViewController") as! FilterTableViewController
         self.addViewControllerAsChildViewController(childController: viewController)
         return viewController
-    }()
+    }()*/
     
     //let group = DispatchGroup()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filtered"), style: .plain, target: self, action: #selector(filteredButtonIsClicked))
+
+        let buttonFilter = UIButton(type: .custom)
+        buttonFilter.frame = CGRect(x: 0.0, y: 0.0, width: 10, height: 10)
+        buttonFilter.setImage(UIImage(named: "filtered"), for: .normal)
+        buttonFilter.addTarget(self, action: #selector(filteredButtonIsClicked), for: .touchUpInside)
+        let menuBarItem = UIBarButtonItem(customView: buttonFilter)
+        self.navigationItem.rightBarButtonItem = menuBarItem
+        self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
+            
+        
         setupView()
         initSearchController()
+  
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        requestWithFilter()
+
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        requestWithFilter()
     }
-    
+
+    //MARK: - Action
     @objc func filteredButtonIsClicked() {
-        performSegue(withIdentifier: "filtered", sender: nil)
+        
+        performSegue(withIdentifier: Constants.Segue.segueFiltered, sender: nil)
+        
     }
+ 
     // MARK: - Request
     private func request() {
         //view for loading result
@@ -68,75 +88,40 @@ class MasterViewController: UIViewController {
     }
 
     private func requestWithFilter() {
-        if FilterSearch.shared.lesserGeopoint != nil && FilterSearch.shared.greaterGeopoint != nil {
-            let lesserGeopoint = FilterSearch.shared.lesserGeopoint
-            let greaterGeopoint = FilterSearch.shared.greaterGeopoint
+        if announceList.filter != nil {
+            guard let lesserGeopoint = announceList.filter.lesserGeopoint else { return }
+            guard let greaterGeopoint = announceList.filter.greaterGeopoint else { return }
             //view for loading result
             announceSearchTableViewController.searchTableView.setLoadingScreen()
-            self.announceList.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint!, greaterGeopoint: greaterGeopoint!) { [weak self] (error, announceList) in
+            self.announceList.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
                 guard let self = self else { return }
-                guard error == nil else { return }
-                guard announceList != nil else { return }
-                self.announceList.filteredAnnounce()
+                guard error == nil else {
+                    self.announceSearchTableViewController.searchTableView.setEmptyMessage("Une erreur s'est produite, ", messageEnd: " vérifiez votre connexion internet. Si le problème persiste contactez le développeur", imageName: "smileyPleure")
+                    return
+                }
+                guard announceList?.count != 0 else {
+                    self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
+                    return
+                }
+                //self.announceList.filteredAnnounce()
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
                 }
             }
     }
-    //MARK: -Helpers for filters announce
-  /*  private func filteredAnnounce() {
-        //filter of the search
-        let dayFilter = FilterSearch.shared.dayFilter
-        let momentDay = FilterSearch.shared.momentDay
-        //var for transition
-        var announceWithFilterDay = [Announce]()
-        var announceWithAllFilter = [Announce]()
-        //boucle for day filter
-        for announce in master.announceTransition {
-            if announce.semaine.lundi == dayFilter["lundi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.mardi == dayFilter["mardi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.mercredi == dayFilter["mercredi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.jeudi == dayFilter["jeudi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.vendredi == dayFilter["vendredi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.samedi == dayFilter["samedi"] {
-                announceWithFilterDay.append(announce)
-            }
-            if announce.semaine.dimanche == dayFilter["dimanche"] {
-                announceWithFilterDay.append(announce)
-            }
-        }
-        //boucle for momentDay filter
-        for announce in announceWithFilterDay {
-            if announce.day == momentDay["day"] {
-                announceWithAllFilter.append(announce)
-            }
-            if announce.night == momentDay["night"] {
-                announceWithAllFilter.append(announce)
-            }
-        }
-        master.announceList = announceWithAllFilter.removeDuplicates()
-    }*/
+    //MARK: -Helpers
 
      // MARK: - prepare ViewController
     private func prepareViewForChildViewController(vc1: AnnounceSearchTableViewController, vc2: MapKitAnnounceViewController) {
         prepareSearchTableView(vc: vc1)
         prepareMapKit(vc: vc2)
     }
-    
+
     private func prepareSearchTableView(vc: AnnounceSearchTableViewController) {
         vc.announceList.announceList = announceList.announceList
-        vc.searchTableView.reloadData()
         //remove view loading
         vc.searchTableView.removeLoadingScreen()
+        vc.viewWillAppear(true)
+        vc.searchTableView.reloadData()
     }
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
         vc.mapKitAnnounce.announceList = self.announceList.announceList
@@ -188,8 +173,9 @@ class MasterViewController: UIViewController {
 
     private func setupSegmentedControl() {
         segmentedControl.removeAllSegments()
+        segmentedControl.tintColor = Constants.Color.titleNavBar
         segmentedControl.insertSegment(withTitle: "Liste", at: 0, animated: false)
-        segmentedControl.insertSegment(withTitle: "Map", at: 1, animated: false)
+        segmentedControl.insertSegment(withTitle: "Carte", at: 1, animated: false)
         segmentedControl.addTarget(self, action: #selector(selectionDidChange(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
     }
@@ -212,9 +198,11 @@ class MasterViewController: UIViewController {
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "filtered" {
-            if segue.destination is FilterTableViewController {
-            }
+        if segue.identifier == Constants.Segue.segueFiltered {
+            let navVC = segue.destination as! UINavigationController
+            let filterVC = navVC.viewControllers.first as! FilterTableViewController
+            filterVC.delegate = self
+            filterVC.filter.filter = announceList.filter
         }
     }
     
@@ -223,11 +211,18 @@ class MasterViewController: UIViewController {
 
 extension MasterViewController: UISearchBarDelegate {
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        performSegue(withIdentifier: "filtered", sender: nil)
+        performSegue(withIdentifier: Constants.Segue.segueFiltered, sender: nil)
         //filterTableViewController.view.isHidden = false
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+    }
+}
+
+extension MasterViewController: isAbleToReceiveFilter {
+    func pass(filter: Filter) {
+        announceList.filter = filter
+        //dismiss(animated: true, completion: nil)
     }
 }

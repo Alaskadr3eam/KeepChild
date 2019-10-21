@@ -16,8 +16,10 @@ class AnnounceEdit {
     //var idUser = UserDefaults.standard.string(forKey: "userID")
     var delegate: AnnounceEditDelegate?
     
+    var filter: Filter!
+    
     var announce: Announce!
-    var announceList = [Announce]()
+    var announceList: [Announce]!
     var announceTransition = [Announce]()
     var announceSearch: [Announce]!
     
@@ -130,14 +132,15 @@ class AnnounceEdit {
             for announceD in announce {
                 self.announceTransition.append(announceD)
             }
-            completionHandler(nil,announceList)
+            self.filteredAnnounce()
+            completionHandler(nil,self.announceList)
         }
     }
     
     func filteredAnnounce() {
         //filter of the search
-        let dayFilter = FilterSearch.shared.dayFilter
-        let momentDay = FilterSearch.shared.momentDay
+        let dayFilter = filter.dayFilter
+        let momentDay = filter.momentDay
         //var for transition
         var announceWithFilterDay = [Announce]()
         var announceWithAllFilter = [Announce]()
@@ -177,7 +180,42 @@ class AnnounceEdit {
         announceList = announceWithAllFilter.removeDuplicates()
     }
 
+    func transformateSemaineInString(semaine: Semaine) -> String {
+        var stringDay = String()
+        stringDay += semaineDayIsTrue(semaineDay: semaine.lundi!, day:"lundi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.mardi!, day:"mardi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.mercredi!, day:"mercredi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.jeudi!, day:"jeudi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.vendredi!, day:"vendredi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.samedi!, day:"samedi, ")
+        stringDay += semaineDayIsTrue(semaineDay: semaine.dimanche!, day:"dimanche, ")
+        stringDay.removeLast(2)
+        return stringDay
+    }
+
+    private func semaineDayIsTrue(semaineDay: Bool, day: String) -> String {
+        var stringDay = String()
+        if semaineDay == true {
+            stringDay = day
+        }
+        return stringDay
+    }
     
+    func transformeMomentDayInString(announce: Announce) -> String {
+        var stringMoment = String()
+        stringMoment += momentDayIsTrue(momentDay: announce.day, stringMomentDay: "Jour ")
+        stringMoment += momentDayIsTrue(momentDay: announce.night, stringMomentDay: "Nuit ")
+        stringMoment.removeLast()
+        return stringMoment
+    }
+    
+    private func momentDayIsTrue(momentDay: Bool, stringMomentDay: String) -> String {
+        var stringMoment = String()
+        if momentDay == true {
+            stringMoment = stringMomentDay
+        }
+        return stringMoment
+    }
 }
 
 protocol AnnounceEditDelegate {

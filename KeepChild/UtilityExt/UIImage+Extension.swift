@@ -33,7 +33,7 @@ extension UIImage {
 
     enum Quality: CGFloat {
         case lowestHard  = 0
-        case lowest = 0.1
+        case lowest = 0.01
         case low     = 0.25
         case medium  = 0.5
         case high    = 0.75

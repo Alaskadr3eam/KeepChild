@@ -6,7 +6,7 @@
 //  Copyright © 2019 Clément Martin. All rights reserved.
 //
 
-import Foundation
+/*import Foundation
 import CoreLocation
 import Firebase
 
@@ -59,3 +59,4 @@ class FilterSearch {
         }
     }
 }
+*/

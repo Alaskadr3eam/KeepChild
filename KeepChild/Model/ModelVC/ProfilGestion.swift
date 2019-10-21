@@ -26,6 +26,7 @@ class ProfilGestion {
     var lat: Double!
     var long: Double!
     var imageProfil = UIImage()
+    var lastConnexion: Date!
     
 }
 extension ProfilGestion {
@@ -62,11 +63,11 @@ extension ProfilGestion {
         }
     }
 
-    func updateProfil(documentID: String, update: [String : Any], completionHandler: @escaping(Error?, Bool?) -> Void) {
+    func updateProfil(documentID: String, update: [String : Any], completionHandler: @escaping(Bool) -> Void) {
         DependencyInjection.shared.dataManager.updateDataProfil(documentID: documentID, update: update) { (error, bool) in
-            guard error == nil else { completionHandler(error,nil); return }
+            guard error == nil else { completionHandler(false); return }
             guard let boolSecure = bool else { return }
-            completionHandler(nil,boolSecure)
+            completionHandler(boolSecure)
         }
     }
     //MARK: - PhotoProfil
@@ -121,6 +122,23 @@ extension ProfilGestion {
                 print("Meta data of uploaded image \(String(describing: uploadedImageMeta))")
             }
         }
+    }
+
+    //MARK: - Helpers
+    func transformeDateInString() -> String {
+        let formatter = DateFormatter()
+        // initially set the format based on your datepicker date / server String
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        let myString = formatter.string(from: lastConnexion) // string purpose I add here
+        // convert your string to date
+        let yourDate = formatter.date(from: myString)
+        //then again set the date format whhich type of output you need
+        formatter.dateFormat = "dd-MMM-yyyy"
+        // again convert your date to string
+        guard let dateSecure = yourDate else { return "erreur" }
+        let myStringafd = formatter.string(from: dateSecure)
+        return myStringafd
     }
     
  /*   func transformUIimageInData(image: UIImageView) {

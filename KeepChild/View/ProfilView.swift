@@ -12,6 +12,7 @@ class ProfilView: UIView {
     
     @IBOutlet weak var imageProfil: CustomImageView!
     @IBOutlet weak var pseudoLabel: UILabel!
+    @IBOutlet weak var dashboardView: DashboardView!
 
     /*
     // Only override draw() if you perform custom drawing.

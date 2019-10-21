@@ -34,32 +34,28 @@ class MapKitAnnounceViewController: UIViewController {
     }
     
     func centerMapOnLocation() {
-        if FilterSearch.shared.latChoice != nil && FilterSearch.shared.longChoice != nil && FilterSearch.shared.regionRadius != nil {
-            let initialLocation = CLLocation(latitude: FilterSearch.shared.latChoice, longitude: FilterSearch.shared.longChoice)
+        if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
+            let initialLocation = CLLocation(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!)
             let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
-                                                      latitudinalMeters: FilterSearch.shared.regionRadius, longitudinalMeters: FilterSearch.shared.regionRadius)
+                                                      latitudinalMeters: mapKitAnnounce.filter.regionRadius!, longitudinalMeters: mapKitAnnounce.filter.regionRadius!)
             mapKitViewAnnounce.setRegion(coordinateRegion, animated: true)
             mapKitViewAnnounce.showsUserLocation = true
         }
         let announce = mapKitAnnounce.announceListLocation
         mapKitViewAnnounce.addAnnotations(announce)
-        if FilterSearch.shared.profilLocIsSelected == true {
-            let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: FilterSearch.shared.latChoice, longitude: FilterSearch.shared.longChoice), title: "Home")
+        if mapKitAnnounce.filter.profilLocIsSelected == true {
+            let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!), title: "Home")
             
             mapKitViewAnnounce.addAnnotation(userHome)
             mapKitViewAnnounce.showsUserLocation = false
-            //  mapKitViewAnnounce.userLocation.
-        } else {
-            // mapKitViewAnnounce.showsUserLocation = true
         }
-        
     }
     
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "DetailAnnounce" {
+        if segue.identifier == Constants.Segue.segueDetailAnnounce {
             let navVC = segue.destination as! UINavigationController
             let detailAnnounceVC = navVC.viewControllers.first as! DetailAnnounceTableViewController
             detailAnnounceVC.detailAnnounce.announce = mapKitAnnounce.announceDetail
@@ -114,7 +110,7 @@ extension MapKitAnnounceViewController: MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView{
             guard let announceLoc = view.annotation as? AnnounceLocation else { return }
             mapKitAnnounce.announceDetail = mapKitAnnounce.transformAnnounceLocationIntoAnnounce(announceLoc: announceLoc)
-            performSegue(withIdentifier: "DetailAnnounce", sender: nil)
+            performSegue(withIdentifier: Constants.Segue.segueDetailAnnounce, sender: nil)
         }
     }
 

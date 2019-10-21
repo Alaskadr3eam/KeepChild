@@ -25,6 +25,9 @@ class EditProfilTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
+        self.navigationItem.leftBarButtonItem?.tintColor = Constants.Color.titleNavBar
+        Constants.configureTilteTextNavigationBar(view: self, title: .editProfil)
         initView()
     }
     
@@ -40,7 +43,7 @@ class EditProfilTableViewController: UITableViewController {
 
     @IBAction func saveNewProfil(_ sender: Any) {
         textFieldIsEmpty()
-        if pictureProfil.image == UIImage(named: "addUser") {
+        if pictureProfil.image == Constants.Image.addUser {
             saveProfilNoPicture()
         } else {
             saveProfilWithPicture()
@@ -49,7 +52,7 @@ class EditProfilTableViewController: UITableViewController {
     }
     @objc func saveProfilUser() {
         textFieldIsEmpty()
-        if pictureProfil.image == UIImage(named: "addUser") {
+        if pictureProfil.image == Constants.Image.addUser {
             saveProfilNoPicture()
         } else {
             saveProfilWithPicture()
@@ -155,9 +158,12 @@ class EditProfilTableViewController: UITableViewController {
     }
 
     private func updateProfil(collection: String, documentID: String, update: [String:Any]) {
-        profilGestion.updateProfil(documentID: documentID, update: update) { (error, bool) in
-            guard error == nil else { return }
-            guard bool != nil else { return }
+        profilGestion.updateProfil(documentID: documentID, update: update) { (bool) in
+            guard bool == true else {
+                self.presentAlert(title: "Attention", message: "Une erreur s'est produite, vérifiez votre connexion internet. Si le problème persiste contactez le développeur")
+                return
+            }
+            self.presentAlert(title: "Félicitation", message: "Profil mise à jour.")
         }
       /*  profilGestion.updateProfil(collection: collection, documentID: documentID, update: update) { (error, bool) in
             guard error == nil else { return }
@@ -165,31 +171,33 @@ class EditProfilTableViewController: UITableViewController {
         }*/
     }
     
+    
     private func saveProfilWithPicture() {
         guard let profilUserSave = createProfilUser() else { return }
-        profilGestion.addDataProfil(profil: profilUserSave) { (bool) in
+        profilGestion.addDataProfil(profil: profilUserSave) { [weak self] (bool) in
+            guard let self = self else { return }
             guard bool == true else {
-                //alert erreur
+                self.presentAlertWithActionDismiss(title: "Attention", message: "Une erreur s'est produite, vérifiez votre connexion internet. Si le problème persiste contactez le développeur")
                 return
             }
-            // alerte reussite
+            self.presentAlertWithActionDismiss(title: "Félicitation", message: "Profil enregistré.")
+            self.uploadPictureProfil()
         }
-        //profilGestion.addDataProfil(profil: profilUserSave)
-        uploadPictureProfil()
-        dismiss(animated: true, completion: nil)
+        //uploadPictureProfil()
+        //dismiss(animated: true, completion: nil)
     }
     
     private func saveProfilNoPicture() {
         guard let profilUserSave = createProfilUser() else { return }
         profilGestion.addDataProfil(profil: profilUserSave) { (bool) in
             guard bool == true else {
-                //alert erreur
+                self.presentAlertWithActionDismiss(title: "Attention", message: "Une erreur s'est produite, vérifiez votre connexion internet. Si le problème persiste contactez le développeur")
                 return
             }
-            // alerte reussite
+            self.presentAlertWithActionDismiss(title: "Félicitation", message: "Profil enregistré.")
         }
         //profilGestion.addDataProfil(profil: profilUserSave)
-        dismiss(animated: true, completion: nil)
+        //dismiss(animated: true, completion: nil)
     }
 
     //MARK: -TableView func

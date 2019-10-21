@@ -11,7 +11,7 @@ import Firebase
 
 extension UIImageView {
     
-    func download(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFill) {
+    func download(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
         contentMode = mode
         
         
@@ -31,25 +31,19 @@ extension CustomImageView {
     
     func setLoadingScreen() {
         
-        let width: CGFloat = self.bounds.width
-        let height: CGFloat = self.bounds.height
-        let x: CGFloat = 0
-        let y: CGFloat = 0
         
-        //self.loadingView.frame = CGRect(x: x, y: y, width: width, height: height)
+
         self.loadingView.center = self.center
         self.loadingView.backgroundColor = UIColor.white
         // Sets spinner
         self.spinner.center = self.center
         self.spinner.style = .gray
-        
         self.spinner.frame = CGRect(x: 0, y: 0, width: loadingView.bounds.width, height: loadingView.bounds.height)
         self.spinner.startAnimating()
         // Add spinner to the view
         self.loadingView.addSubview(spinner)
-        //self.addSubview(loadingView)
         self.addSubview(loadingView)
-        //self.backgroundView = loadingView
+        
     }
     
     func removeLoadingScreen() {
@@ -60,7 +54,7 @@ extension CustomImageView {
         self.loadingView.removeFromSuperview()
     }
     
-    func downloadCustom(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFill) {
+    func downloadCustom(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
         contentMode = mode
         
         self.setLoadingScreen()
@@ -72,6 +66,7 @@ extension CustomImageView {
             guard let dataSecure = data else {
                 self.image = UIImage(named: "default")
                 print("no image")
+                self.removeLoadingScreen()
                 return }
             let image = UIImage(data: dataSecure)
             self.image = image

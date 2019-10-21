@@ -20,6 +20,9 @@ class FirstMessageTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        Constants.configureTilteTextNavigationBar(view: self, title: .firstMessage)
+        self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
+        self.navigationItem.leftBarButtonItem?.tintColor = Constants.Color.titleNavBar
         messageTxt.delegate = self
         customTextViewPlaceholder(textView: messageTxt)
         manageConversation.createOrRetrieveDocumentID()

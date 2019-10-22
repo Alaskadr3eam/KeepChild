@@ -9,6 +9,8 @@
 import Foundation
 
 class CurrentUserManager {
+   
+    
     
     static var shared = CurrentUserManager()
     

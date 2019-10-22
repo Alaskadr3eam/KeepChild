@@ -13,12 +13,10 @@ import CoreLocation
 class AnnounceEditTest: XCTestCase {
     
     var announceEdit: AnnounceEdit!
-    var mockDataManger: MockDataManager!
+    var mockDataManager: MockDataManager!
     override func setUp() {
-        announceEdit = AnnounceEdit()
-        mockDataManger = MockDataManager()
-        //mockDataManger.shouldSucceed = false
-        DependencyInjection.shared.dataManager = mockDataManger
+        mockDataManager = MockDataManager()
+        announceEdit = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         
         user1 = User(senderId: "uid1", email: "email1")
         user2 = User(senderId: "uid2", email: "email2")
@@ -120,6 +118,72 @@ class AnnounceEditTest: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testSearchAnnounceFilteredSuccess1() {
+        //Given
+        announceEdit.filter = filter1
+        guard let lesser = filter1.lesserGeopoint else { return }
+        guard let greater = filter1.greaterGeopoint else { return }
+        var errorTest: Error!
+        XCTAssertNil(errorTest)
+        //When
+        announceEdit.searchAnnounceFiltered(lesserGeopoint: lesser, greaterGeopoint: greater) { (error, announceList) in
+            guard error == nil else {
+                errorTest = error
+                return
+            }
+            guard announceList == nil else {
+                return
+            }
+        }
+        //Then
+        XCTAssertNil(errorTest)
+        XCTAssertEqual(announceEdit.announceList[0], announce1)
+    }
+    func testSearchAnnounceFilteredSuccess2() {
+        //Given
+        announceEdit.filter = filter2
+        guard let lesser = filter2.lesserGeopoint else { return }
+        guard let greater = filter2.greaterGeopoint else { return }
+        var errorTest: Error!
+        XCTAssertNil(errorTest)
+        //When
+        announceEdit.searchAnnounceFiltered(lesserGeopoint: lesser, greaterGeopoint: greater) { (error, announceList) in
+            guard error == nil else {
+                errorTest = error
+                return
+            }
+            guard announceList == nil else {
+                return
+            }
+        }
+        //Then
+        XCTAssertNil(errorTest)
+        XCTAssertEqual(announceEdit.announceList.count, 2)
+    }
+
+    func testSearchAnnounceFilteredFail() {
+        //Given
+        mockDataManager.shouldSucceed = false
+        announceEdit.filter = filter1
+        guard let lesser = filter1.lesserGeopoint else { return }
+        guard let greater = filter1.greaterGeopoint else { return }
+        var errorTest: Error!
+        XCTAssertNil(errorTest)
+        //When
+        announceEdit.searchAnnounceFiltered(lesserGeopoint: lesser, greaterGeopoint: greater) { (error, announceList) in
+            guard error == nil else {
+                errorTest = error
+                return
+            }
+            guard announceList == nil else {
+                return
+            }
+        }
+        //Then
+        XCTAssertNotNil(errorTest)
+        XCTAssertEqual(announceEdit.announceList, nil)
+    }
+
    /* func testGeocoderFail() {
         let expect = expectation(description: "Wait for geocode")
         announceEdit.getCoordinate(addressString: "abc") { (coordinate, error) in
@@ -156,7 +220,7 @@ class AnnounceEditTest: XCTestCase {
 
     func testAddAnnounceFailed() {
         //Given
-        mockDataManger.shouldSucceed = false
+        mockDataManager.shouldSucceed = false
         var boolResult: Bool!
         
         XCTAssertEqual(announceEdit.announce, nil)
@@ -184,7 +248,7 @@ class AnnounceEditTest: XCTestCase {
 
     func testReadAnnounceInFirebaseFail() {
         //Given
-        mockDataManger.shouldSucceed = false
+        mockDataManager.shouldSucceed = false
         var errorTest: Error!
         //When
         announceEdit.readData { (error, announceList) in
@@ -192,7 +256,8 @@ class AnnounceEditTest: XCTestCase {
             guard announceList != nil else { return }
         }
         //Then
-        XCTAssertEqual(announceEdit.announceList.count, 0)
+        //XCTAssertEqual(announceEdit.announceList.count, 0)
+        XCTAssertNil(announceEdit.announceList)
         XCTAssertNotNil(errorTest)
     }
 
@@ -210,7 +275,7 @@ class AnnounceEditTest: XCTestCase {
 
     func testDeleteAnnounceInFireBaseFail() {
         //Given
-        mockDataManger.shouldSucceed = false
+        mockDataManager.shouldSucceed = false
         let id = "test"
         var errorTest: Error!
         //When

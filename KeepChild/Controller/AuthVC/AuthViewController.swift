@@ -15,7 +15,9 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     //MARK: - Properties
     @IBOutlet weak var authView: AuthView!
     //model for vc
-    var manageFireBase = ManageFireBase()
+   // var manageFireBase = ManageFireBase()
+    var authGestion = AuthGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
    // var profilGestion = ProfilGestion()
 
     var loginToList = "LoginToList"
@@ -27,10 +29,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
         hideKeyboardWhenTappedAround()
         authView.setDesign()
         authView.authViewDelegate = self
-        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
-            //Auth.auth().signIn(withEmail: "test@gmail.com", password: "test@test")
-            //Test
-        }
+     
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +53,15 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     }
 
     private func retrieveUserAuth() {
-        Auth.auth().addStateDidChangeListener() { auth, user in
+        authGestion.retrievUserConnected { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {return}
+            //search profil user for add singleton CurrentUserManager
+            self.retrieveProfil()
+            self.authView.emailLoginTextField.text = nil
+            self.authView.passwordLoginTextField.text = nil
+        }
+        /*Auth.auth().addStateDidChangeListener() { auth, user in
             guard auth != nil else {
                 return
             }
@@ -70,7 +77,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             self.retrieveProfil()
             self.authView.emailLoginTextField.text = nil
             self.authView.passwordLoginTextField.text = nil
-        }
+        }*/
     }
     //func retrieve profilUser if existing
     func retrieveProfil() {
@@ -84,7 +91,15 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             CurrentUserManager.shared.addProfil(profilUser: profil[0])
             self.performSegue(withIdentifier: self.loginToList, sender: nil)
         }*/
-        manageFireBase.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
+        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error) in
+            guard let self = self else { return }
+            guard error == nil else {
+                self.presentAlert(title: "Erreur", message: "Problèeme de connexion")
+                return
+            }
+            self.performSegue(withIdentifier: Constants.Segue.segueLoginToList, sender: nil)
+        }
+       /* manageFireBase.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard let profil = profilUser else {
@@ -92,7 +107,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
                 return }
             CurrentUserManager.shared.addProfil(profilUser: profil[0])
             self.performSegue(withIdentifier: self.loginToList, sender: nil)
-        }
+        }*/
         /*CurrentUserManager.shared.retrieveProfilUser(collection: "ProfilUser", field: "iDuser", equal: idUser2) { (error, profil) in
             guard error == nil else { return }
             guard profil != nil else {
@@ -105,9 +120,14 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     //MARK: - Action
     @IBAction func saveToMainViewController (segue:UIStoryboardSegue) {
         _ = segue.source as! ProfilTableViewController
-        //DependencyInjection.shared.dataManager.signOut()
-       try! Auth.auth().signOut()
-        CurrentUserManager.shared.removeUserAndProfilWhenLogOut()
+        authGestion.signOut { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {
+                self.presentAlert(title: "Sign Out Failed", message: "Vérifiez votre connexion")
+                return
+            }
+            CurrentUserManager.shared.removeUserAndProfilWhenLogOut()
+        }
     }
 
     
@@ -117,7 +137,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
             if segue.destination is ProfilTableViewController {
             }
         }
-        if segue.identifier == "EditProfil" {
+        if segue.identifier == Constants.Segue.segueEditProfil {
             if segue.destination is EditProfilTableViewController {
                 
             }
@@ -138,27 +158,12 @@ extension AuthViewController: AuthViewDelegate {
             email.count > 0,
             password.count > 0
             else { return }
-        /*DependencyInjection.shared.dataManager.signIn(withEmail: email, password: password) { (user) in
-         guard user != nil else {
-         let alert = UIAlertController(title: "Sign In Failed", message: "Echec de l'authentification", preferredStyle: .alert)
-         alert.addAction(UIAlertAction(title: "OK", style: .default))
-         self.present(alert, animated: true, completion: nil)
-         return
-         }
-         self.retrieveProfil()
-         }*/
-        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-            guard error == nil else {
-                let alert = UIAlertController(title: "Sign In Failed", message: error?.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self.present(alert, animated: true, completion: nil)
+        authGestion.signIn(withEmail: email, password: password) { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {
+                self.presentAlert(title: "Sign In Failed", message: "Echec de l'authentification")
                 return
             }
-            guard user != nil else { return }
-            guard let id = user?.user.uid else { return }
-            guard let email = user?.user.email else { return }
-            CurrentUserManager.shared.addUser(senderId: id, mail: email)
-            //retrieve profilUser if existing
             self.retrieveProfil()
         }
     }
@@ -170,14 +175,33 @@ extension AuthViewController: AuthViewDelegate {
             email.count > 0,
             password.count > 0
             else { return }
-        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+        authGestion.createAccount(email: email, password: password) { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else {
+                self.presentAlert(title: "Create account Failed", message: "Vérifiez votre connexion. Si le problème persiste contactez l'administrateur")
+                return
+            }
+            guard let email = self.authView.emailLoginTextField.text else { return }
+            guard let password = self.authView.passwordLoginTextField.text else { return }
+            self.authGestion.signIn(withEmail: email, password: password) { [weak self] (bool) in
+                guard let self = self else { return }
+                guard bool == true else {
+                    self.presentAlert(title: "Sign In Failed", message: "Echec de l'authentification")
+                    return
+                }
+                self.retrieveProfil()
+            }
+            
+        }
+    }
+       /* Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if error == nil {
                 guard let email = self.authView.emailLoginTextField.text else { return }
                 guard let password = self.authView.passwordLoginTextField.text else { return }
                 Auth.auth().signIn(withEmail: email, password: password)
             }
         }
-    }
+    }*/
     
    /* func loginButtonIsListenner() {
         guard

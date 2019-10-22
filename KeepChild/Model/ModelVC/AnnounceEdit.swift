@@ -14,6 +14,13 @@ import CoreLocation
 class AnnounceEdit {
     //var manageFireBase = ManageFireBase()
     //var idUser = UserDefaults.standard.string(forKey: "userID")
+    
+    private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
+    
+    init(firebaseServiceSession: FirebaseService) {
+        self.firebaseServiceSession = firebaseServiceSession
+    }
+
     var delegate: AnnounceEditDelegate?
     
     var filter: Filter!
@@ -50,7 +57,7 @@ class AnnounceEdit {
     }
     
     func addData(announce: Announce, completionHandler: @escaping (Bool?) -> Void) {
-        DependencyInjection.shared.dataManager.addAnnounce(announce: announce) { (bool) in
+        firebaseServiceSession.dataManager.addAnnounce(announce: announce) { (bool) in
             guard bool == true else {
                 //self.delegate?.alert("Annonce non envoyé", "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
                 completionHandler(bool)
@@ -97,7 +104,7 @@ class AnnounceEdit {
     }
 
     func readData(completionHandler: @escaping (Error?,[Announce]?) -> Void) {
-        DependencyInjection.shared.dataManager.readDataAnnounce { [weak self] (error, announceList) in
+        firebaseServiceSession.dataManager.readDataAnnounce { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else {
                 completionHandler(error,nil)
@@ -111,7 +118,7 @@ class AnnounceEdit {
     }
 
     func deleteAnnounce(announceId: String, completionHandler: @escaping(Error?) -> Void) {
-        DependencyInjection.shared.dataManager.deleteAnnounce(announceId: announceId) { (error) in
+        firebaseServiceSession.dataManager.deleteAnnounce(announceId: announceId) { (error) in
             guard error == nil else {
                 completionHandler(error)
                 return
@@ -122,7 +129,7 @@ class AnnounceEdit {
     
     func searchAnnounceFiltered(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint, completionHandler: @escaping(Error?, [Announce]?) -> Void) {
         announceTransition = [Announce]()
-        DependencyInjection.shared.dataManager.searchAnnounceWithFilter(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
+        firebaseServiceSession.dataManager.searchAnnounceWithFilter(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
             guard let self = self else { return }
             guard error == nil else {
                 completionHandler(error,nil)

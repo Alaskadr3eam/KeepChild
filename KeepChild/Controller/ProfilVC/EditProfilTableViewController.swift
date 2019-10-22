@@ -21,7 +21,7 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var editProfilTableView: CustomTableView!
     @IBOutlet weak var saveButtonEdit: UIBarButtonItem!
     //MARK: -Propertie model
-    var profilGestion = ProfilGestion()
+    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,17 +172,12 @@ class EditProfilTableViewController: UITableViewController {
         }*/
     }
     private func retrieveProfil() {
-         CurrentUserManager.shared.profil = nil
         let idUser = CurrentUserManager.shared.user.senderId
-        DependencyInjection.shared.dataManager.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error, profilUser) in
+        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error) in
             guard let self = self else { return }
             guard error == nil else { return }
-            guard let profil = profilUser else {
-                self.performSegue(withIdentifier: "EditProfil", sender: nil)
-                return }
-            CurrentUserManager.shared.addProfil(profilUser: profil[0])
             self.dismiss(animated: true, completion: nil)
-            }
+        }
     }
         
     

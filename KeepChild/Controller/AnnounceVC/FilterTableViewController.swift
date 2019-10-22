@@ -133,7 +133,7 @@ class FilterTableViewController: UITableViewController {
         }
     }
     //use coreLoc
-    private func location() {
+    /*private func location() {
         filter.checkLocationAuthorizationStatus { [weak self] (bool) in
             guard let self = self else { return }
             guard bool == true else {
@@ -144,6 +144,26 @@ class FilterTableViewController: UITableViewController {
             }
             self.positionProfilButton.isSelected = false
             self.positionActuelleButton.isSelected = false
+        }
+    }*/
+
+    private func location() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            // locationManager.distanceFilter = 100000
+            guard let lat = locationManager.location?.coordinate.latitude, let long = locationManager.location?.coordinate.longitude else {
+                self.presentAlert(title: "Attention Probleme", message: "Impossible de vous localiser, vérifiez vos parametres.")
+                self.positionActuelleButton.isSelected = false
+                self.positionProfilButton.isSelected = true
+                return }
+            self.filter.latChoice = lat
+            self.filter.longChoice = long
+            self.positionProfilButton.isSelected = false
+            self.positionActuelleButton.isSelected = false
+        } else {
+            self.presentAlert(title: "Attention Probleme", message: "Impossible de vous localiser, vérifiez vos parametres.")
+            self.positionActuelleButton.isSelected = false
+            self.positionProfilButton.isSelected = true
+            locationManager.requestWhenInUseAuthorization()
         }
     }
 

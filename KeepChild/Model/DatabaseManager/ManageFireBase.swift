@@ -6,7 +6,7 @@
 //  Copyright © 2019 Clément Martin. All rights reserved.
 //
 
-import Foundation
+/*import Foundation
 import Firebase
 import FirebaseFirestore
 import CodableFirebase
@@ -385,4 +385,4 @@ class ManageFireBase {
     }*/
 }
 
-
+*/

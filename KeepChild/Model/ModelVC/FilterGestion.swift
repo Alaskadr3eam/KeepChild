@@ -11,7 +11,7 @@ import CoreLocation
 import Firebase
 
 class FilterGestion {
-    
+
     var filter: Filter!
     
     var dayFilter = [String:Bool]()
@@ -49,7 +49,7 @@ class FilterGestion {
         }
     }
     //autorize location
-    func checkLocationAuthorizationStatus(completionHandler: @escaping(Bool) -> Void) {
+    /*func checkLocationAuthorizationStatus(completionHandler: @escaping(Bool) -> Void) {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             // locationManager.distanceFilter = 100000
             guard let lat = locationManager.location?.coordinate.latitude, let long = locationManager.location?.coordinate.longitude else {
@@ -57,13 +57,12 @@ class FilterGestion {
                 return }
             self.latChoice = lat
             self.longChoice = long
-            //FilterSearch.shared.addLocationValue(lat: lat,long: long)
             completionHandler(true)
         } else {
             locationManager.requestWhenInUseAuthorization()
             completionHandler(false)
         }
-    }
+    }*/
     func prepareQueryIsPossibleOrNot() -> Bool {
         if latChoice == nil && longChoice == nil {
             return false
@@ -105,19 +104,21 @@ class FilterGestion {
         regionRadius = Double(value) * 1000
     }
     
-    func fiterIsComplete(alert: Void) {
+    /*func fiterIsComplete(alert: Void) {
         //filterSearchIsComplete() ? createFilterForSearch() : alert(alert)
     }
     
     func alert(_ alert: Void) {
         alert
-    }
+    }*/
     func filterSearchIsComplete() -> Bool {
         if dayFilter.count == 0 && momentDay.count == 0 {
             return false
         } else if lesserGeopoint == nil && greaterGeopoint == nil {
             return false
         } else if regionRadius == nil {
+            return false
+        } else if latChoice == nil && longChoice == nil {
             return false
         } else {
             return true

@@ -19,7 +19,6 @@ enum ErrorMock: Error, Equatable {
 
 class MockDataManager: DataManagerProtocol {
    
-    
     var shouldSucceed: Bool
     
    /* enum ErrorMock: Error {
@@ -31,15 +30,47 @@ class MockDataManager: DataManagerProtocol {
     }
 
     //MARK: - Account
-   /* func signIn(withEmail email: String, password: String, completion: @escaping (User?) -> Void) { }
-  /*  func signIn(withEmail email: String, password: String, completion: @escaping (String?) -> Void) { }*/
+    func retrieveUserAuth(completionHandler: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            CurrentUserManager.shared.user = user1
+            completionHandler(true)
+        } else {
+            completionHandler(false)
+        }
+    }
     
-    func signOut() { }
+    func signIn(withEmail email: String, password: String, completion: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            CurrentUserManager.shared.user = user1
+            completion(true)
+        } else {
+            completion(false)
+        }
+    }
     
-    func resetPassword(withEmail email: String, completion: @escaping (String?) -> Void) { }
+    func signOut(completionHandler: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            CurrentUserManager.shared.user = nil
+            completionHandler(true)
+        } else {
+            completionHandler(false)
+        }
+    }
     
-    func createAccount(email: String, password: String, completion: @escaping (User?) -> Void) { }
-    /*func createAccount(name: String, email: String, password: String, completion: @escaping (String?) -> Void) { }*/*/
+    func resetPassword(withEmail email: String, completion: @escaping (String?) -> Void) {
+        if shouldSucceed {
+        } else {
+        }
+    }
+    
+    func createAccount(email: String, password: String, completion: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            CurrentUserManager.shared.user = user1
+            completion(true)
+        } else {
+            completion(false)
+        }
+    }
     
     //MARK: - Announce
     
@@ -85,7 +116,14 @@ class MockDataManager: DataManagerProtocol {
     
     //MARK: - Conversation
     
-    func retrieveConversationUser(field: String, completionHandler: @escaping (Error?, [Conversation]?) -> Void) { }
+    func retrieveConversationUser(field: String, completionHandler: @escaping (Error?, [Conversation]?) -> Void) {
+        if shouldSucceed {
+            completionHandler(nil,[conversation1])
+        } else {
+            completionHandler(ErrorMock.error,nil)
+        }
+    
+    }
     
     func readConversation(documentID: String, completionHandler: @escaping (Bool?) -> Void) {
         if shouldSucceed {
@@ -95,7 +133,32 @@ class MockDataManager: DataManagerProtocol {
         }
     }
     
+    func addConversation(conversation: Conversation, documentID: String, completionHandler: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            completionHandler(true)
+        } else {
+            completionHandler(false)
+        }
+    }
+    
+    func updateConversation(update: [String : Any], id: String, completionHandler: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            completionHandler(true)
+        } else {
+            completionHandler(false)
+        }
+    }
+    
+    func addMessageInConversation(documentID: String, arrayMessageRep: [[String : Any]], completionHandler: @escaping (Bool) -> Void) {
+        if shouldSucceed {
+            completionHandler(true)
+        } else {
+            completionHandler(false)
+        }
+    }
+    
     //MARK: - Profil
+    
     
     func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping (Error?, [ProfilUser]?) -> Void) {
         if shouldSucceed {
@@ -123,7 +186,14 @@ class MockDataManager: DataManagerProtocol {
     
     //MARK: - PhotoProfil
     
-    func uploadProfileImage(imageData: Data, completionHandler: @escaping (Error?, StorageMetadata?) -> Void) { }
+    func uploadProfileImage(imageData: Data, completionHandler: @escaping (Error?, StorageMetadata?) -> Void) {
+        let metadata = StorageMetadata()
+        if shouldSucceed {
+            completionHandler(nil,metadata)
+        } else {
+            completionHandler(ErrorMock.error,nil)
+        }
+    }
     
     func downloadPhotoProfil(idUserImage: String, completionHandler: @escaping (Error?, Data?) -> Void) {  }
     

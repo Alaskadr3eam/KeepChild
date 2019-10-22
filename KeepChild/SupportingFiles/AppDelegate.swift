@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseFirestore
 import FirebaseCore
 import CoreData
@@ -18,9 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
-        DependencyInjection.shared.dataManager = ManagerFirebase()
+        //FirebaseApp.configure()
+        //Database.database().isPersistenceEnabled = true
         return true
+    }
+
+    override init() {
+        super.init()
+        FirebaseApp.configure()
+        // not really needed unless you really need it
+        //FIRDatabase.database().persistenceEnabled = true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

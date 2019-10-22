@@ -29,10 +29,10 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var detailTableView: CustomTableView!
 
     //MARK: -Properties models
-    var detailAnnounce = AnnounceEdit()
+    var detailAnnounce = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     //var detailAnnounce = DetailAnnounce()
     var mapKitAnnounce = MapKitAnnounce()
-    var profilGestion = ProfilGestion()
+    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()

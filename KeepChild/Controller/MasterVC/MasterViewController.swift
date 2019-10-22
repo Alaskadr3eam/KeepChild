@@ -13,9 +13,8 @@ import CodableFirebase
 class MasterViewController: UIViewController {
     //MARK: - Properties
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    let searchController = UISearchController(searchResultsController: nil)
     //model for vc
-    var announceList = AnnounceEdit()
+    var announceList = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -31,14 +30,6 @@ class MasterViewController: UIViewController {
         return viewController
     }()
 
-    /*lazy var filterTableViewController: FilterTableViewController = {
-        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "FilterTableViewController") as! FilterTableViewController
-        self.addViewControllerAsChildViewController(childController: viewController)
-        return viewController
-    }()*/
-    
-    //let group = DispatchGroup()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,18 +40,13 @@ class MasterViewController: UIViewController {
         let menuBarItem = UIBarButtonItem(customView: buttonFilter)
         self.navigationItem.rightBarButtonItem = menuBarItem
         self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
-            
         
         setupView()
-        initSearchController()
-  
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         requestWithFilter()
-
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -69,11 +55,8 @@ class MasterViewController: UIViewController {
 
     //MARK: - Action
     @objc func filteredButtonIsClicked() {
-        
         performSegue(withIdentifier: Constants.Segue.segueFiltered, sender: nil)
-        
     }
- 
     // MARK: - Request
     private func request() {
         //view for loading result
@@ -84,9 +67,8 @@ class MasterViewController: UIViewController {
             guard announceList != nil else { return }
             self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
         }
-        
     }
-
+    
     private func requestWithFilter() {
         if announceList.filter != nil {
             guard let lesserGeopoint = announceList.filter.lesserGeopoint else { return }
@@ -103,7 +85,6 @@ class MasterViewController: UIViewController {
                     self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
                     return
                 }
-                //self.announceList.filteredAnnounce()
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
                 }
             }
@@ -126,39 +107,11 @@ class MasterViewController: UIViewController {
 
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
         vc.mapKitAnnounce.announceList = self.announceList.announceList
+        vc.mapKitAnnounce.filter = self.announceList.filter
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
-        vc.viewWillAppear(true)
+        //vc.viewWillAppear(true)
     }
 
-     // MARK: - Search Controller
-    private func initSearchController() {
-        searchController.searchBar.delegate = self
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Announce"
-        navigationItem.searchController = searchController
-        definesPresentationContext = true
-        searchController.searchBar.tintColor = UIColor.black
-        searchController.searchBar.barTintColor = UIColor.black
-    }
-
-    private func searchBarIsEmpty() -> Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    private func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        announceList.announceSearch = announceList.announceList.filter({( announce : Announce) -> Bool in
-         let name = announce.title/* else {
-         return false
-         }*/
-         return name.lowercased().contains(searchText.lowercased())
-         })
-         announceSearchTableViewController.tableView.reloadData()
-    }
-    
-    private func isFiltering() -> Bool {
-        return searchController.isActive && !searchBarIsEmpty()
-    }
-    
      // MARK: - View
     private func setupView() {
         setupSegmentedControl()
@@ -169,7 +122,7 @@ class MasterViewController: UIViewController {
         announceSearchTableViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 0)
         mapKitAnnounceViewController.view.isHidden = !(segmentedControl.selectedSegmentIndex == 1)
         //active viewWillAppear in launch vc for animation mapkit
-        //mapKitAnnounceViewController.viewWillAppear(true)
+        mapKitAnnounceViewController.viewWillAppear(true)
     }
 
     private func setupSegmentedControl() {
@@ -210,20 +163,10 @@ class MasterViewController: UIViewController {
 
 }
 
-extension MasterViewController: UISearchBarDelegate {
-    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        performSegue(withIdentifier: Constants.Segue.segueFiltered, sender: nil)
-        //filterTableViewController.view.isHidden = false
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-}
-
 extension MasterViewController: isAbleToReceiveFilter {
     func pass(filter: Filter) {
         announceList.filter = filter
-        //dismiss(animated: true, completion: nil)
+        announceSearchTableViewController.announceList.filter = filter
+        mapKitAnnounceViewController.mapKitAnnounce.filter = filter
     }
 }

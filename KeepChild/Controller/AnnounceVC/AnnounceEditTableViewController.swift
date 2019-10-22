@@ -22,8 +22,8 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var nocturneSwitch: UISwitch!
 
     //MARK: -Properties models
-    var announceEdit = AnnounceEdit()
-    var profilGestion = ProfilGestion()
+    var announceEdit = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
 
     override func viewDidLoad() {
         super.viewDidLoad()

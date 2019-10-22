@@ -16,7 +16,7 @@ class AnnounceSearchTableViewController: UITableViewController {
 
     let searchController = UISearchController(searchResultsController: nil)
     //MARK: - Properties
-    var announceList = AnnounceEdit()
+    var announceList = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
 
     override func viewDidLoad() {
         super.viewDidLoad()

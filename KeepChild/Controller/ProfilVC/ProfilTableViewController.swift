@@ -17,9 +17,9 @@ class ProfilTableViewController: UITableViewController {
     @IBOutlet weak var profilView: ProfilView!
     
     //model for vc
-    var profilGestion = ProfilGestion()
-    var manageConversation = ManageConversation()
-
+    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         profilGestion.lastConnexion = Auth.auth().currentUser?.metadata.lastSignInDate

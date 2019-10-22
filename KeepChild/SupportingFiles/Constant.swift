@@ -42,6 +42,7 @@ class Constants {
         static let segueDetailAnnounce = "DetailAnnounce"
         static let segueMapKit = "mapKitView"
         static let segueSendMessage = "SendMessage"
+        static let segueLoginToList = "LoginToList"
     }
     
     struct VCIdentifier {

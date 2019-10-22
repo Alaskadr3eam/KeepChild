@@ -10,10 +10,18 @@ import Foundation
 import FirebaseFirestore
 
 class ManageConversation {
+
+    private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
+    
+    init(firebaseServiceSession: FirebaseService) {
+        self.firebaseServiceSession = firebaseServiceSession
+    }
+
     //properties for conversationVC
     var arrayConversation = [Conversation]()
     var arrayMessage = [Message]()
     var conversation: Conversation!
+    var newConversation: Conversation!
     //properties for messageVC
     var messages = [Message]()
     var messageDict = [[String : Any]]()
@@ -27,7 +35,7 @@ class ManageConversation {
     
     //func for conversationVC
     func retrieveConversion(field: String, completionHandler: @escaping(Error?,Bool?) -> Void) {
-        DependencyInjection.shared.dataManager.retrieveConversationUser(field: field) { [weak self] (error, conversation) in
+        firebaseServiceSession.dataManager.retrieveConversationUser(field: field) { [weak self] (error, conversation) in
             guard let self = self else { return }
             guard error == nil else {
                 completionHandler(error,nil)
@@ -47,16 +55,24 @@ class ManageConversation {
     }
     //func for messageVC
     //func request update conversation message
-    func updateConversation(update: [String:Any], action: Void) {
+    func updateConversation(update: [String:Any], completionHandler: @escaping(Bool) -> Void){
         guard let id = conversation.id else { return }
-        Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
+        firebaseServiceSession.dataManager.updateConversation(update: update, id: id) { (bool) in
+            guard bool == true else {
+                completionHandler(false)
+                return
+            }
+            completionHandler(true)
+            }
+        
+        /*Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
             if let e = error {
                 print("Error sending message: \(e.localizedDescription)")
                 return
             }
             action
             //self.messagesCollectionView.scrollToBottom()
-        }
+        }*/
     }
     func transformeMessageInDic() {
         for message in messages {
@@ -66,17 +82,11 @@ class ManageConversation {
 
     func decodeConversationMessage() {
         for message in conversation.arrayMessage! {
-           /* let messageText = message["message"] as! String
-            let id = message["senderID"] as! String
-            let name = message["senderName"] as! String
-            let timeInterval = message["created"] as! Timestamp
-            let date = timeInterval.dateValue()
-            let message2 = Message(created: date, message: messageText, senderID: id, senderName: name)*/
             messages.append(decodeMessage(message: message))
         }
     }
 
-    func decodeMessage(message: [String:Any]) -> Message {
+    private func decodeMessage(message: [String:Any]) -> Message {
         let messageText = message["message"] as! String
         let id = message["senderID"] as! String
         let name = message["senderName"] as! String
@@ -92,8 +102,8 @@ class ManageConversation {
         if isExisting == true {
             addMessageInConversation()
         } else {
-            let conversation = createNewConversation()
-            addConversation(conversation: conversation)
+            newConversation = createNewConversation()
+            addConversation(conversation: newConversation)
         }
     }
     //create new message
@@ -110,15 +120,20 @@ class ManageConversation {
     }
     //func request pull for add message in conversation Firebase
     private func addMessageInConversation() {
-        Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
+        firebaseServiceSession.dataManager.addMessageInConversation(documentID: documentID, arrayMessageRep: arrayMessageRep) { (bool) in
+            guard bool == true else { return }
+        }
+        /*Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])*/
     }
 
     private func addConversation(conversation: Conversation) {
-        Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)
+        firebaseServiceSession.dataManager.addConversation(conversation: conversation, documentID: documentID) { (bool) in
+            guard bool == true else { return }
+        } /*Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)*/
     }
     //we check if the conversation already exists or not
     func readConversation() {
-        DependencyInjection.shared.dataManager.readConversation(documentID: documentID) { [weak self] (bool) in
+        firebaseServiceSession.dataManager.readConversation(documentID: documentID) { [weak self] (bool) in
             guard let self = self else { return }
             guard bool == true else {
                 return

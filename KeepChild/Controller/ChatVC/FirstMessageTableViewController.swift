@@ -16,7 +16,7 @@ class FirstMessageTableViewController: UITableViewController {
     //MARK: - Properties
     @IBOutlet weak var messageTxt: UITextView!
     
-    var manageConversation = ManageConversation()
+    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()

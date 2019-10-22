@@ -12,7 +12,7 @@ class SemaineTableViewController: UITableViewController {
     //MARK: - Outlet
     @IBOutlet var switchDay: [UISwitch]!
     //MARK: - Properties
-    var announceEdit = AnnounceEdit()
+    var announceEdit = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     
     override func viewDidLoad() {

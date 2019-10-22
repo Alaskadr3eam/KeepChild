@@ -40,11 +40,121 @@ class FilterTest: XCTestCase {
     func testDistanceForSlider() {
         //Given
         var value: Float!
-        filterGestion.filter = filter
+        filterGestion.filter = filter1
         //When
         value = filterGestion.disTanceForSlider()
         //Then
         XCTAssertEqual(value, 1)
+    }
+
+    func testCreateFilterForSearch() {
+        //Given
+        filterGestion.dayFilter = ["lundi":true]
+        filterGestion.momentDay = ["day":true]
+        filterGestion.lesserGeopoint = coordinate1
+        filterGestion.greaterGeopoint = coordinate2
+        filterGestion.regionRadius = 10000
+        filterGestion.latChoice = 1.5
+        filterGestion.longChoice = 1.2
+        filterGestion.profilLocIsSelected = true
+        XCTAssertNil(filterGestion.filter)
+        //When
+        filterGestion.createFilterForSearch()
+        //Then
+        XCTAssertNotNil(filterGestion.filter)
+        XCTAssertEqual(filterGestion.filter.latChoice, 1.5)
+    }
+
+    func testPrepareQuery() {
+        //Given
+        filterGestion.latChoice = 1.5
+        filterGestion.longChoice = 1.2
+        XCTAssertNil(filterGestion.lesserGeopoint)
+        XCTAssertNil(filterGestion.greaterGeopoint)
+        //When
+        filterGestion.prepareQueryLoc()
+        //Then
+        XCTAssertNotNil(filterGestion.lesserGeopoint)
+        XCTAssertNotNil(filterGestion.greaterGeopoint)
+        
+    }
+
+    func testSearchIsCompleteIsTrue() {
+        //Given
+        filterGestion.dayFilter = ["lundi":true]
+        filterGestion.momentDay = ["day":true]
+        filterGestion.lesserGeopoint = coordinate1
+        filterGestion.greaterGeopoint = coordinate2
+        filterGestion.regionRadius = 10000
+        filterGestion.latChoice = 1.5
+        filterGestion.longChoice = 1.2
+        //When
+        let result = filterGestion.filterSearchIsComplete()
+        //Then
+        XCTAssertTrue(result)
+    }
+
+    func testSearchIsCompleteIsFalse1() {
+        //Given
+        filterGestion.dayFilter = ["lundi":true]
+        filterGestion.momentDay = ["day":true]
+        filterGestion.lesserGeopoint = coordinate1
+        filterGestion.greaterGeopoint = coordinate2
+        filterGestion.regionRadius = 10000
+        //When
+        let result = filterGestion.filterSearchIsComplete()
+        //Then
+        XCTAssertFalse(result)
+    }
+
+    func testSearchIsCompleteIsFalse2() {
+        //Given
+        filterGestion.dayFilter = ["lundi":true]
+        filterGestion.momentDay = ["day":true]
+        filterGestion.lesserGeopoint = coordinate1
+        filterGestion.greaterGeopoint = coordinate2
+        //When
+        let result = filterGestion.filterSearchIsComplete()
+        //Then
+        XCTAssertFalse(result)
+    }
+
+    func testSearchIsCompleteIsFalse3() {
+        //Given
+        filterGestion.dayFilter = ["lundi":true]
+        filterGestion.momentDay = ["day":true]
+        //When
+        let result = filterGestion.filterSearchIsComplete()
+        //Then
+        XCTAssertFalse(result)
+    }
+
+    func testSearchIsCompleteIsFalse4() {
+        //Given
+        //When
+        let result = filterGestion.filterSearchIsComplete()
+        //Then
+        XCTAssertFalse(result)
+    }
+
+    
+    
+    func testGeocoderSuccess() {
+        let expect = expectation(description: "Wait for geocode")
+        filterGestion.getCoordinate(addressString: "Infinite Loop 1, Cupertino") { (coordinate, error) in
+            defer { expect.fulfill() }
+            
+            guard error == nil else {
+                XCTFail(error!.localizedDescription)
+                return }
+            guard coordinate != nil else {
+                XCTFail("No coordinate")
+                return }
+            
+            XCTAssertEqual(coordinate.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
+            XCTAssertEqual(coordinate.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
+        }
+        waitForExpectations(timeout: 3, handler: nil)
     }
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.

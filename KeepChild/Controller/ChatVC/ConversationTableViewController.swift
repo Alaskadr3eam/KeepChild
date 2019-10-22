@@ -12,7 +12,7 @@ import InputBarAccessoryView
 
 class ConversationTableViewController: UITableViewController {
     
-    var manageConversation = ManageConversation()
+    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()

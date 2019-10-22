@@ -10,8 +10,15 @@ import Foundation
 import Firebase
 import CodableFirebase
 import FirebaseFirestore
+import FirebaseAuth
 
 class ManagerFirebase {
+    
+    /*var dataManager: DataManagerProtocol!
+    
+    init(dataManager: DataManagerProtocol) {
+        self.dataManager = dataManager
+    }*/
     
     private let db = Firestore.firestore()
     private let dbStore = Storage.storage()
@@ -72,27 +79,46 @@ class ManagerFirebase {
 }
 
 extension ManagerFirebase: DataManagerProtocol {
+
     //MARK: - Account
-   /* func signIn(withEmail email: String, password: String, completion: @escaping (User?) -> Void) {
+    func signIn(withEmail email: String, password: String, completion: @escaping (Bool) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             guard error == nil else {
-                completion(nil)
+                completion(false)
                 return
             }
             guard let user = result?.user else { return }
             guard let email = user.email else { return }
             CurrentUserManager.shared.addUser(senderId: user.uid, mail: email)
-            completion(CurrentUserManager.shared.user)
+            completion(true)
         }
     }
     
-    func signOut() {
+    func signOut(completionHandler: @escaping(Bool) -> Void) {
         CurrentUserManager.shared.removeUserAndProfilWhenLogOut()
         do {
             try Auth.auth().signOut()
+            completionHandler(true)
         }
         catch {
             print(error.localizedDescription)
+            completionHandler(false)
+        }
+    }
+
+    func retrieveUserAuth(completionHandler: @escaping (Bool) -> Void) {
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            guard user != nil else {
+                completionHandler(false)
+                return
+            }
+            guard let id = user?.uid else { return }
+            guard let email = user?.email else { return }
+            //create user in singleton for use in app
+            let user = User(senderId: id, email: email)
+            CurrentUserManager.shared.user = user
+            completionHandler(true)
+            
         }
     }
     
@@ -106,19 +132,19 @@ extension ManagerFirebase: DataManagerProtocol {
         }
     }
     
-    func createAccount(email: String, password: String, completion: @escaping (User?) -> Void) {
+    func createAccount(email: String, password: String, completion: @escaping (Bool) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             guard error == nil else {
-                completion(nil)
+                completion(false)
                 return
             }
             guard let user = result else { return }
             guard let email = user.user.email else { return }
             
             CurrentUserManager.shared.addUser(senderId: user.user.uid, mail: email)
-            completion(CurrentUserManager.shared.user)
+            completion(true)
         }
-    }*/
+    }
     
     //MARK: - Announce
     func retrieveAnnounceUser(field: String, equal: String, completionHandler: @escaping (Error?, [Announce]?) -> Void) {
@@ -207,20 +233,31 @@ extension ManagerFirebase: DataManagerProtocol {
             }
         }
     }
-    
-  /*  func getDocumentAnnounceNearby(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint) {
-        <#code#>
-    }*/
+
     //MARK: - Conversation
-  /*  func retrieveConversationUser2(completionHandler: @escaping(Error?, [Conversation]?) -> Void) {
-        let idUser = CurrentUserManager.shared.user.senderId
-        var arrayConversation = [Conversation]()
-        queryConversation.whereField("idUser1", isEqualTo: idUser).whereField("idUser2", isEqualTo: idUser).getDocuments { (<#QuerySnapshot?#>, <#Error?#>) in
-            <#code#>
+    func addConversation(conversation: Conversation, documentID: String, completionHandler: @escaping (Bool) -> Void) {
+        conversationCollection.document(documentID).setData(conversation.representation)
+        completionHandler(true)
+    }
+    
+    func updateConversation(update: [String : Any],id: String, completionHandler: @escaping (Bool) -> Void) {
+        conversationCollection.document(id).updateData(update) { (error) in
+            if let e = error {
+                print("Error sending message: \(e.localizedDescription)")
+                completionHandler(false)
+                return
+            }
+            completionHandler(true)
         }
-    }*/
+    }
+    
+    func addMessageInConversation(documentID: String,arrayMessageRep: [[String: Any]], completionHandler: @escaping (Bool) -> Void) {
+        conversationCollection.document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
+        completionHandler(true)
+    }
+    
     func retrieveConversationUser(field: String, completionHandler: @escaping (Error?, [Conversation]?) -> Void) {
-        var idUser = CurrentUserManager.shared.user.senderId
+        let idUser = CurrentUserManager.shared.user.senderId
         var arrayConversation = [Conversation]()
         queryConversation.whereField(field, isEqualTo: idUser).getDocuments { (querySnapshot, error) in
             guard error == nil else {

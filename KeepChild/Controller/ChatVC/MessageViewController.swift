@@ -13,7 +13,7 @@ import InputBarAccessoryView
 
 class MessageViewController: MessagesViewController {
     
-    var manageConversation = ManageConversation()
+    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     private var messageListener: ListenerRegistration?
     private var reference: CollectionReference?
@@ -93,22 +93,7 @@ class MessageViewController: MessagesViewController {
         
         switch change.type {
         case .added:
-           /* if let url = message.downloadURL {
-                downloadImage(at: url) { [weak self] image in
-                    guard let `self` = self else {
-                        return
-                    }
-                    guard let image = image else {
-                        return
-                    }
-                    
-                    message.image = image
-                    self.insertNewMessage(message)
-                }
-            } else {*/
                 insertMessage(message)
-            //}
-            
         default:
             break
         }
@@ -116,18 +101,13 @@ class MessageViewController: MessagesViewController {
 
     private func save(_ message: Message) {
         manageConversation.transformeMessageInDic()
-       // guard let id = manageConversation.conversation.id else { return }
         let arrayMessage = manageConversation.messageDict as Any
         let update = ["message":arrayMessage]
-        manageConversation.updateConversation(update: update, action: self.messagesCollectionView.scrollToBottom())
-      /*  Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
-            if let e = error {
-                print("Error sending message: \(e.localizedDescription)")
-                return
-            }
-            
+        manageConversation.updateConversation(update: update) { [weak self] (bool) in
+            guard let self = self else { return }
+            guard bool == true else { return }
             self.messagesCollectionView.scrollToBottom()
-        }*/
+        }
     }
     
 }
@@ -254,7 +234,6 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
             print("message present")
             return }
         manageConversation.messages.append(message)
-        //messages.sort()
         // Reload last section to update header/footer labels and insert a new one
         messagesCollectionView.performBatchUpdates({
             messagesCollectionView.insertSections([manageConversation.messages.count - 1])
@@ -298,37 +277,3 @@ extension MessageViewController: MessageCellDelegate {
 
 }
 
-extension MessageViewController {
-    
-    /*func configureMessageCollectionView() {
-        
-        /*messagesCollectionView.messagesDataSource = self
-        messagesCollectionView.messageCellDelegate = self*/
-        
-        scrollsToBottomOnKeyboardBeginsEditing = true // default false
-        maintainPositionOnKeyboardFrameChanged = true // default false
-        
-        messagesCollectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
-    }
-
-    @objc func loadMoreMessages() {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
-            let documentID = self.manageConversation.conversation.id
-            self.db.collection("Conversation").doc
-            self.db.collection("Conversation").document(documentID!).addSnapshotListener { documentSnapshot, error in
-                    guard let document = documentSnapshot else {
-                        print("Error fetching document: \(error!)")
-                        return
-                    }
-                    guard let data = document.data() else {
-                        print("Document data was empty.")
-                        return
-                    }
-                    print("Current data: \(data)")
-            }
-        }
-    }*/
-
-    
-}

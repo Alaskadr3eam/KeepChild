@@ -28,14 +28,21 @@ class MapKitAnnounceViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       // centerMapOnLocation()
+        if mapKitAnnounce.filter != nil {
+        centerMapOnLocation()
+        }
     }
     
-    func centerMapOnLocation() {
+    private func centerMapOnLocation() {
             if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
-            let initialLocation = CLLocation(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!)
+                guard
+                    let lat = mapKitAnnounce.filter.latChoice,
+                    let long = mapKitAnnounce.filter.longChoice,
+                    let regionRadius = mapKitAnnounce.filter.regionRadius else { return }
+                
+            let initialLocation = CLLocation(latitude: lat, longitude: long)
             let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
-                                                      latitudinalMeters: mapKitAnnounce.filter.regionRadius!, longitudinalMeters: mapKitAnnounce.filter.regionRadius!)
+                                                      latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
             mapKitViewAnnounce.setRegion(coordinateRegion, animated: true)
             mapKitViewAnnounce.showsUserLocation = true
         }
@@ -111,9 +118,5 @@ extension MapKitAnnounceViewController: MKMapViewDelegate {
             performSegue(withIdentifier: Constants.Segue.segueDetailAnnounce, sender: nil)
         }
     }
-
-    
-    
-    
 }
 

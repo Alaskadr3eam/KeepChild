@@ -11,9 +11,8 @@ import CoreLocation
 import Firebase
 
 class FilterGestion {
-
+    //MARK: - Properties
     var filter: Filter!
-    
     var dayFilter = [String:Bool]()
     var momentDay = [String:Bool]()
     var lesserGeopoint: GeoPoint!
@@ -21,48 +20,32 @@ class FilterGestion {
     var latChoice: CLLocationDegrees!
     var longChoice: CLLocationDegrees!
     var regionRadius: CLLocationDistance!
-    var profilLocIsSelected = false
-    
+    var profilLocIsSelected: Bool!
     var distanceMile = Double()
-    let locationManager = CLLocationManager()
-    //func create filter
-    func createFilterForSearch() {
-        
-        filter = Filter(dayFilter: dayFilter, momentDay: momentDay, lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint, regionRadius: regionRadius, latChoice: latChoice, longChoice: longChoice, profilLocIsSelected: profilLocIsSelected)
-    }
-    //request geocoder for transalte adress string in CLLlocation
+    
+    //MARK: - Request geocoder
+    // for transalte adress string in CLLlocation
     func getCoordinate( addressString : String,
-                        completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
+                        completionHandler: @escaping(CLLocationCoordinate2D?, NSError?) -> Void ) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(addressString) { (placemarks, error) in
             guard error == nil else {
-                completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
+                completionHandler(nil, error as NSError?)
                 return
             }
             guard let placemark = placemarks?[0] else { return }
             let location = placemark.location!
-            /*FilterSearch.shared.latChoice = location.coordinate.latitude
-            FilterSearch.shared.longChoice = location.coordinate.longitude*/
             self.latChoice = location.coordinate.latitude
             self.longChoice = location.coordinate.longitude
             completionHandler(location.coordinate, nil)
         }
     }
-    //autorize location
-    /*func checkLocationAuthorizationStatus(completionHandler: @escaping(Bool) -> Void) {
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            // locationManager.distanceFilter = 100000
-            guard let lat = locationManager.location?.coordinate.latitude, let long = locationManager.location?.coordinate.longitude else {
-                completionHandler(false)
-                return }
-            self.latChoice = lat
-            self.longChoice = long
-            completionHandler(true)
-        } else {
-            locationManager.requestWhenInUseAuthorization()
-            completionHandler(false)
-        }
-    }*/
+    //MARK: - Func Helpers
+    //func create filter
+    func createFilterForSearch() {
+        filter = Filter(dayFilter: dayFilter, momentDay: momentDay, lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint, regionRadius: regionRadius, latChoice: latChoice, longChoice: longChoice, profilLocIsSelected: profilLocIsSelected)
+    }
+    
     func prepareQueryIsPossibleOrNot() -> Bool {
         if latChoice == nil && longChoice == nil {
             return false
@@ -92,10 +75,11 @@ class FilterGestion {
         guard let regionRadius = filter.regionRadius else { return nil }
         let distanceMeters = Double(regionRadius)
         let distanceKm = distanceMeters / 1000
+        distanceMile = distanceKm / 1.60934
         let value = Float(distanceKm)
         return value
     }
-
+    
     func distanceInMile(value: Float) {
         distanceMile = Double(value) / 1.60934
     }
@@ -104,13 +88,6 @@ class FilterGestion {
         regionRadius = Double(value) * 1000
     }
     
-    /*func fiterIsComplete(alert: Void) {
-        //filterSearchIsComplete() ? createFilterForSearch() : alert(alert)
-    }
-    
-    func alert(_ alert: Void) {
-        alert
-    }*/
     func filterSearchIsComplete() -> Bool {
         if dayFilter.count == 0 && momentDay.count == 0 {
             return false

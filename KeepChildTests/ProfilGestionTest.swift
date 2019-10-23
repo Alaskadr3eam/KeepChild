@@ -118,7 +118,7 @@ class ProfilGestionTest: XCTestCase {
         var errorTest: Error!
         let idUser = CurrentUserManager.shared.user.senderId
         //When
-        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { (error) in
+        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { (error,bool)  in
             guard error == nil else {
                 errorTest = error
                 return
@@ -136,7 +136,7 @@ class ProfilGestionTest: XCTestCase {
         var errorTest: Error!
         let idUser = CurrentUserManager.shared.user.senderId
         //When
-        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { (error) in
+        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { (error,bool) in
             guard error == nil else {
                 errorTest = error
                 return

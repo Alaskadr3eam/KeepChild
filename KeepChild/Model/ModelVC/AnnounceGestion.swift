@@ -11,32 +11,22 @@ import FirebaseFirestore
 import CoreLocation
 
 
-class AnnounceEdit {
-    //var manageFireBase = ManageFireBase()
-    //var idUser = UserDefaults.standard.string(forKey: "userID")
-    
+class AnnounceGestion {
+    //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
     init(firebaseServiceSession: FirebaseService) {
         self.firebaseServiceSession = firebaseServiceSession
     }
-
-    var delegate: AnnounceEditDelegate?
     
     var filter: Filter!
-    
     var announce: Announce!
     var announceList: [Announce]!
     var announceTransition = [Announce]()
-    var announceSearch: [Announce]!
-    
+    //for core location
     var location: CLLocationCoordinate2D!
-    var jour: String!
-
-    var lat: CLLocationCoordinate2D!
-    var long: CLLocationCoordinate2D!
     
-
+    //MARK: - Func for UserDefault
     func encodeObjectInData(semaine: Semaine) {
         if let encodedData = try? JSONEncoder().encode(semaine) {
             UserDefaults.standard.set(encodedData, forKey: "semaine")
@@ -51,58 +41,21 @@ class AnnounceEdit {
         }
         return nil
     }
-
+    
     func removeUserDefaultObject(forkey: String) {
         UserDefaults.standard.removeObject(forKey: forkey)
     }
-    
+    //MARK: - Request firebase
     func addData(announce: Announce, completionHandler: @escaping (Bool?) -> Void) {
         firebaseServiceSession.dataManager.addAnnounce(announce: announce) { (bool) in
             guard bool == true else {
-                //self.delegate?.alert("Annonce non envoyé", "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
                 completionHandler(bool)
                 return
             }
-            //self.delegate?.alert("Annonce envoyé", "Félicitation, votre annonce a été enregistré.")
             completionHandler(bool)
         }
-        
-       /* manageFireBase.addData(announce: announce) { bool in
-            guard bool == true else {
-                self.delegate?.alert("Annonce non envoyé", "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet.")
-                return
-            }
-            self.delegate?.alert("Annonce envoyé", "Félicitation, votre annonce a été enregistré.")
-        }*/
     }
-
-    func createAnnounce(title: String, description: String,price: String, tel: Bool, day: Bool, night: Bool) {
-      
-        let idUser = CurrentUserManager.shared.user.senderId
-        let latitude = location.latitude
-        let longitute = location.longitude
-        let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
-        let semaine = decodedDataInObject()!
-        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
-        announce = announceCreate
-    }
-
-    func getCoordinate( addressString : String,
-                        completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(addressString) { [weak self] (placemarks, error) in
-            guard let self = self else { return }
-            guard error == nil else {
-                completionHandler(kCLLocationCoordinate2DInvalid, error as NSError?)
-                return
-            }
-            guard let placemark = placemarks?[0] else { return }
-            guard let location = placemark.location else { return }
-            self.location = location.coordinate
-            completionHandler(location.coordinate, nil)
-        }
-    }
-
+    
     func readData(completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         firebaseServiceSession.dataManager.readDataAnnounce { [weak self] (error, announceList) in
             guard let self = self else { return }
@@ -116,7 +69,7 @@ class AnnounceEdit {
             completionHandler(nil,announce)
         }
     }
-
+    
     func deleteAnnounce(announceId: String, completionHandler: @escaping(Error?) -> Void) {
         firebaseServiceSession.dataManager.deleteAnnounce(announceId: announceId) { (error) in
             guard error == nil else {
@@ -142,6 +95,32 @@ class AnnounceEdit {
             self.filteredAnnounce()
             completionHandler(nil,self.announceList)
         }
+    }
+    //MARK: - Func Geocoder
+    func getCoordinate( addressString : String,
+                        completionHandler: @escaping(CLLocationCoordinate2D?, NSError?) -> Void ) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(addressString) { [weak self] (placemarks, error) in
+            guard let self = self else { return }
+            guard error == nil else {
+                completionHandler(nil, error as NSError?)
+                return
+            }
+            guard let placemark = placemarks?[0] else { return }
+            guard let location = placemark.location else { return }
+            self.location = location.coordinate
+            completionHandler(location.coordinate, nil)
+        }
+    }
+    //MARK: - Func Helpers
+    func createAnnounce(title: String, description: String,price: String, tel: Bool, day: Bool, night: Bool) {
+        let idUser = CurrentUserManager.shared.user.senderId
+        let latitude = location.latitude
+        let longitute = location.longitude
+        let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
+        let semaine = decodedDataInObject()!
+        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
+        announce = announceCreate
     }
     
     func filteredAnnounce() {
@@ -186,7 +165,7 @@ class AnnounceEdit {
         }
         announceList = announceWithAllFilter.removeDuplicates()
     }
-
+    
     func transformateSemaineInString(semaine: Semaine) -> String {
         var stringDay = String()
         stringDay += semaineDayIsTrue(semaineDay: semaine.lundi!, day:"lundi, ")
@@ -199,7 +178,7 @@ class AnnounceEdit {
         stringDay.removeLast(2)
         return stringDay
     }
-
+    
     private func semaineDayIsTrue(semaineDay: Bool, day: String) -> String {
         var stringDay = String()
         if semaineDay == true {
@@ -225,6 +204,3 @@ class AnnounceEdit {
     }
 }
 
-protocol AnnounceEditDelegate {
-    func alert(_ title: String,_ message: String)
-}

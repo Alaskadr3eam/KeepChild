@@ -12,14 +12,9 @@ import MessageKit
 import InputBarAccessoryView
 
 class MessageViewController: MessagesViewController {
-    
-    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    
+    //MARK: - Properties
+    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     private var messageListener: ListenerRegistration?
-    private var reference: CollectionReference?
-    private let db = Firestore.firestore()
-    
-    let refreshControl = UIRefreshControl()
     
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -30,7 +25,7 @@ class MessageViewController: MessagesViewController {
     deinit {
         messageListener?.remove()
     }
-
+    
     init(conversation: Conversation) {
         self.manageConversation.conversation = conversation
         super.init(nibName: nil, bundle: nil)
@@ -47,23 +42,8 @@ class MessageViewController: MessagesViewController {
         navigationItem.title = manageConversation.conversation.name
         Constants.configureTilteTextNavigationBar(view: self, title: .chatMessaging(manageConversation.conversation.name))
         initInputBar()
-
-        guard let id = manageConversation.conversation.id else { return }
-        
-        reference = db.collection(["Conversation", id, "message"].joined(separator: "/"))
-        messageListener = reference?.addSnapshotListener { querySnapshot, error in
-            guard let snapshot = querySnapshot else {
-                print("Error listening for channel updates: \(error?.localizedDescription ?? "No error")")
-                return
-            }
-            
-            snapshot.documentChanges.forEach { change in
-                self.handleDocumentChange(change)
-            }
-        }
-        
-        
     }
+    //MARK: - Init
     private func initInputBar() {
         messageInputBar.delegate = self
         messagesCollectionView.messagesDataSource = self
@@ -80,25 +60,10 @@ class MessageViewController: MessagesViewController {
         messageInputBar.sendButton.setTitleColor(
             UIColor.primary.withAlphaComponent(0.3),
             for: .highlighted)
-        
-        
         messageInputBar.leftStackView.alignment = .center
         messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
     }
-    
-    private func handleDocumentChange(_ change: DocumentChange) {
-        guard let message = Message(document: change.document) else {
-            return
-        }
-        
-        switch change.type {
-        case .added:
-                insertMessage(message)
-        default:
-            break
-        }
-    }
-
+    //MARK: - Func Helpers
     private func save(_ message: Message) {
         manageConversation.transformeMessageInDic()
         let arrayMessage = manageConversation.messageDict as Any
@@ -109,7 +74,6 @@ class MessageViewController: MessagesViewController {
             self.messagesCollectionView.scrollToBottom()
         }
     }
-    
 }
 
 extension MessageViewController: MessagesDisplayDelegate {
@@ -139,7 +103,7 @@ extension MessageViewController: MessagesLayoutDelegate {
         
         return 0
     }
-
+    
 }
 
 extension MessageViewController: MessagesDataSource {
@@ -161,35 +125,33 @@ extension MessageViewController: MessagesDataSource {
         }
         return nil
     }
-
+    
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let name = message.sender.displayName
         return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
     }
-
+    
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
         
         return 12
     }
-
+    
     func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         
         return NSAttributedString(string: "Read", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
     }
-
+    
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         let dateString = formatter.string(from: message.sentDate)
         return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
     }
-    
-    
     
 }
 
 extension MessageViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
-       
+        
         let message = Message(text: text, user: CurrentUserManager.shared.user)
         // Here we can parse for which substrings were autocompleted
         let attributedText = messageInputBar.inputTextView.attributedText!
@@ -217,9 +179,8 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
                 self?.save(message)
             }
         }
-        
     }
-
+    
     private func insertMessages(_ data: [Any]) {
         for component in data {
             if let str = component as? String {
@@ -228,7 +189,7 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
             }
         }
     }
-
+    
     func insertMessage(_ message: Message) {
         guard manageConversation.messages.contains(message) else {
             print("message present")
@@ -252,7 +213,7 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
         let lastIndexPath = IndexPath(item: 0, section: manageConversation.messages.count - 1)
         return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
     }
- 
+    
 }
 
 extension MessageViewController: MessageCellDelegate {
@@ -274,6 +235,6 @@ extension MessageViewController: MessageCellDelegate {
         let letterString = String(letter)
         avatarView.initials = letterString
     }
-
+    
 }
 

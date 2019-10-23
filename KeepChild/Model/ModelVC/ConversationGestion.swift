@@ -9,14 +9,14 @@
 import Foundation
 import FirebaseFirestore
 
-class ManageConversation {
-
+class ConversationGestion {
+    
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
     init(firebaseServiceSession: FirebaseService) {
         self.firebaseServiceSession = firebaseServiceSession
     }
-
+    
     //properties for conversationVC
     var arrayConversation = [Conversation]()
     var arrayMessage = [Message]()
@@ -27,7 +27,6 @@ class ManageConversation {
     var messageDict = [[String : Any]]()
     //properties for firstMessageVC
     var idAnnounceUser = String()
-    //var arrayMessage = [Message]()
     var arrayMessageRep = [[String: Any]]()
     var announce: Announce!
     var isExisting: Bool = false
@@ -50,7 +49,7 @@ class ManageConversation {
             }
             self.arrayConversation = self.arrayConversation.removeDuplicates()
             completionHandler(nil,true)
-            //self.requestIdUser2()
+            
         }
     }
     //func for messageVC
@@ -63,29 +62,21 @@ class ManageConversation {
                 return
             }
             completionHandler(true)
-            }
-        
-        /*Firestore.firestore().collection("Conversation").document(id).updateData(update) { (error) in
-            if let e = error {
-                print("Error sending message: \(e.localizedDescription)")
-                return
-            }
-            action
-            //self.messagesCollectionView.scrollToBottom()
-        }*/
+        }
     }
+    
     func transformeMessageInDic() {
         for message in messages {
             messageDict.append(message.representation)
         }
     }
-
+    
     func decodeConversationMessage() {
         for message in conversation.arrayMessage! {
             messages.append(decodeMessage(message: message))
         }
     }
-
+    
     private func decodeMessage(message: [String:Any]) -> Message {
         let messageText = message["message"] as! String
         let id = message["senderID"] as! String
@@ -95,7 +86,7 @@ class ManageConversation {
         let message = Message(created: date, message: messageText, senderID: id, senderName: name)
         return message
     }
-
+    
     //func for firstMessageVC
     func prepareSendMessage(text: String) {
         createNewMessage(text: text)
@@ -123,13 +114,12 @@ class ManageConversation {
         firebaseServiceSession.dataManager.addMessageInConversation(documentID: documentID, arrayMessageRep: arrayMessageRep) { (bool) in
             guard bool == true else { return }
         }
-        /*Firestore.firestore().collection("Conversation").document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])*/
     }
-
+    
     private func addConversation(conversation: Conversation) {
         firebaseServiceSession.dataManager.addConversation(conversation: conversation, documentID: documentID) { (bool) in
             guard bool == true else { return }
-        } /*Firestore.firestore().collection("Conversation").document(documentID).setData(conversation.representation)*/
+        }
     }
     //we check if the conversation already exists or not
     func readConversation() {
@@ -146,5 +136,5 @@ class ManageConversation {
         guard let announceId = announce.id else { return }
         documentID = CurrentUserManager.shared.user.senderId + announce.idUser + announceId
     }
-
+    
 }

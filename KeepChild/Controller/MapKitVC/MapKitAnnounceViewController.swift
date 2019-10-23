@@ -10,55 +10,51 @@ import UIKit
 import MapKit
 
 class MapKitAnnounceViewController: UIViewController {
-    
-    var mapKitAnnounce = MapKitAnnounce()
-    
+    //MARK: - Outlet
     @IBOutlet weak var mapKitViewAnnounce: MKMapView!
-
+    //MARK: - Properties
+    var mapKitAnnounce = MapKitAnnounceGestion()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         mapKitViewAnnounce.delegate = self
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if mapKitAnnounce.filter != nil {
-        centerMapOnLocation()
+            centerMapOnLocation()
         }
     }
-    
+    //MARK: - Func
     private func centerMapOnLocation() {
-            if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
-                guard
-                    let lat = mapKitAnnounce.filter.latChoice,
-                    let long = mapKitAnnounce.filter.longChoice,
-                    let regionRadius = mapKitAnnounce.filter.regionRadius else { return }
-                
+        if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
+            guard
+                let lat = mapKitAnnounce.filter.latChoice,
+                let long = mapKitAnnounce.filter.longChoice,
+                let regionRadius = mapKitAnnounce.filter.regionRadius else { return }
+            
             let initialLocation = CLLocation(latitude: lat, longitude: long)
             let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
                                                       latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
             mapKitViewAnnounce.setRegion(coordinateRegion, animated: true)
-            mapKitViewAnnounce.showsUserLocation = true
+
         }
         let announce = mapKitAnnounce.announceListLocation
         mapKitViewAnnounce.addAnnotations(announce)
         if mapKitAnnounce.filter.profilLocIsSelected == true {
             let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!), title: "Home")
-            
             mapKitViewAnnounce.addAnnotation(userHome)
             mapKitViewAnnounce.showsUserLocation = false
+        } else {
+            mapKitViewAnnounce.showsUserLocation = true
         }
     }
-    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.segueDetailAnnounce {
             let navVC = segue.destination as! UINavigationController
@@ -68,33 +64,17 @@ class MapKitAnnounceViewController: UIViewController {
     }
 }
 
-class ProfilMapKit: NSObject, MKAnnotation {
-    var coordinate: CLLocationCoordinate2D
-    let title: String?
-
-    init(coordinate: CLLocationCoordinate2D, title: String) {
-        self.coordinate = coordinate
-        self.title = title
-        super.init()
-    }
-}
 extension MapKitAnnounceViewController: MKMapViewDelegate {
-
-    
+    //func for prepare pinAnnotation In MapView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // 2
         guard let annotation = annotation as? AnnounceLocation else { return nil }
-        //guard let annotationProfil = annotation as? ProfilMapKit else { return nil }
-        // 3
         let identifier = "marker"
         var view: MKPinAnnotationView
-        // 4
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
-            // 5
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             if annotation.title == "Home" {
                 view.pinTintColor = UIColor.blue
@@ -106,7 +86,6 @@ extension MapKitAnnounceViewController: MKMapViewDelegate {
                 view.rightCalloutAccessoryView = mapsButton
             }
         }
-       // view.setSelected(true, animated: true)
         view.animatesDrop = true
         return view
     }
@@ -119,4 +98,13 @@ extension MapKitAnnounceViewController: MKMapViewDelegate {
         }
     }
 }
-
+//objet for geoLoc profil for Pin Home on mapView
+class ProfilMapKit: NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    let title: String?
+    init(coordinate: CLLocationCoordinate2D, title: String) {
+        self.coordinate = coordinate
+        self.title = title
+        super.init()
+    }
+}

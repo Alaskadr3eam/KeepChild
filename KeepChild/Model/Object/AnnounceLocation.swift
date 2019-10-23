@@ -11,7 +11,6 @@ import MapKit
 
 class AnnounceLocation: NSObject, MKAnnotation {
     
-    
     var id: String?
     var idUser: String
     var title: String?
@@ -20,12 +19,8 @@ class AnnounceLocation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var tel: Bool
     var semaine: Semaine
-    //var dayList: [String]
     var day: Bool
     var night: Bool
-    
-    //var city: String
-    //var postalCode: String
     
     init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D,tel: Bool,semaine: Semaine, day: Bool, night: Bool) {
         self.id = id
@@ -39,8 +34,6 @@ class AnnounceLocation: NSObject, MKAnnotation {
         self.day = day
         self.night = night
         
-        
         super.init()
     }
-    
 }

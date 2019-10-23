@@ -12,11 +12,11 @@ import CoreLocation
 
 class AnnounceEditTest: XCTestCase {
     
-    var announceEdit: AnnounceEdit!
+    var announceEdit: AnnounceGestion!
     var mockDataManager: MockDataManager!
     override func setUp() {
         mockDataManager = MockDataManager()
-        announceEdit = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        announceEdit = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         
         user1 = User(senderId: "uid1", email: "email1")
         user2 = User(senderId: "uid2", email: "email2")
@@ -111,9 +111,10 @@ class AnnounceEditTest: XCTestCase {
             guard coordinate != nil else {
                 XCTFail("No coordinate")
                 return }
+            guard let location = coordinate else { return }
             
-            XCTAssertEqual(coordinate.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
-            XCTAssertEqual(coordinate.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
+            XCTAssertEqual(location.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
+            XCTAssertEqual(location.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
         }
         waitForExpectations(timeout: 3, handler: nil)
     }

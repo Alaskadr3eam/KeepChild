@@ -33,6 +33,7 @@ class EditProfilTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        initView()
     }
     
     //MARK: -Action Func
@@ -40,47 +41,46 @@ class EditProfilTableViewController: UITableViewController {
         pictureProfil.contentMode = .scaleAspectFit
         pickPicture()
     }
-
+    
     @IBAction func saveNewProfil(_ sender: Any) {
-        textFieldIsEmpty()
-        if pictureProfil.image == Constants.Image.addUser {
-            saveProfilNoPicture()
-        } else {
-            saveProfilWithPicture()
+        switch textFieldIsEmpty() {
+        case .accepted:
+            (pictureProfil.image == Constants.Image.addUser) ? saveProfilNoPicture() : saveProfilWithPicture()
+            navigationController?.popViewController(animated: true)
+        case .rejeted(let error):
+            self.presentAlert(title: "", message: error)
         }
-        navigationController?.popViewController(animated: true)
-    }
-    @objc func saveProfilUser() {
-        textFieldIsEmpty()
-        if pictureProfil.image == Constants.Image.addUser {
-            saveProfilNoPicture()
-        } else {
-            saveProfilWithPicture()
-        }
-        dismiss(animated: true, completion: nil)
     }
     
     @objc func updateProfilButton() {
-        textFieldIsEmpty()
-        let update: [String: Any] = [
-            "name": nameTextField.text as Any,
-            "prenom": prenomTextField.text as Any,
-            "telInt": Int(telTextField.text!) as Any,
-            "pseudo": pseudoTextField.text as Any,
-            "idUser": profilGestion.idUser as Any,
-            "postalCode": profilGestion.postalCode,
-            "ville": profilGestion.city
-        ]
-        guard let documentID = CurrentUserManager.shared.profil.id else { return }
-        updateProfil(collection: "ProfilUser", documentID: documentID, update: update)
-        retrieveProfil()
+        switch textFieldIsEmpty() {
+        case .accepted:
+            let update: [String: Any] = [
+                "nom": nameTextField.text as Any,
+                "prenom": prenomTextField.text as Any,
+                "tel": telTextField.text as Any,
+                "pseudo": pseudoTextField.text as Any,
+                "iDuser": CurrentUserManager.shared.user.senderId as Any,
+                "postalCode": postalCodeTextField.text as Any,
+                "city": cityTextField.text as Any
+            ]
+            guard let documentID = CurrentUserManager.shared.profil.id else { return }
+            if pictureProfil.image == Constants.Image.defaultImage {
+                updateProfilNoPicture(collection: "ProfilUser", documentID: documentID, update: update)
+            } else {
+                updateProfilWithPicture(collection: "ProfilUser", documentID: documentID, update: update)
+            }
+            retrieveProfil()
+        case .rejeted(let error):
+            self.presentAlert(title: "", message: error)
+        }
+        
     }
-
     //MARK: -View Func
     //choice button save or update
     private func buttonNavigation() {
         if CurrentUserManager.shared.profil == nil {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))
+            /* self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))*/
         } else {
             let updateButton = UIBarButtonItem(title: "Update", style: .plain, target: self, action: #selector(updateProfilButton))
             updateButton.tintColor = UIColor.white
@@ -94,7 +94,7 @@ class EditProfilTableViewController: UITableViewController {
         pictureProfil.isUserInteractionEnabled = true
         pictureProfil.addGestureRecognizer(tapGestureRecognizer)
     }
-
+    
     private func initView() {
         initTapGestureForAddPicture()
         guard let profil = CurrentUserManager.shared.profil else { return }
@@ -109,47 +109,41 @@ class EditProfilTableViewController: UITableViewController {
     }
     
     //MARK: -Helpers Func
-    private func textFieldIsEmpty() -> Void {
-        let title = "Attention"
+    private func textFieldIsEmpty() -> FromError {
         if nameTextField.text?.isEmpty == true {
-            let message = "Champs du nom non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+            return .rejeted(NSLocalizedString("Champs nom non renseigné", comment: ""))
         }
         if prenomTextField.text?.isEmpty == true {
-            let message = "Champs du prénom non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+            return .rejeted(NSLocalizedString("Champs prénom non renseigné", comment: ""))
         }
-        if telTextField.text?.isEmpty == true {
-            let message = "Champs du téléphone non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+        if telTextField.text!.count != 10 {
+            return .rejeted(NSLocalizedString("Le numéro de téléphone doit contenir 10 chiffres", comment: ""))
         }
         if pseudoTextField.text?.isEmpty == true {
-            let message = "Champs du pseudo non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+            return .rejeted(NSLocalizedString("Le pseudo doit ètre renseigné.", comment: ""))
         }
         if cityTextField.text?.isEmpty == true {
-            let message = "Champs de la ville non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+            return .rejeted(NSLocalizedString("La ville doit ètre renseigné.", comment: ""))
         }
         if postalCodeTextField.text?.isEmpty == true {
-            let message = "Champs du code postal non remplie. Il faut que tout les champs soit renseignés."
-            return self.presentAlert(title: title, message: message)
+            return .rejeted(NSLocalizedString("Le code postal doit ètre renseigné.", comment: ""))
         }
+        return .accepted
     }
+    
     private func createProfilUser() -> ProfilUser? {
         guard let name = nameTextField.text else { return nil }
         guard let prenom = prenomTextField.text else { return nil }
         guard let tel = telTextField.text else { return nil }
-        guard let telInt = Int(tel) else { return nil }
         guard let pseudo = pseudoTextField.text else { return nil }
         guard let city = cityTextField.text else { return nil }
         guard let postalCode = postalCodeTextField.text else { return nil }
         let idUser = CurrentUserManager.shared.user.senderId
         let email = CurrentUserManager.shared.user.email
         
-        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo,mail: email, tel: telInt, postalCode: postalCode, city: city)
+        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo,mail: email, tel: tel, postalCode: postalCode, city: city)
     }
-    
+    //MARK: - Func Request
     private func uploadPictureProfil() {
         guard let pictureDataCompress = pictureProfil.image?.jpeg(.lowest) else { print("rror save picture"); return }
         profilGestion.uploadPhotoProfil(imageData: pictureDataCompress) { (error, data) in
@@ -157,29 +151,38 @@ class EditProfilTableViewController: UITableViewController {
             guard data != nil else { return }
         }
     }
-
-    private func updateProfil(collection: String, documentID: String, update: [String:Any]) {
+    
+    private func updateProfilWithPicture(collection: String, documentID: String, update: [String:Any]) {
         profilGestion.updateProfil(documentID: documentID, update: update) { (bool) in
             guard bool == true else {
                 self.presentAlert(title: "Attention", message: "Une erreur s'est produite, vérifiez votre connexion internet. Si le problème persiste contactez le développeur")
                 return
             }
-            self.presentAlert(title: "Félicitation", message: "Profil mise à jour.")
+            self.presentAlertWithActionNavPop(title: "Félicitation", message: "Profil mise à jour.")
+            self.uploadPictureProfil()
         }
-      /*  profilGestion.updateProfil(collection: collection, documentID: documentID, update: update) { (error, bool) in
-            guard error == nil else { return }
-            guard bool != nil else { return }
-        }*/
     }
+    
+    private func updateProfilNoPicture(collection: String, documentID: String, update: [String:Any]) {
+        profilGestion.updateProfil(documentID: documentID, update: update) { (bool) in
+            guard bool == true else {
+                self.presentAlert(title: "Attention", message: "Une erreur s'est produite, vérifiez votre connexion internet. Si le problème persiste contactez le développeur")
+                return
+            }
+            self.presentAlertWithActionNavPop(title: "Félicitation", message: "Profil mise à jour.")
+        }
+    }
+    
     private func retrieveProfil() {
         let idUser = CurrentUserManager.shared.user.senderId
-        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error) in
+        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error,bool) in
             guard let self = self else { return }
-            guard error == nil else { return }
-            self.dismiss(animated: true, completion: nil)
+            guard error == nil, bool == true else {
+                self.presentAlertWithActionNavPop(title: "Erreur", message: "Vérifier votre connexion, si le problème persiste contactez l'administrateur.")
+                return }
         }
     }
-        
+    
     
     private func saveProfilWithPicture() {
         guard let profilUserSave = createProfilUser() else { return }
@@ -192,8 +195,6 @@ class EditProfilTableViewController: UITableViewController {
             self.presentAlertWithActionDismiss(title: "Félicitation", message: "Profil enregistré.")
             self.uploadPictureProfil()
         }
-        //uploadPictureProfil()
-        //dismiss(animated: true, completion: nil)
     }
     
     private func saveProfilNoPicture() {
@@ -205,10 +206,7 @@ class EditProfilTableViewController: UITableViewController {
             }
             self.presentAlertWithActionDismiss(title: "Félicitation", message: "Profil enregistré.")
         }
-        //profilGestion.addDataProfil(profil: profilUserSave)
-        //dismiss(animated: true, completion: nil)
     }
-
     //MARK: -TableView func
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return self.view
@@ -236,10 +234,16 @@ extension EditProfilTableViewController: UIImagePickerControllerDelegate, UINavi
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let imagePicker = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
         pictureProfil.image = imagePicker
-    
+        
         dismiss(animated: true, completion: nil)
     }
 }
 
+extension EditProfilTableViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
 
 

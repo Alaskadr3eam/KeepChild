@@ -14,7 +14,7 @@ import CodableFirebase
 import CoreLocation
 
 class DetailAnnounceTableViewController: UITableViewController {
-    //MARK: -Properties Outlet
+    //MARK: - Outlet
     @IBOutlet weak var image: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -24,14 +24,11 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var pseudoLabel: UILabel!
     @IBOutlet weak var telLabel: UILabel!
     @IBOutlet weak var mailLabel: UILabel!
-
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var detailTableView: CustomTableView!
-
-    //MARK: -Properties models
-    var detailAnnounce = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    //var detailAnnounce = DetailAnnounce()
-    var mapKitAnnounce = MapKitAnnounce()
+    //MARK: - Properties
+    var detailAnnounce = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var mapKitAnnounce = MapKitAnnounceGestion()
     var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
@@ -44,19 +41,17 @@ class DetailAnnounceTableViewController: UITableViewController {
         detailTableView.setLoadingScreen()
         locMapKit.delegate = self
         request()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         request()
     }
-
     //MARK: -Action func
     @objc func backIsClicked() {
         dismiss(animated: true, completion: nil)
     }
-
+    
     @IBAction func deleteAnnounce() {
         //metter a l'initView
         if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
@@ -73,11 +68,25 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     
     @IBAction func sendMessage(_ sender: Any) {
-        if !itsAnnounceOfUser() {
-        performSegue(withIdentifier: Constants.Segue.segueSendMessage, sender: nil)
+        if !itsAnnounceOfUserForMessage() {
+            performSegue(withIdentifier: Constants.Segue.segueSendMessage, sender: nil)
         }
     }
-
+    
+    @IBAction func call() {
+        if !itsAnnounceOfUserForTel() {
+            if detailAnnounce.announce.tel == true {
+                if let url = URL(string: "tel://\(profilGestion.profil.tel)"), UIApplication.shared.canOpenURL(url) {
+                    if #available(iOS 10, *)
+                    {
+                        UIApplication.shared.open(url)
+                    } else {
+                        UIApplication.shared.open(url)
+                    }
+                }
+            }
+        }
+    }
     //MARK: -PrepareMapKit
     //func for prepare mapKitView
     private func centerMapOnLocation(location: CLLocation, regionRadius: CLLocationDistance) {
@@ -109,7 +118,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         //on enleve la page de chargement mapKit
         locMapKit.removeLoadingScreen()
     }
-
+    // request geocoder for mapKit
     private func retrieveCoordinateAnnounce() {
         let adresseString = ("\(profilGestion.profil.city) \(profilGestion.profil.postalCode)")
         print(adresseString)
@@ -119,15 +128,14 @@ class DetailAnnounceTableViewController: UITableViewController {
             guard coordinate != nil else { return }
             //une fois les coordonées trouvé on initialise makKitView
             self.initLocMapView()
-            print(coordinate.latitude)
-            print(coordinate.longitude)
             //on initialise la vue complete
             self.initView()
             self.detailTableView.removeLoadingScreen()
         }
     }
+    //MARK: - Helpers
     //on verifie que l'annonce n'appartient pas a l'utilisateur avant d'ouvrir l'envoie message
-    private func itsAnnounceOfUser() -> Bool {
+    private func itsAnnounceOfUserForMessage() -> Bool {
         if detailAnnounce.announce.idUser == CurrentUserManager.shared.user.senderId {
             self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous envoyer un message.")
             return true
@@ -135,9 +143,28 @@ class DetailAnnounceTableViewController: UITableViewController {
         return false
     }
     
+    private func itsAnnounceOfUserForTel() -> Bool {
+        if profilGestion.profil.tel == CurrentUserManager.shared.profil.tel {
+            self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous appeler.")
+            return true
+        }
+        return false
+    }
+    
+    private func telLabelInit() {
+        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
+    }
+    
+    private func buttonDeleteInitView() {
+        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
+            deleteButton.isHidden = false
+        } else {
+            deleteButton.isHidden = true
+        }
+    }
     //MARK: -Prepare Display Announce Detail
     private func request() {
-      //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
+        //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
         locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
         profilGestion.retrieveProfilAnnounce(field: "iDuser", equal: idUser) { [weak self] (error, profil) in
@@ -163,19 +190,6 @@ class DetailAnnounceTableViewController: UITableViewController {
         image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
         buttonDeleteInitView()
     }
-    
-    private func telLabelInit() {
-        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
-    }
-
-    private func buttonDeleteInitView() {
-        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
-            deleteButton.isHidden = false
-        } else {
-            deleteButton.isHidden = true
-        }
-    }
-
     //MARK: -Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.segueSendMessage {
@@ -184,24 +198,18 @@ class DetailAnnounceTableViewController: UITableViewController {
             }
         }
     }
-    
-    
 }
 
 extension DetailAnnounceTableViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // 2
         guard let annotation = annotation as? AnnounceLocation else { return nil }
-        // 3
         let identifier = "marker"
         var view: MKPinAnnotationView
-        // 4
         if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
             as? MKPinAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
-            // 5
             view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view.canShowCallout = true
             view.calloutOffset = CGPoint(x: -5, y: 5)

@@ -18,6 +18,7 @@ class Constants {
         static let announce = UIImage(named:"announce")
         static let smileyContent = UIImage(named: "smileyContent")
         static let addUser = UIImage(named: "addUser")
+        static let defaultImage = UIImage(named: "default")
     }
     
     struct Color {
@@ -29,7 +30,7 @@ class Constants {
     }
     
     struct FontText {
-        static let title = UIFont(name: "Noteworthy-Bold", size: 25)
+        static let title = UIFont(name: "Noteworthy-Bold", size: 20)
         static let editText = UIFont(name: "Noteworthy-Light", size: 20)
         
     }
@@ -49,10 +50,8 @@ class Constants {
         static let firstViewController = "firstViewController"
         static let announceSearchTableViewController = "AnnounceSearchTableViewController"
         static let mapKitAnnounceViewController = "MapKitAnnounceViewController"
-
     }
 
-    
     static func configureTilteTextNavigationBar(view: UIViewController,title: TitleNavBar) {
         view.navigationItem.title = title.titleText
         view.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:Constants.Color.titleNavBar as Any,NSAttributedString.Key.font:Constants.FontText.title as Any]
@@ -66,11 +65,11 @@ class Constants {
             case .editAnnounce:
                 return "Créer votre annonce"
             case .choiceSemaine:
-                return "Choix des jours de garde"
+                return "Choix des jours"
             case .detailAnnounce:
                 return "Annonce"
             case .filterAnnounce:
-                return "Recherche avancée"
+                return "Filtre"
             case .firstMessage:
                 return "Votre message"
             case .conversation:
@@ -85,6 +84,5 @@ class Constants {
         }
         
     }
-    
 }
 

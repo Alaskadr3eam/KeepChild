@@ -201,39 +201,3 @@ class MockDataManager: DataManagerProtocol {
     
     
 }
-
-/*private class MockDatabaseReference: CollectionReference {
-    
-    override func whereField(_ field: String, isEqualTo value: Any) -> Query {
-        return self
-    }
-    
-    override func getDocuments(completion: @escaping FIRQuerySnapshotBlock) {
-        let querySnapshot = MockQuerySnapshot()
-        DispatchQueue.global().async {
-            block(querySnapshot)
-        }
-    }
-}
-
-class MockQuerySnapshot: QuerySnapshot {
-   
-    let announce1Query = try! FirestoreEncoder().encode(announce1)
-    let announce2Query = try! FirestoreEncoder().encode(announce2)
-  
-    override var documents: [MockQueryDocumentSnapshot]? {
-        return [announce1Query,announce2Query]
-    }
-    
-  
-    
-}
-
-class MockQueryDocumentSnapshot: QueryDocumentSnapshot {
-    
-    let announce1Query = try! FirestoreEncoder().encode(announce1)
-    
-    override func data() -> [String : Any] {
-        return announce1Query
-    }
-}*/

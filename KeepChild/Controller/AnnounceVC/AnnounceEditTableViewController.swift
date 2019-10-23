@@ -12,24 +12,19 @@ import CodableFirebase
 import FirebaseFirestore
 
 class AnnounceEditTableViewController: UITableViewController {
-    
-    //MARK: -Properties Outlet
+    //MARK: - Outlet
     @IBOutlet weak var titleAnnounceTextField: UITextField!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var priceAnnounceTextField: UITextField!
     @IBOutlet weak var switchTel: UISwitch!
     @IBOutlet weak var diurneSwitch: UISwitch!
     @IBOutlet weak var nocturneSwitch: UISwitch!
-
-    //MARK: -Properties models
-    var announceEdit = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    //MARK: - Properties
+    var announceEdit = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        announceEdit.delegate = self
-        //announceEdit.removeUserDefaultObject(forkey: "semaine")
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
         Constants.configureTilteTextNavigationBar(view: self, title: .editAnnounce)
@@ -37,21 +32,7 @@ class AnnounceEditTableViewController: UITableViewController {
         customTextViewPlaceholder(textView: descriptionTextView)
         descriptionTextView.delegate = self
         tableView.footerView(forSection: 1)
-        
     }
-
-    //func for decode object in userDefault
-    func decodeProfilSaved() -> Semaine? {
-        if let savedProfil = UserDefaults.standard.object(forKey: "Semaine") as? Data {
-            if let semaineLoaded = try? JSONDecoder().decode(Semaine.self, from: savedProfil) {
-                return semaineLoaded
-            }
-        }
-        return nil
-    }
-    
-    // MARK: - Table view data source
-
     //MARK: -Action Func
     @objc func saveAnnounce() {
         if textFieldIsEmpty() == true {
@@ -75,15 +56,12 @@ class AnnounceEditTableViewController: UITableViewController {
             }
         }
     }
-
     //MARK: -View Func
-    
     private func initView() {
         titleAnnounceTextField.text? = ""
         customTextViewPlaceholder(textView: descriptionTextView)
         priceAnnounceTextField.text = ""
     }
-
     //MARK: -Helpers Func
     private func textFieldIsEmpty() -> Bool {
         let title = "Attention"
@@ -104,20 +82,40 @@ class AnnounceEditTableViewController: UITableViewController {
         }
         let semaine = announceEdit.decodedDataInObject()
         if semaine == nil {
-            let message = "Attention, vous n'avez pas sélectionné les jours de la semaine ou vous étiez disponnible."
+            let message = "Attention, vous n'avez pas sélectionné les jours de la semaine ou vous étiez disponible."
             self.presentAlert(title: title, message: message)
             return false
         }
-       return true
+        return true
     }
-
+    
     private func switchTelIsClicked() -> Bool {
         if switchTel.isOn {
             return true
         }
         return false
     }
-
+    
+    private func createAnnounce() {
+        guard
+            let title = titleAnnounceTextField.text,
+            let description = descriptionTextView.text,
+            let price = priceAnnounceTextField.text else {
+                self.presentAlert(title: "Attention", message: "Tout les champs ne sont pas remplis")
+                return
+        }
+        let tel = switchTelIsClicked()
+        announceEdit.createAnnounce(title: title, description: description, price: price, tel: tel, day: momentDaySwitch(diurneSwitch), night: momentDaySwitch(nocturneSwitch))
+    }
+    
+    private func momentDaySwitch(_ sender: UISwitch) -> Bool {
+        if sender.isOn {
+            return true
+        } else {
+            return false
+        }
+    }
+    //MARK: - Request
     //retrieve geoloc, create announce and addData in database.
     private func retriveGeoLocForAnnounce() {
         let adressString = "(\(CurrentUserManager.shared.profil.postalCode) \(CurrentUserManager.shared.profil.city)"
@@ -133,7 +131,7 @@ class AnnounceEditTableViewController: UITableViewController {
             self.addAnnounceInFirebase()
         }
     }
-
+    
     //request for addAnnounce in firebase
     private func addAnnounceInFirebase() {
         announceEdit.addData(announce: self.announceEdit.announce) { [weak self] (bool) in
@@ -144,39 +142,14 @@ class AnnounceEditTableViewController: UITableViewController {
             }
             self.presentAlertWithActionSegue(title: "Annonce envoyé", message: "Félicitation, votre annonce a été enregistré.", withIdentifier: Constants.Segue.segueProfil)
             self.initView()
-            //self.performSegue(withIdentifier: Constants.Segue.segueProfil, sender: nil)
         }
     }
-
-    private func createAnnounce() {
-        guard
-            let title = titleAnnounceTextField.text,
-            let description = descriptionTextView.text,
-            let price = priceAnnounceTextField.text else {
-                self.presentAlert(title: "Attention", message: "Tout les champs ne sont pas remplis")
-                return
-        }
-        let tel = switchTelIsClicked()
-        announceEdit.createAnnounce(title: title, description: description, price: price, tel: tel, day: momentDaySwitch(diurneSwitch), night: momentDaySwitch(nocturneSwitch))
-    }
-
-    private func momentDaySwitch(_ sender: UISwitch) -> Bool {
-        
-        if sender.isOn {
-            return true
-        } else {
-            return false
-        }
-    }
-
     //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.segueProfil {
-            if segue.destination is ProfilTableViewController {
-            }
+            _ = segue.destination as! UITabBarController
         }
     }
-
 }
 
 extension AnnounceEditTableViewController: UITextViewDelegate {
@@ -213,10 +186,9 @@ extension AnnounceEditTableViewController: UITextViewDelegate {
     }
 }
 
-extension AnnounceEditTableViewController: AnnounceEditDelegate {
-    func alert(_ title: String, _ message: String) {
-        self.presentAlert(title: title, message: message)
+extension AnnounceEditTableViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
-    
-    
 }

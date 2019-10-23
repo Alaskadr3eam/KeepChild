@@ -13,11 +13,9 @@ import Firebase
 class AnnounceSearchTableViewController: UITableViewController {
     //MARK: - Outlet
     @IBOutlet weak var searchTableView: CustomTableView!
-
-    let searchController = UISearchController(searchResultsController: nil)
     //MARK: - Properties
-    var announceList = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-
+    var announceList = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -33,7 +31,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         searchTableView.restore()
     }
     //MARK: - Init View
-    func setUpView() {
+    private func setUpView() {
         if announceList.announceList == nil {
             searchTableView.setEmptyMessage("Aucune annonce pour le moment. Pour effectuer une recherche cliquez sur ", messageEnd: " en haut à droite de l'écran", imageName: "filtered" )
         } else if announceList.announceList.count == 0 {
@@ -42,78 +40,12 @@ class AnnounceSearchTableViewController: UITableViewController {
             searchTableView.restore()
         }
     }
-
-    func setUpViewPostRequest() {
-        if announceList.announceList.count == 0 {
-            searchTableView.setEmptyMessage("Pas de résultat !", messageEnd: "Changez vos filtres.", imageName: "smileyContent")
-        } else {
-            searchTableView.restore()
-        }
-    }
-
-    // MARK: - Search Controller
-    private func initSearchController() {
-       
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Announce"
-        navigationController?.navigationItem.searchController = searchController
-        definesPresentationContext = true
-        searchController.searchBar.tintColor = UIColor.black
-        searchController.searchBar.barTintColor = UIColor.black
-        //createButtonForFiltered()
-    }
-
-   /* private func createButtonForFiltered() {
-        searchController.searchBar.showsBookmarkButton = true
-        searchController.searchBar.setImage(UIImage(named: "filtered"), for: .bookmark, state: .normal)
-        // MARK: You may change position of bookmark button.
-        //searchController.searchBar.setPositionAdjustment(UIOffset(horizontal: 0, vertical: 0), for: .bookmark)
-        
-    }*/
-    
-    private func searchBarIsEmpty() -> Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    
-    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        announceList.announceSearch = announceList.announceList.filter({( announce : Announce) -> Bool in
-            let name = announce.title/* else {
-             return false
-             }*/
-            return name.lowercased().contains(searchText.lowercased())
-        })
-        self.tableView.reloadData()
-    }
-    
-    private func isFiltering() -> Bool {
-        return searchController.isActive && !searchBarIsEmpty()
-    }
-    
-   /* func request() {
-        searchTableView.setLoadingScreen()
-        announceList.readData(collection: "Announce2") { [weak self] (error, announceList) in
-            guard let self = self else { return }
-            guard error == nil else { return }
-            guard announceList != nil else { return }
-            self.searchTableView.reloadData()
-            self.searchTableView.removeLoadingScreen()
-        }
-        
-    }*/
-
-    @objc func mapAccess() {
-        announceList.announceList = announceList.announceList
-        performSegue(withIdentifier: Constants.Segue.segueMapKit, sender: nil)
-    }
-
     // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if announceList.announceList == nil {
@@ -122,7 +54,6 @@ class AnnounceSearchTableViewController: UITableViewController {
             return announceList.announceList.count
         }
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
@@ -131,10 +62,10 @@ class AnnounceSearchTableViewController: UITableViewController {
         cell.semaineDayLabel.text = "\(announceList.transformateSemaineInString(semaine: announce.semaine))"
         cell.momentDayLabel.text = "\(announceList.transformeMomentDayInString(announce: announce))"
         cell.imageProfil.downloadCustom(idUserImage: announce.idUser, contentMode: .scaleToFill)
-       
+        
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = UIView()
         footerView.backgroundColor = Constants.Color.bleu
@@ -145,10 +76,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         announceList.announce = announceList.announceList[indexPath.row]
         performSegue(withIdentifier: Constants.Segue.segueDetailAnnounce, sender: nil)
     }
-    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.segueDetailAnnounce {
             let navVC = segue.destination as! UINavigationController
@@ -162,16 +90,5 @@ class AnnounceSearchTableViewController: UITableViewController {
             }
         }
     }
-    
-
 }
 
-extension AnnounceSearchTableViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
-        filterContentForSearchText(text)
-    }
-}
-
-extension AnnounceSearchTableViewController: UISearchBarDelegate {
-}

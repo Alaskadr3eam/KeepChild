@@ -9,7 +9,6 @@
 import Foundation
 
 class FirebaseService {
-    
     var dataManager: DataManagerProtocol
     
     init(dataManager: DataManagerProtocol) {

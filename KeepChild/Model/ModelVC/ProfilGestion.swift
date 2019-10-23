@@ -20,22 +20,15 @@ class ProfilGestion {
         self.firebaseServiceSession = firebaseServiceSession
     }
     
-    //var idUser: String!
-    var arrayProfil = [ProfilUser]()
+    var idUser: String!
     var profil: ProfilUser!
     var announceDetail: Announce!
     var arrayProfilAnnounce = [Announce]()
-    var documentID = String()
     var postalCode = String()
     var city = String()
-    var lat: Double!
-    var long: Double!
-    var imageProfil = UIImage()
+    
     var lastConnexion: Date!
     
-}
-
-extension ProfilGestion {
     // MARK: - Announce
     func retrieveAnnounceUser(field: String, equal: String, completionHandler: @escaping (Error?, [Announce]?) -> Void) {
         firebaseServiceSession.dataManager.retrieveAnnounceUser(field: field, equal: equal) { [weak self] (error, announce) in
@@ -47,16 +40,16 @@ extension ProfilGestion {
         }
     }
     //MARK: - Profil
-    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping(Error?) -> Void) {
+    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping(Error?,Bool?) -> Void) {
         CurrentUserManager.shared.profil = nil
         firebaseServiceSession.dataManager.retrieveProfilUser(field: field, equal: equal) { (error, profilUser) in
-            guard error == nil else { completionHandler(error); return }
-            guard let profilArray = profilUser else { completionHandler(error); return }
+            guard error == nil else { completionHandler(error,nil); return }
+            guard let profilArray = profilUser else { completionHandler(nil,false); return }
             CurrentUserManager.shared.addProfil(profilUser: profilArray[0])
-            completionHandler(nil)
+            completionHandler(nil,true)
         }
     }
-
+    
     func retrieveProfilAnnounce(field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         firebaseServiceSession.dataManager.retrieveProfilUser(field: field, equal: equal) { [weak self] (error, profilUser) in
             guard let self = self else { return }
@@ -76,7 +69,7 @@ extension ProfilGestion {
             }
         }
     }
-
+    
     func updateProfil(documentID: String, update: [String : Any], completionHandler: @escaping(Bool) -> Void) {
         firebaseServiceSession.dataManager.updateDataProfil(documentID: documentID, update: update) { (error, bool) in
             guard error == nil else { completionHandler(false); return }
@@ -108,6 +101,6 @@ extension ProfilGestion {
         let myStringafd = formatter.string(from: dateSecure)
         return myStringafd
     }
-
+    
     
 }

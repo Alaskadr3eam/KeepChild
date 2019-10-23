@@ -9,36 +9,21 @@
 import UIKit
 
 class CustomCell: UITableViewCell {
-    
+    //MARK: - Outlet
     @IBOutlet weak var imageProfil: CustomImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var semaineDayLabel: UILabel!
     @IBOutlet weak var momentDayLabel: UILabel!
-    
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
 }
 
 class CellLocation: UITableViewCell {
-    
-    //@IBOutlet weak var label: UILabel!
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // update UI
         accessoryType = selected ? .checkmark : .none
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .gray
@@ -47,9 +32,11 @@ class CellLocation: UITableViewCell {
 }
 
 class CellTextField: UITableViewCell {
+    //MARK: - Outlet
     @IBOutlet weak var textField: UITextField!
 }
 
 class CellImageView: UITableViewCell {
+    //MARK: - Outlet
     @IBOutlet weak var imageViewProfil: UIImageView!
 }

@@ -11,34 +11,20 @@ import Foundation
 import Firebase
 
 class AuthView: UIView {
-    
+    // MARK: - Outlet
     @IBOutlet weak var emailLoginTextField: CustomTextField!
     @IBOutlet weak var passwordLoginTextField: CustomTextField!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    
-    var gradientLayer: CAGradientLayer!
     // MARK: - Properties
+    var gradientLayer: CAGradientLayer!
+    var authViewDelegate: AuthViewDelegate?
     var registration: Bool! {
         didSet {
-          submitButtonDisplay()
+            submitButtonDisplay()
         }
     }
-    
-    private func submitButtonDisplay() {
-        //guard let titleButton = submitButton.titleLabel else { return }
-        registration ? (submitButton.setTitle("Enregistrer", for: .normal)) : (submitButton.setTitle("Soumettre", for: .normal))
-    }
-    var authViewDelegate: AuthViewDelegate?
-    
-   /* @IBAction func logingDidTouch() {
-        authViewDelegate?.loginButtonIsListenner()
-    }
-    
-    @IBAction func signUpDidTouch() {
-        authViewDelegate?.signUpButtonIsListenner()
-    }*/
-    
+    // MARK: - Action
     @IBAction func segmentedControlValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
@@ -49,7 +35,7 @@ class AuthView: UIView {
             break
         }
     }
-
+    
     @IBAction func submitButtonPressed(_ sender: AnyObject) {
         submitButton.isEnabled = false
         switch checkForm() {
@@ -62,7 +48,11 @@ class AuthView: UIView {
             submitButton.isEnabled = true
         }
     }
-
+    
+    private func submitButtonDisplay() {
+        registration ? (submitButton.setTitle("Enregistrer", for: .normal)) : (submitButton.setTitle("Soumettre", for: .normal))
+    }
+    
     func setDesign() {
         registration = false
         
@@ -73,19 +63,17 @@ class AuthView: UIView {
         guard let passwordImage = Constants.Image.lock else { return }
         passwordLoginTextField.setIcon(passwordImage)
     }
-
+    
     func createGradientLayer() {
         gradientLayer = CAGradientLayer()
-        
         gradientLayer.frame = self.bounds
         guard let bleu = Constants.Color.bleu else { return }
         gradientLayer.colors = [bleu.cgColor, UIColor.white.cgColor, bleu.cgColor]
         self.layer.insertSublayer(gradientLayer, at: 0)
-        //self.view.layer.addSublayer(gradientLayer)
+        
     }
     
     private func checkForm() -> FromError {
-        
         if emailLoginTextField.text == nil || emailLoginTextField.text == "" {
             return .rejeted(NSLocalizedString("entrer email", comment: ""))
         }
@@ -97,22 +85,11 @@ class AuthView: UIView {
         }
         return .accepted
     }
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-
 }
 protocol AuthViewDelegate {
     func authenticateUser()
     func createUser()
     func errorDetected(error: String)
-   // func loginButtonIsListenner()
-    //func signUpButtonIsListenner()
 }
 
 enum FromError {

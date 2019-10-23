@@ -13,13 +13,12 @@ extension UIImageView {
     
     func download(idUserImage: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
         contentMode = mode
-        
-        
+    
         let storageReference = Storage.storage().reference()
         let reference = storageReference.child("usersProfil")
         let photoUser = reference.child("\(idUserImage).jpg")
         photoUser.getData(maxSize: 1*1024*1024) { (data, error) in
-            guard error == nil else { print("error download:\(error?.localizedDescription)") ; return }
+            guard error == nil else { return }
             guard let dataSecure = data else { return }
             let image = UIImage(data: dataSecure)
             self.image = image
@@ -31,14 +30,12 @@ extension CustomImageView {
     
     func setLoadingScreen() {
         
-        
-
         self.loadingView.center = self.center
         self.loadingView.backgroundColor = UIColor.white
         // Sets spinner
         self.spinner.center = self.center
         self.spinner.style = .gray
-        self.spinner.frame = CGRect(x: 0, y: 0, width: loadingView.bounds.width, height: loadingView.bounds.height)
+        self.spinner.frame = CGRect(x: 0, y: 0, width: self.loadingView.bounds.width, height: self.loadingView.bounds.height)
         self.spinner.startAnimating()
         // Add spinner to the view
         self.loadingView.addSubview(spinner)
@@ -62,10 +59,12 @@ extension CustomImageView {
         let reference = storageReference.child("usersProfil")
         let photoUser = reference.child("\(idUserImage).jpg")
         photoUser.getData(maxSize: 1*1024*1024) { (data, error) in
-            guard error == nil else { print("error download:\(error?.localizedDescription)") ; return }
+            guard error == nil else {
+                self.image = UIImage(named: "default")
+                self.removeLoadingScreen()
+                return }
             guard let dataSecure = data else {
                 self.image = UIImage(named: "default")
-                print("no image")
                 self.removeLoadingScreen()
                 return }
             let image = UIImage(data: dataSecure)

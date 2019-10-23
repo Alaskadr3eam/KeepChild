@@ -10,13 +10,16 @@ import Foundation
 import MapKit
 import Firebase
 
-class MapKitAnnounce {
+class MapKitAnnounceGestion {
+    //MARK: - Properties
     var announceDetail: Announce!
     var filter: Filter!
     var announceDetailLocation: AnnounceLocation!
     var announceList = [Announce]()
     var announceListLocation = [AnnounceLocation]()
     
+    
+    //MARK: - Func Helpers
     func toFillTheLocationAnnounceArray() {
         for announce in announceList {
             guard let announceLoc = transformAnnounceIntoAnnounceLocation(announce: announce) else { return }
@@ -30,7 +33,7 @@ class MapKitAnnounce {
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         guard let id = announce.id else { return nil }
         let tel = announce.tel
-       // let dayList = announce.dayList
+        // let dayList = announce.dayList
         let semaine = announce.semaine
         let day = announce.day
         let night = announce.night
@@ -44,7 +47,6 @@ class MapKitAnnounce {
         guard let title = announceLoc.title else { return nil }
         let coordinate = GeoPoint(latitude: latitude, longitude: longitude)
         let tel = announceLoc.tel
-        //let dayList = announceLoc.dayList
         let semaine = announceLoc.semaine
         let night = announceLoc.night
         let day = announceLoc.day

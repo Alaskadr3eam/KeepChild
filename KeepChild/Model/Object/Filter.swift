@@ -11,19 +11,13 @@ import Firebase
 import CoreLocation
 
 struct Filter {
-    /*var dayFilter: [String:Bool]?
-    var momentDay: [String:Bool]?
-    var lesserGeopoint: GeoPoint?
-    var greaterGeopoint: GeoPoint?
-    var regionRadius: CLLocationDistance?
-    var profilLocIsSelected = false*/
 
     var dayFilter: [String:Bool]
     var momentDay: [String:Bool]
     var lesserGeopoint: GeoPoint?
     var greaterGeopoint: GeoPoint?
     var regionRadius: CLLocationDistance?
-    var profilLocIsSelected = false
+    var profilLocIsSelected: Bool
     var latChoice: Double?
     var longChoice: Double?
     
@@ -35,6 +29,6 @@ struct Filter {
         self.regionRadius = regionRadius
         self.latChoice = latChoice
         self.longChoice = longChoice
-        self.profilLocIsSelected = true
+        self.profilLocIsSelected = profilLocIsSelected
     }
 }

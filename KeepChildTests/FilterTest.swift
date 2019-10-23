@@ -64,9 +64,28 @@ class FilterTest: XCTestCase {
         XCTAssertNotNil(filterGestion.filter)
         XCTAssertEqual(filterGestion.filter.latChoice, 1.5)
     }
+    func testPrepareQueryIsPossibleF() {
+        //Given
+        //When
+        let result = filterGestion.prepareQueryIsPossibleOrNot()
+        //Then
+        XCTAssertFalse(result)
+    }
 
+    func testPrepareQueryIsPossibleT() {
+        //Given
+        filterGestion.distanceMile = 1.6
+        filterGestion.latChoice = 1.5
+        filterGestion.longChoice = 1.2
+        //When
+        let result = filterGestion.prepareQueryIsPossibleOrNot()
+        //Then
+        XCTAssertTrue(result)
+    }
+    
     func testPrepareQuery() {
         //Given
+        filterGestion.distanceMile = 1.6
         filterGestion.latChoice = 1.5
         filterGestion.longChoice = 1.2
         XCTAssertNil(filterGestion.lesserGeopoint)
@@ -150,9 +169,10 @@ class FilterTest: XCTestCase {
             guard coordinate != nil else {
                 XCTFail("No coordinate")
                 return }
+            guard let location = coordinate else { return }
             
-            XCTAssertEqual(coordinate.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
-            XCTAssertEqual(coordinate.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
+            XCTAssertEqual(location.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
+            XCTAssertEqual(location.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
         }
         waitForExpectations(timeout: 3, handler: nil)
     }

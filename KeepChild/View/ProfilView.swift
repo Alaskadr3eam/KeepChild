@@ -9,17 +9,9 @@
 import UIKit
 
 class ProfilView: UIView {
-    
+    //MARK: - Outlet
     @IBOutlet weak var imageProfil: CustomImageView!
     @IBOutlet weak var pseudoLabel: UILabel!
     @IBOutlet weak var dashboardView: DashboardView!
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

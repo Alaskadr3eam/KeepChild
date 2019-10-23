@@ -18,5 +18,4 @@ struct Semaine: Codable, Equatable {
     var vendredi: Bool?
     var samedi: Bool?
     var dimanche: Bool?
-    
 }

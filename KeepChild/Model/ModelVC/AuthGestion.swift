@@ -25,7 +25,7 @@ class AuthGestion {
             completionHandler(true)
         }
     }
-
+    
     func signOut(completionHandler: @escaping(Bool) -> Void) {
         firebaseServiceSession.dataManager.signOut { (bool) in
             guard bool == true else {
@@ -35,7 +35,7 @@ class AuthGestion {
             completionHandler(true)
         }
     }
-
+    
     func createAccount(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         firebaseServiceSession.dataManager.createAccount(email: email, password: password) { (bool) in
             guard bool == true else {
@@ -45,7 +45,7 @@ class AuthGestion {
             completionHandler(true)
         }
     }
-
+    
     func retrievUserConnected(completionHandler: @escaping(Bool)->Void) {
         firebaseServiceSession.dataManager.retrieveUserAuth { (bool) in
             guard bool == true else {

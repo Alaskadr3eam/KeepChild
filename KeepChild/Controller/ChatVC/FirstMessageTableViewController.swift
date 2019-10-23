@@ -16,7 +16,7 @@ class FirstMessageTableViewController: UITableViewController {
     //MARK: - Properties
     @IBOutlet weak var messageTxt: UITextView!
     
-    var manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,19 +28,18 @@ class FirstMessageTableViewController: UITableViewController {
         manageConversation.createOrRetrieveDocumentID()
         manageConversation.readConversation()
     }
-
+    
     // MARK: -Action Func
-  
     @IBAction func validateMessage(_ sender: Any) {
         if textViewIsEmpty() == true {
             manageConversation.prepareSendMessage(text: messageTxt.text)
             //alert mesaage bien envoyé
-            dismiss(animated: true, completion: nil)
+            self.presentAlertWithActionDismiss(title: "Envoyé", message: "Message envoyé")
         }
     }
-
+    
     @IBAction func `return`(_ sender: Any) {
-       dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     //MARK: - Helpers
     //on verifie que le champs message n'est pas vide

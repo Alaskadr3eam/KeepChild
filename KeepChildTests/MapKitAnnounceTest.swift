@@ -12,9 +12,9 @@ import XCTest
 
 class MapKitAnnounceTest: XCTestCase {
     
-    var mapKitAnnounce: MapKitAnnounce!
+    var mapKitAnnounce: MapKitAnnounceGestion!
     override func setUp() {
-        mapKitAnnounce = MapKitAnnounce()
+        mapKitAnnounce = MapKitAnnounceGestion()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 

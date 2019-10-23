@@ -13,9 +13,7 @@ import Firebase
 struct Message: MessageType {
     
     var id: String?
-    var sender: SenderType/* {
-     return user
-     }*/
+    var sender: SenderType
     var messageId: String {
         return id ?? UUID().uuidString
     }
@@ -86,16 +84,8 @@ extension Message: DatabaseRepresentation {
             "senderName": sender.displayName,
             "message": content
         ]
-        
-        /* if let url = downloadURL {
-         rep["url"] = url.absoluteString
-         } else {
-         rep["content"] = content
-         }*/
-        
         return rep
     }
-    
 }
 
 extension Message: Comparable {

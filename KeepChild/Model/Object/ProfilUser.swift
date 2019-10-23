@@ -16,7 +16,7 @@ struct ProfilUser: Codable, Equatable {
     var prenom: String
     var pseudo: String
     var mail: String
-    var tel: Int
+    var tel: String
     var postalCode: String
     var city: String
 }

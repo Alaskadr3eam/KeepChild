@@ -9,7 +9,7 @@
 import UIKit
 
 class DashboardView: UIView {
-    
+    //MARK: - Outlet
     @IBOutlet weak var imageAnnounce: UIImageView!
     @IBOutlet weak var labelCountAnnounce: UILabel!
     @IBOutlet weak var imageMessage: UIImageView!
@@ -18,18 +18,9 @@ class DashboardView: UIView {
     
     func setUpView() {
         imageAnnounce.image = Constants.Image.announce
-        imageAnnounce.tintColor = UIColor.black
         imageMessage.image = Constants.Image.envelope
-        imageMessage.tintColor = UIColor.black
+        imageMessage.tintColor = .black
         lastConnexionlabel.text = "Derniere connexion: "
     }
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

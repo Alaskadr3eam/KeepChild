@@ -25,6 +25,16 @@ extension UIViewController {
         present(alertVC, animated: true, completion: nil)
     }
 
+    func presentAlertWithActionNavPop(title: String, message: String) {
+        let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            guard let navVC = self.navigationController else { return }
+            navVC.popViewController(animated: true)
+        }
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true, completion: nil)
+    }
+
     func presentAlertWithActionSegue(title: String, message: String, withIdentifier: String) {
         let alertVC = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in

@@ -14,8 +14,8 @@ import Firebase
 var user1 = User(senderId: "uid1", email: "email1")
 var user2 = User(senderId: "uid2", email: "email2")
 
-var profil1 = ProfilUser(id: "123", iDuser: user1.senderId, nom: "numero1", prenom: "1", pseudo: "test1", mail: user1.email, tel: 1111111111, postalCode: "34570", city: "murviel-les-montpellier")
-var profil2 = ProfilUser(id: nil, iDuser: user2.senderId, nom: "numero2", prenom: "2", pseudo: "test2", mail: user2.email, tel: 2222222222, postalCode: "34570", city: "montarnaud")
+var profil1 = ProfilUser(id: "123", iDuser: user1.senderId, nom: "numero1", prenom: "1", pseudo: "test1", mail: user1.email, tel: "1111111111", postalCode: "34570", city: "murviel-les-montpellier")
+var profil2 = ProfilUser(id: nil, iDuser: user2.senderId, nom: "numero2", prenom: "2", pseudo: "test2", mail: user2.email, tel: "2222222222", postalCode: "34570", city: "montarnaud")
 
 let semaine1 = Semaine(idUser: user1.senderId, lundi: true, mardi: true
     , mercredi: true, jeudi: true, vendredi: true, samedi: true, dimanche: true)

@@ -14,7 +14,7 @@ class MasterViewController: UIViewController {
     //MARK: - Properties
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     //model for vc
-    var announceList = AnnounceEdit(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var announceList = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -29,10 +29,10 @@ class MasterViewController: UIViewController {
         self.addViewControllerAsChildViewController(childController: viewController)
         return viewController
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let buttonFilter = UIButton(type: .custom)
         buttonFilter.frame = CGRect(x: 0.0, y: 0.0, width: 10, height: 10)
         buttonFilter.setImage(UIImage(named: "filtered"), for: .normal)
@@ -52,10 +52,14 @@ class MasterViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-
+    
     //MARK: - Action
     @objc func filteredButtonIsClicked() {
         performSegue(withIdentifier: Constants.Segue.segueFiltered, sender: nil)
+    }
+    
+    @objc func selectionDidChange(sender: UISegmentedControl) {
+        updateView()
     }
     // MARK: - Request
     private func request() {
@@ -86,17 +90,15 @@ class MasterViewController: UIViewController {
                     return
                 }
                 self.prepareViewForChildViewController(vc1: self.announceSearchTableViewController, vc2: self.mapKitAnnounceViewController)
-                }
             }
+        }
     }
-    //MARK: -Helpers
-
-     // MARK: - prepare ViewController
+    // MARK: - prepare ViewController
     private func prepareViewForChildViewController(vc1: AnnounceSearchTableViewController, vc2: MapKitAnnounceViewController) {
         prepareSearchTableView(vc: vc1)
         prepareMapKit(vc: vc2)
     }
-
+    
     private func prepareSearchTableView(vc: AnnounceSearchTableViewController) {
         vc.announceList.announceList = announceList.announceList
         //remove view loading
@@ -104,15 +106,13 @@ class MasterViewController: UIViewController {
         vc.viewWillAppear(true)
         vc.searchTableView.reloadData()
     }
-
+    
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
         vc.mapKitAnnounce.announceList = self.announceList.announceList
         vc.mapKitAnnounce.filter = self.announceList.filter
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
-        //vc.viewWillAppear(true)
     }
-
-     // MARK: - View
+    // MARK: - View
     private func setupView() {
         setupSegmentedControl()
         updateView()
@@ -124,7 +124,7 @@ class MasterViewController: UIViewController {
         //active viewWillAppear in launch vc for animation mapkit
         mapKitAnnounceViewController.viewWillAppear(true)
     }
-
+    
     private func setupSegmentedControl() {
         segmentedControl.removeAllSegments()
         segmentedControl.tintColor = Constants.Color.titleNavBar
@@ -132,10 +132,6 @@ class MasterViewController: UIViewController {
         segmentedControl.insertSegment(withTitle: "Carte", at: 1, animated: false)
         segmentedControl.addTarget(self, action: #selector(selectionDidChange(sender:)), for: .valueChanged)
         segmentedControl.selectedSegmentIndex = 0
-    }
-    
-    @objc func selectionDidChange(sender: UISegmentedControl) {
-        updateView()
     }
     
     private func addViewControllerAsChildViewController(childController: UIViewController) {
@@ -149,7 +145,6 @@ class MasterViewController: UIViewController {
         childController.view.removeFromSuperview()
         childController.removeFromParent()
     }
-
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Constants.Segue.segueFiltered {
@@ -159,8 +154,6 @@ class MasterViewController: UIViewController {
             filterVC.filter.filter = announceList.filter
         }
     }
-    
-
 }
 
 extension MasterViewController: isAbleToReceiveFilter {

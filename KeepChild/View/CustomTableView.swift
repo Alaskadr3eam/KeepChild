@@ -9,13 +9,10 @@
 import UIKit
 
 class CustomTableView: UITableView {
-
+    //MARK: - Properties
     var loadingView = UIView()
     var spinner = UIActivityIndicatorView()
     var label = UILabel()
-    var image = UIImageView()
-    
-    
 
 }
 

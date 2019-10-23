@@ -13,12 +13,12 @@ import Firebase
 
 class ManageConversationTest: XCTestCase {
     
-    var manageConversation: ManageConversation!
+    var manageConversation: ConversationGestion!
     var mockDataManager: MockDataManager!
     
     override func setUp() {
         mockDataManager = MockDataManager()
-        manageConversation = ManageConversation(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         // Put setup code here. This method is called before the invocation of each test method in the class.
         //Given
         //When

@@ -13,19 +13,14 @@ import FirebaseStorage
 import FirebaseAuth
 
 class ProfilGestion {
-    
-    
-    //private var firebaseManagerData = ManagerFirebase(dataManager: DataManagerProtocol())
+    //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
     init(firebaseServiceSession: FirebaseService) {
         self.firebaseServiceSession = firebaseServiceSession
     }
     
-    //var firebaseService = FirebaseService(dataManager: ManagerFirebase())
-   // var manageFireBase = ManagerFirebase(dataManager: DataManagerProtocol)
-    
-    var idUser: String! /*CurrentUserManager.shared.user.id*//*UserDefaults.standard.string(forKey: "userID")*/
+    //var idUser: String!
     var arrayProfil = [ProfilUser]()
     var profil: ProfilUser!
     var announceDetail: Announce!
@@ -61,6 +56,7 @@ extension ProfilGestion {
             completionHandler(nil)
         }
     }
+
     func retrieveProfilAnnounce(field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
         firebaseServiceSession.dataManager.retrieveProfilUser(field: field, equal: equal) { [weak self] (error, profilUser) in
             guard let self = self else { return }

@@ -9,13 +9,13 @@
 import Foundation
 
 class AuthGestion {
-    
+    //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
     init(firebaseServiceSession: FirebaseService) {
         self.firebaseServiceSession = firebaseServiceSession
     }
-    
+    //MARK: - Request
     func signIn(withEmail: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         firebaseServiceSession.dataManager.signIn(withEmail: withEmail, password: password) { (bool) in
             guard bool == true else {

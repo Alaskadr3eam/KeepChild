@@ -30,6 +30,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     var detailAnnounce = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     var mapKitAnnounce = MapKitAnnounceGestion()
     var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,10 +62,21 @@ class DetailAnnounceTableViewController: UITableViewController {
                     self.presentAlert(title: "Erreur Suppression.", message: "Annonce non supprimée, vérifiez votre connexion internet.")
                     return
                 }
-                self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Announce supprimé avec success.")
+                self.deleteConversation(announceID: id)
+                //self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Announce supprimé avec success.")
             }
         }
         
+    }
+    
+    func deleteConversation(announceID: String) {
+        manageConversation.deleteConversation(announceID: announceID) { (error) in
+            guard error == nil else {
+                self.presentAlert(title: "Erreur Suppression.", message: "Annonce non supprimée, vérifiez votre connexion internet.")
+                return
+            }
+            self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Tout ce qui concerne l'annonce est supprimé aussi")
+        }
     }
     
     @IBAction func sendMessage(_ sender: Any) {

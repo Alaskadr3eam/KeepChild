@@ -118,7 +118,7 @@ class AnnounceGestion {
         let latitude = location.latitude
         let longitute = location.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
-        let semaine = decodedDataInObject()!
+        guard let semaine = decodedDataInObject() else { return }
         let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
         announce = announceCreate
     }
@@ -166,15 +166,22 @@ class AnnounceGestion {
         announceList = announceWithAllFilter.removeDuplicates()
     }
     
-    func transformateSemaineInString(semaine: Semaine) -> String {
+    func transformateSemaineInString(semaine: Semaine) -> String? {
+        guard let lundi = semaine.lundi,
+                let mardi = semaine.mardi,
+                let mercredi = semaine.mercredi,
+                let jeudi = semaine.jeudi,
+                let vendredi = semaine.vendredi,
+                let samedi = semaine.samedi,
+            let dimanche = semaine.dimanche else { return nil }
         var stringDay = String()
-        stringDay += semaineDayIsTrue(semaineDay: semaine.lundi!, day:"lundi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.mardi!, day:"mardi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.mercredi!, day:"mercredi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.jeudi!, day:"jeudi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.vendredi!, day:"vendredi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.samedi!, day:"samedi, ")
-        stringDay += semaineDayIsTrue(semaineDay: semaine.dimanche!, day:"dimanche, ")
+        stringDay += semaineDayIsTrue(semaineDay: lundi, day:"lundi, ")
+        stringDay += semaineDayIsTrue(semaineDay: mardi, day:"mardi, ")
+        stringDay += semaineDayIsTrue(semaineDay: mercredi, day:"mercredi, ")
+        stringDay += semaineDayIsTrue(semaineDay: jeudi, day:"jeudi, ")
+        stringDay += semaineDayIsTrue(semaineDay: vendredi, day:"vendredi, ")
+        stringDay += semaineDayIsTrue(semaineDay: samedi, day:"samedi, ")
+        stringDay += semaineDayIsTrue(semaineDay: dimanche, day:"dimanche, ")
         stringDay.removeLast(2)
         return stringDay
     }

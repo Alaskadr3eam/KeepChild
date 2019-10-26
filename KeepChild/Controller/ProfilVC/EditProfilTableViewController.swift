@@ -116,7 +116,8 @@ class EditProfilTableViewController: UITableViewController {
         if prenomTextField.text?.isEmpty == true {
             return .rejeted(NSLocalizedString("Champs prénom non renseigné", comment: ""))
         }
-        if telTextField.text!.count != 10 {
+        guard let tel = telTextField.text else { return .rejeted("erreur textfield") }
+        if tel.count != 10 {
             return .rejeted(NSLocalizedString("Le numéro de téléphone doit contenir 10 chiffres", comment: ""))
         }
         if pseudoTextField.text?.isEmpty == true {

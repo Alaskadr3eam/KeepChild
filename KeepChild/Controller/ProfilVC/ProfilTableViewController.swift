@@ -48,7 +48,8 @@ class ProfilTableViewController: UITableViewController {
                 return
             }
             guard announce != nil else { return }
-            if announce!.count == 0 {
+            guard let announceResult = announce else { return }
+            if announceResult.count == 0 {
                 self.tableView.reloadData()
                 self.tableView.setEmptyMessage("Vous n'avez pas d'annonces publiées pour le moment. Cliquez sur ", messageEnd: " en bas à droite de votre barre de navigation.", imageName: "edit")
             } else {
@@ -105,7 +106,8 @@ class ProfilTableViewController: UITableViewController {
             return cell
         } else {
             let announce = profilGestion.arrayProfilAnnounce[indexPath.row]
-            cell.textLabel!.text = announce.title
+            guard let label = cell.textLabel else { return cell }
+            label.text = announce.title
             return cell
         }
     }

@@ -36,6 +36,8 @@ protocol DataManagerProtocol {
     
     func readConversation(documentID: String,completionHandler: @escaping(Bool?)->Void)
     
+    func deleteConversation(announceId: String, completionHandler: @escaping (Error?) -> Void)
+    
     func addConversation(conversation: Conversation, documentID: String, completionHandler: @escaping(Bool) -> Void)
     
     func updateConversation(update: [String:Any],id: String, completionHandler: @escaping(Bool) -> Void)

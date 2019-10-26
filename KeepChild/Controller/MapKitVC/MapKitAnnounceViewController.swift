@@ -47,7 +47,10 @@ class MapKitAnnounceViewController: UIViewController {
         let announce = mapKitAnnounce.announceListLocation
         mapKitViewAnnounce.addAnnotations(announce)
         if mapKitAnnounce.filter.profilLocIsSelected == true {
-            let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: mapKitAnnounce.filter.latChoice!, longitude: mapKitAnnounce.filter.longChoice!), title: "Home")
+            guard
+                let lat = mapKitAnnounce.filter.latChoice,
+                let long = mapKitAnnounce.filter.longChoice else { return }
+            let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long), title: "Home")
             mapKitViewAnnounce.addAnnotation(userHome)
             mapKitViewAnnounce.showsUserLocation = false
         } else {

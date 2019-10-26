@@ -65,6 +65,15 @@ class ConversationGestion {
         }
     }
     
+    func deleteConversation(announceID: String, completionHandler: @escaping(Error?) -> Void) {
+        firebaseServiceSession.dataManager.deleteConversation(announceId: announceID) { (error) in
+            guard error == nil else {
+                completionHandler(error)
+                return
+            }
+            completionHandler(nil)
+        }
+    }
     func transformeMessageInDic() {
         for message in messages {
             messageDict.append(message.representation)
@@ -72,7 +81,8 @@ class ConversationGestion {
     }
     
     func decodeConversationMessage() {
-        for message in conversation.arrayMessage! {
+        guard let array = conversation.arrayMessage else { return }
+        for message in array {
             messages.append(decodeMessage(message: message))
         }
     }
@@ -104,9 +114,10 @@ class ConversationGestion {
         arrayMessage.append(message)
     }
     //create new conversation
-    private func createNewConversation() -> Conversation {
+    private func createNewConversation() -> Conversation? {
         idAnnounceUser = announce.idUser
-        let conversation = Conversation(id: nil, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
+        guard let announceId = announce.id else { return nil}
+        let conversation = Conversation(id: nil, idAnnounce: announceId, name: announce.title, idUser1: CurrentUserManager.shared.user.senderId, idUser2: idAnnounceUser, arrayMessage: arrayMessageRep)
         return conversation
     }
     //func request pull for add message in conversation Firebase

@@ -228,6 +228,25 @@ extension ManagerFirebase: DataManagerProtocol {
         }
     }
     
+    func deleteConversation(announceId: String, completionHandler: @escaping (Error?) -> Void) {
+        queryConversation.whereField("idAnnounce", isEqualTo: announceId).getDocuments { (querySnapshot, error) in
+            guard error == nil else {
+                completionHandler(error)
+                return
+            }
+            guard let querySnap = querySnapshot else { return }
+            for document in querySnap.documents {
+                let doc = document.data()
+                let idAnnounce = doc["idAnnounce"] as! String
+                if idAnnounce == announceId {
+                    let docID = document.documentID
+                    self.conversationCollection.document(docID).delete()
+                    completionHandler(nil)
+                }
+            }
+        }
+    }
+    
     func addMessageInConversation(documentID: String,arrayMessageRep: [[String: Any]], completionHandler: @escaping (Bool) -> Void) {
         conversationCollection.document(documentID).updateData(["message" : FieldValue.arrayUnion(arrayMessageRep)])
         completionHandler(true)
@@ -245,10 +264,11 @@ extension ManagerFirebase: DataManagerProtocol {
             for document in querySnap.documents {
                 let doc = document.data()
                 let name = doc["name"] as! String
+                let idAnnounce = doc["idAnnounce"] as! String
                 let idUser1 = doc["idUser1"] as! String
                 let idUser2 = doc["idUser2"] as! String
                 let arrayMessage = doc["message"] as! [[String : Any]]
-                let conversation = Conversation(id: document.documentID, name: name, idUser1: idUser1, idUser2: idUser2, arrayMessage: arrayMessage)
+                let conversation = Conversation(id: document.documentID, idAnnounce: idAnnounce, name: name, idUser1: idUser1, idUser2: idUser2, arrayMessage: arrayMessage)
                 arrayConversation.append(conversation)
             }
             if arrayConversation.count == 0 {

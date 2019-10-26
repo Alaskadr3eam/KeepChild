@@ -154,7 +154,7 @@ extension MessageViewController: InputBarAccessoryViewDelegate {
         
         let message = Message(text: text, user: CurrentUserManager.shared.user)
         // Here we can parse for which substrings were autocompleted
-        let attributedText = messageInputBar.inputTextView.attributedText!
+        guard let attributedText = messageInputBar.inputTextView.attributedText else { return }
         let range = NSRange(location: 0, length: attributedText.length)
         attributedText.enumerateAttribute(.autocompleted, in: range, options: []) { (_, range, _) in
             

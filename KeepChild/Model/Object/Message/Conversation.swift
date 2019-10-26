@@ -16,6 +16,7 @@ import FirebaseFirestore
 struct Conversation: Equatable {
     
     var id: String?
+    let idAnnounce: String
     let name: String
     let idUser1: String
     let idUser2: String
@@ -31,6 +32,7 @@ extension Conversation: DatabaseRepresentation {
     var representation: [String : Any] {
         var rep: [String : Any] = [
             "name": name,
+            "idAnnounce": idAnnounce,
             "idUser1": idUser1,
             "idUser2":idUser2,
             "message": arrayMessage as Any

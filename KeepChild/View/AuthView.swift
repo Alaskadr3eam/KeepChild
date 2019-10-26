@@ -80,7 +80,8 @@ class AuthView: UIView {
         if passwordLoginTextField.text == nil || passwordLoginTextField.text == "" {
             return .rejeted(NSLocalizedString("entrer mot de passe", comment: ""))
         }
-        if passwordLoginTextField.text!.count < 6 {
+        guard let text = passwordLoginTextField.text else { return .rejeted("erreur")}
+        if text.count < 6 {
             return .rejeted(NSLocalizedString("mot de passe doit avoir 6 charactères", comment: ""))
         }
         return .accepted

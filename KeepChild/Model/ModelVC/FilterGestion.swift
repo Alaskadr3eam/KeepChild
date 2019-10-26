@@ -34,7 +34,7 @@ class FilterGestion {
                 return
             }
             guard let placemark = placemarks?[0] else { return }
-            let location = placemark.location!
+            guard let location = placemark.location else { return }
             self.latChoice = location.coordinate.latitude
             self.longChoice = location.coordinate.longitude
             completionHandler(location.coordinate, nil)

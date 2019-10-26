@@ -74,7 +74,8 @@ class ConversationTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel!.text = manageConversation.arrayConversation[indexPath.row].name
+        guard let label = cell.textLabel else { return cell }
+        label.text = manageConversation.arrayConversation[indexPath.row].name
         if let messageArray = manageConversation.arrayConversation[indexPath.row].arrayMessage {
             if let lastMessage = messageArray.last {
                 cell.detailTextLabel?.text = (lastMessage["message"] as! String)

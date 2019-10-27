@@ -24,9 +24,4 @@ pod 'MessageKit'
     # Pods for testing
   end
 
-  target 'KeepChildUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end

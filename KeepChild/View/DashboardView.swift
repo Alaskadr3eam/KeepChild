@@ -20,7 +20,7 @@ class DashboardView: UIView {
         imageAnnounce.image = Constants.Image.announce
         imageMessage.image = Constants.Image.envelope
         imageMessage.tintColor = .black
-        lastConnexionlabel.text = "Derniere connexion: "
+        lastConnexionlabel.text = "Dernière connexion: "
     }
 
 }

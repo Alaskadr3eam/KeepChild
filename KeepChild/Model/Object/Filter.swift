@@ -21,7 +21,7 @@ struct Filter {
     var latChoice: Double?
     var longChoice: Double?
     
-    init(dayFilter: [String:Bool],momentDay: [String:Bool],lesserGeopoint: GeoPoint,greaterGeopoint: GeoPoint,regionRadius: CLLocationDistance,latChoice: Double,longChoice: Double,profilLocIsSelected: Bool) {
+    init(dayFilter: [String:Bool], momentDay: [String:Bool], lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint, regionRadius: CLLocationDistance, latChoice: Double, longChoice: Double, profilLocIsSelected: Bool) {
         self.dayFilter = dayFilter
         self.momentDay = momentDay
         self.lesserGeopoint = lesserGeopoint

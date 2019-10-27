@@ -40,9 +40,7 @@ class AuthView: UIView {
         submitButton.isEnabled = false
         switch checkForm() {
         case .accepted:
-            //registration ? createUser() : authenticateUser()
             registration ? authViewDelegate?.createUser() : authViewDelegate?.authenticateUser()
-            submitButton.isEnabled = true
         case .rejeted(let error):
             authViewDelegate?.errorDetected(error: error)
             submitButton.isEnabled = true

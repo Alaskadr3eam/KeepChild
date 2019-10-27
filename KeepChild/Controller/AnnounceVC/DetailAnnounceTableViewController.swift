@@ -27,10 +27,10 @@ class DetailAnnounceTableViewController: UITableViewController {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var detailTableView: CustomTableView!
     //MARK: - Properties
-    var detailAnnounce = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    var mapKitAnnounce = MapKitAnnounceGestion()
-    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var detailAnnounce = AnnounceManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var mapKitAnnounce = MapKitAnnounceManager()
+    var profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ConversationManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +63,6 @@ class DetailAnnounceTableViewController: UITableViewController {
                     return
                 }
                 self.deleteConversation(announceID: id)
-                //self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Announce supprimé avec success.")
             }
         }
         
@@ -72,7 +71,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     func deleteConversation(announceID: String) {
         manageConversation.deleteConversation(announceID: announceID) { (error) in
             guard error == nil else {
-                self.presentAlert(title: "Erreur Suppression.", message: "Annonce non supprimée, vérifiez votre connexion internet.")
+                self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Tout ce qui concerne l'annonce est supprimé aussi")
                 return
             }
             self.presentAlertWithActionDismiss(title: "Annonce Supprimée.", message: "Tout ce qui concerne l'annonce est supprimé aussi")
@@ -87,8 +86,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     
     @IBAction func call() {
         if !itsAnnounceOfUserForTel() {
-            if detailAnnounce.announce.tel == true {
-                if let url = URL(string: "tel://\(profilGestion.profil.tel)"), UIApplication.shared.canOpenURL(url) {
+            if detailAnnounce.announce.phone == true {
+                if let url = URL(string: "tel://\(profilGestion.profil.phone)"), UIApplication.shared.canOpenURL(url) {
                     if #available(iOS 10, *)
                     {
                         UIApplication.shared.open(url)
@@ -156,7 +155,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     
     private func itsAnnounceOfUserForTel() -> Bool {
-        if profilGestion.profil.tel == CurrentUserManager.shared.profil.tel {
+        if profilGestion.profil.phone == CurrentUserManager.shared.profil.phone {
             self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous appeler.")
             return true
         }
@@ -164,7 +163,7 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     
     private func telLabelInit() {
-        (detailAnnounce.announce.tel == true) ? (telLabel.text = String(profilGestion.profil.tel)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
+        (detailAnnounce.announce.phone == true) ? (telLabel.text = String(profilGestion.profil.phone)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
     }
     
     private func buttonDeleteInitView() {
@@ -179,7 +178,7 @@ class DetailAnnounceTableViewController: UITableViewController {
         //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
         locMapKit.setLoadingScreen()
         let idUser = detailAnnounce.announce.idUser
-        profilGestion.retrieveProfilAnnounce(field: "iDuser", equal: idUser) { [weak self] (error, profil) in
+        profilGestion.retrieveProfilAnnounce(field: "idUser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else { return }
             guard profil != nil else { return }

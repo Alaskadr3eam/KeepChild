@@ -11,7 +11,7 @@ import FirebaseFirestore
 import CoreLocation
 
 
-class AnnounceGestion {
+class AnnounceManager {
     //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
@@ -119,7 +119,7 @@ class AnnounceGestion {
         let longitute = location.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
         guard let semaine = decodedDataInObject() else { return }
-        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, tel: tel, day: day, night: night)
+        let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, phone: tel, day: day, night: night)
         announce = announceCreate
     }
     

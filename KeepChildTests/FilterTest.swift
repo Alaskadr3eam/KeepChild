@@ -11,10 +11,10 @@ import XCTest
 
 class FilterTest: XCTestCase {
     
-    var filterGestion: FilterGestion!
+    var filterGestion: FilterManager!
     
     override func setUp() {
-        filterGestion = FilterGestion()
+        filterGestion = FilterManager()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     

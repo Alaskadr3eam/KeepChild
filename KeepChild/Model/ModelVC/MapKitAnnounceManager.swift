@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import Firebase
 
-class MapKitAnnounceGestion {
+class MapKitAnnounceManager {
     //MARK: - Properties
     var announceDetail: Announce!
     var filter: Filter!
@@ -32,8 +32,7 @@ class MapKitAnnounceGestion {
         let longitude = announce.coordinate.longitude
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         guard let id = announce.id else { return nil }
-        let tel = announce.tel
-        // let dayList = announce.dayList
+        let tel = announce.phone
         let semaine = announce.semaine
         let day = announce.day
         let night = announce.night
@@ -46,11 +45,11 @@ class MapKitAnnounceGestion {
         let longitude = announceLoc.coordinate.longitude
         guard let title = announceLoc.title else { return nil }
         let coordinate = GeoPoint(latitude: latitude, longitude: longitude)
-        let tel = announceLoc.tel
-        let semaine = announceLoc.semaine
+        let tel = announceLoc.phone
+        let semaine = announceLoc.week
         let night = announceLoc.night
         let day = announceLoc.day
-        let announce = Announce(id: announceLoc.id, idUser: announceLoc.idUser, title: title, description: announceLoc.descriptionAnnounce, price: announceLoc.price,semaine: semaine, coordinate: coordinate, tel: tel, day: day ,night: night)
+        let announce = Announce(id: announceLoc.id, idUser: announceLoc.idUser, title: title, description: announceLoc.descriptionAnnounce, price: announceLoc.price,semaine: semaine, coordinate: coordinate, phone: tel, day: day ,night: night)
         return announce
     }
 }

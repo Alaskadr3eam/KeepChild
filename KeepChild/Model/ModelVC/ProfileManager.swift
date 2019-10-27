@@ -12,7 +12,7 @@ import CodableFirebase
 import FirebaseStorage
 import FirebaseAuth
 
-class ProfilGestion {
+class ProfileManager {
     //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
@@ -21,7 +21,7 @@ class ProfilGestion {
     }
     
     var idUser: String!
-    var profil: ProfilUser!
+    var profil: Profile!
     var announceDetail: Announce!
     var arrayProfilAnnounce = [Announce]()
     var postalCode = String()
@@ -50,7 +50,7 @@ class ProfilGestion {
         }
     }
     
-    func retrieveProfilAnnounce(field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void) {
+    func retrieveProfilAnnounce(field: String, equal: String, completionHandler: @escaping(Error?,[Profile]?) -> Void) {
         firebaseServiceSession.dataManager.retrieveProfilUser(field: field, equal: equal) { [weak self] (error, profilUser) in
             guard let self = self else { return }
             guard error == nil else { completionHandler(error,nil); return }
@@ -60,7 +60,7 @@ class ProfilGestion {
         }
     }
     
-    func addDataProfil(profil: ProfilUser, completionHandler: @escaping(Bool?) -> Void) {
+    func addDataProfil(profil: Profile, completionHandler: @escaping(Bool?) -> Void) {
         firebaseServiceSession.dataManager.addDataProfil(profil: profil) { (bool) in
             if bool == false {
                 completionHandler(false)

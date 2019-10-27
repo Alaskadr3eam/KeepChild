@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 import Firebase
 
-class FilterGestion {
+class FilterManager {
     //MARK: - Properties
     var filter: Filter!
     var dayFilter = [String:Bool]()

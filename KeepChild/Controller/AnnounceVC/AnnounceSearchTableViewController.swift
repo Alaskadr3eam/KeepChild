@@ -14,7 +14,7 @@ class AnnounceSearchTableViewController: UITableViewController {
     //MARK: - Outlet
     @IBOutlet weak var searchTableView: CustomTableView!
     //MARK: - Properties
-    var announceList = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var announceList = AnnounceManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +59,7 @@ class AnnounceSearchTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
         let announce = announceList.announceList[indexPath.row]
         cell.titleLabel.text = announce.title
-        cell.semaineDayLabel.text = "\(announceList.transformateSemaineInString(semaine: announce.semaine))"
+        cell.semaineDayLabel.text = announceList.transformateSemaineInString(semaine: announce.semaine) ?? "Non renseigné"
         cell.momentDayLabel.text = "\(announceList.transformeMomentDayInString(announce: announce))"
         cell.imageProfil.downloadCustom(idUserImage: announce.idUser, contentMode: .scaleToFill)
         

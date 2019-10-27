@@ -20,13 +20,12 @@ class AnnounceEditTableViewController: UITableViewController {
     @IBOutlet weak var diurneSwitch: UISwitch!
     @IBOutlet weak var nocturneSwitch: UISwitch!
     //MARK: - Properties
-    var announceEdit = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var announceEdit = AnnounceManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAnnounce))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sauver", style: .plain, target: self, action: #selector(saveAnnounce))
         Constants.configureTilteTextNavigationBar(view: self, title: .editAnnounce)
         self.navigationItem.rightBarButtonItem?.tintColor = Constants.Color.titleNavBar
         customTextViewPlaceholder(textView: descriptionTextView)

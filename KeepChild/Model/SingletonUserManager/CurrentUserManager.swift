@@ -14,13 +14,11 @@ class CurrentUserManager {
     private init () {
         if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil {
             user = User(senderId: "eP5TsXuUutNNs5U5cPPvjayFks92", email: "test@gmail.com")
-        } else {
-            
         }
     }
     
     var user: User!
-    var profil: ProfilUser!
+    var profil: Profile!
     
     func removeUserAndProfilWhenLogOut() {
         user = nil
@@ -32,7 +30,7 @@ class CurrentUserManager {
         user.email = mail
     }
     
-    func addProfil(profilUser: ProfilUser) {
+    func addProfil(profilUser: Profile) {
         profil = profilUser
     }
 }

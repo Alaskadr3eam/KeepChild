@@ -17,20 +17,20 @@ class AnnounceLocation: NSObject, MKAnnotation {
     var descriptionAnnounce: String
     var price: String
     var coordinate: CLLocationCoordinate2D
-    var tel: Bool
-    var semaine: Semaine
+    var phone: Bool
+    var week: Semaine
     var day: Bool
     var night: Bool
     
-    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D,tel: Bool,semaine: Semaine, day: Bool, night: Bool) {
+    init(id: String, idUser: String, title: String, descriptionAnnounce: String, price: String, coordinate: CLLocationCoordinate2D, tel: Bool, semaine: Semaine, day: Bool, night: Bool) {
         self.id = id
         self.idUser = idUser
         self.title = title
         self.descriptionAnnounce = descriptionAnnounce
         self.price = price
         self.coordinate = coordinate
-        self.tel = tel
-        self.semaine = semaine
+        self.phone = tel
+        self.week = semaine
         self.day = day
         self.night = night
         

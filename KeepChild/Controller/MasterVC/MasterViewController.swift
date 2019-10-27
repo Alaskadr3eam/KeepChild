@@ -14,7 +14,7 @@ class MasterViewController: UIViewController {
     //MARK: - Properties
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     //model for vc
-    var announceList = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var announceList = AnnounceManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     //properties vc
     lazy var announceSearchTableViewController: AnnounceSearchTableViewController = {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AuthGestion {
+class AuthManager {
     //MARK: - Properties
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     

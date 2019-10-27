@@ -20,7 +20,7 @@ struct Announce: Codable, Equatable {
     var price: String
     var semaine: Semaine
     var coordinate: GeoPoint
-    var tel: Bool
+    var phone: Bool
     var day: Bool
     var night: Bool
     

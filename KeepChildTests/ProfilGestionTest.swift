@@ -14,12 +14,12 @@ import CoreLocation
 
 class ProfilGestionTest: XCTestCase {
     
-    var profilGestion: ProfilGestion!
+    var profilGestion: ProfileManager!
     var mockDataManager: MockDataManager!
 
     override func setUp() {
         mockDataManager = MockDataManager()
-        profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         //mockDataManger = MockDataManager()
         //DependencyInjection.shared.dataManager = mockDataManger
         

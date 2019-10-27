@@ -52,6 +52,10 @@ class Constants {
         static let mapKitAnnounceViewController = "MapKitAnnounceViewController"
     }
 
+    struct MoveTextField {
+        static let movePasswordTextfield = -50
+    }
+
     static func configureTilteTextNavigationBar(view: UIViewController,title: TitleNavBar) {
         view.navigationItem.title = title.titleText
         view.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:Constants.Color.titleNavBar as Any,NSAttributedString.Key.font:Constants.FontText.title as Any]

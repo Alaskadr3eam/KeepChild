@@ -17,8 +17,8 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     @IBOutlet weak var authView: AuthView!
     //model for vc
 
-    var authGestion = AuthGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var authGestion = AuthManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     var locationManager = CLLocationManager()
     
     override func viewDidLoad() {
@@ -48,8 +48,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     
     private func retrieveUserAuth() {
         authGestion.retrievUserConnected { [weak self] (bool) in
-            guard let self = self else { return }
-            guard bool == true else {return}
+            guard let self = self, bool == true else { return }
             //search profil user for add singleton CurrentUserManager
             self.retrieveProfil()
             self.authView.emailLoginTextField.text = nil
@@ -59,7 +58,7 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     //func retrieve profilUser if existing
     func retrieveProfil() {
         let idUser = CurrentUserManager.shared.user.senderId
-        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error,bool) in
+        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { [weak self] (error,bool) in
             guard let self = self else { return }
             guard error == nil else {
                 self.presentAlert(title: "Erreur", message: "Problème de connexion")
@@ -105,7 +104,7 @@ extension AuthViewController: UITextFieldDelegate {
         case authView.emailLoginTextField:
             moveTextField(authView.passwordLoginTextField, moveDistance: 0, up: false)
         case authView.passwordLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: -50, up: true)
+            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: true)
         default:break
         }
         return true
@@ -117,7 +116,7 @@ extension AuthViewController: UITextFieldDelegate {
             moveTextField(authView.passwordLoginTextField, moveDistance: 0, up: false)
             authView.emailLoginTextField.resignFirstResponder()
         case authView.passwordLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: -50, up: false)
+            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: false)
             authView.passwordLoginTextField.resignFirstResponder()
         default:break
         }
@@ -157,6 +156,7 @@ extension AuthViewController: AuthViewDelegate {
             }
             self.retrieveProfil()
         }
+        self.authView.submitButton.isEnabled = true
     }
     
     func createUser() {

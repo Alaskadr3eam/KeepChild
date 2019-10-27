@@ -20,7 +20,7 @@ enum ErrorMock: Error, Equatable {
 class MockDataManager: DataManagerProtocol {
    
     var shouldSucceed: Bool
-    
+    var conversationArray = [conversation1]
    /* enum ErrorMock: Error {
         case error
     }*/
@@ -133,6 +133,15 @@ class MockDataManager: DataManagerProtocol {
         }
     }
     
+    func deleteConversation(announceId: String, completionHandler: @escaping (Error?) -> Void) {
+        if shouldSucceed {
+            conversationArray.removeAll()
+            completionHandler(nil)
+        } else {
+            completionHandler(ErrorMock.error)
+        }
+    }
+    
     func addConversation(conversation: Conversation, documentID: String, completionHandler: @escaping (Bool) -> Void) {
         if shouldSucceed {
             completionHandler(true)
@@ -160,7 +169,7 @@ class MockDataManager: DataManagerProtocol {
     //MARK: - Profil
     
     
-    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping (Error?, [ProfilUser]?) -> Void) {
+    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping (Error?, [Profile]?) -> Void) {
         if shouldSucceed {
             completionHandler(nil, [profil1])
         } else {
@@ -168,7 +177,7 @@ class MockDataManager: DataManagerProtocol {
         }
     }
     
-    func addDataProfil(profil: ProfilUser, completionHandler: @escaping (Bool?) -> Void) {
+    func addDataProfil(profil: Profile, completionHandler: @escaping (Bool?) -> Void) {
         if shouldSucceed {
             completionHandler(true)
         } else {

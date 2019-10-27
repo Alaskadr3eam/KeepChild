@@ -21,7 +21,7 @@ class EditProfilTableViewController: UITableViewController {
     @IBOutlet weak var editProfilTableView: CustomTableView!
     @IBOutlet weak var saveButtonEdit: UIBarButtonItem!
     //MARK: -Propertie model
-    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,10 +79,8 @@ class EditProfilTableViewController: UITableViewController {
     //MARK: -View Func
     //choice button save or update
     private func buttonNavigation() {
-        if CurrentUserManager.shared.profil == nil {
-            /* self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveProfilUser))*/
-        } else {
-            let updateButton = UIBarButtonItem(title: "Update", style: .plain, target: self, action: #selector(updateProfilButton))
+        if CurrentUserManager.shared.profil != nil {
+            let updateButton = UIBarButtonItem(title: "Modifier", style: .plain, target: self, action: #selector(updateProfilButton))
             updateButton.tintColor = UIColor.white
             self.navigationItem.rightBarButtonItem = updateButton
         }
@@ -98,13 +96,13 @@ class EditProfilTableViewController: UITableViewController {
     private func initView() {
         initTapGestureForAddPicture()
         guard let profil = CurrentUserManager.shared.profil else { return }
-        nameTextField.text = profil.nom
-        prenomTextField.text = profil.prenom
-        telTextField.text = String(profil.tel)
+        nameTextField.text = profil.name
+        prenomTextField.text = profil.firstName
+        telTextField.text = String(profil.phone)
         pseudoTextField.text = profil.pseudo
         cityTextField.text = profil.city
         postalCodeTextField.text = profil.postalCode
-        pictureProfil.downloadCustom(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        pictureProfil.downloadCustom(idUserImage: profil.idUser, contentMode: .scaleToFill)
         buttonNavigation()
     }
     
@@ -132,7 +130,7 @@ class EditProfilTableViewController: UITableViewController {
         return .accepted
     }
     
-    private func createProfilUser() -> ProfilUser? {
+    private func createProfilUser() -> Profile? {
         guard let name = nameTextField.text else { return nil }
         guard let prenom = prenomTextField.text else { return nil }
         guard let tel = telTextField.text else { return nil }
@@ -142,7 +140,7 @@ class EditProfilTableViewController: UITableViewController {
         let idUser = CurrentUserManager.shared.user.senderId
         let email = CurrentUserManager.shared.user.email
         
-        return ProfilUser(id:"",iDuser: idUser, nom: name, prenom: prenom, pseudo: pseudo,mail: email, tel: tel, postalCode: postalCode, city: city)
+        return Profile(id:"",idUser: idUser, name: name, firstName: prenom, pseudo: pseudo,mail: email, phone: tel, postalCode: postalCode, city: city)
     }
     //MARK: - Func Request
     private func uploadPictureProfil() {
@@ -176,7 +174,7 @@ class EditProfilTableViewController: UITableViewController {
     
     private func retrieveProfil() {
         let idUser = CurrentUserManager.shared.user.senderId
-        profilGestion.retrieveProfilUser(field: "iDuser", equal: idUser) { [weak self] (error,bool) in
+        profilGestion.retrieveProfilUser(field: "idUser", equal: idUser) { [weak self] (error,bool) in
             guard let self = self else { return }
             guard error == nil, bool == true else {
                 self.presentAlertWithActionNavPop(title: "Erreur", message: "Vérifier votre connexion, si le problème persiste contactez l'administrateur.")

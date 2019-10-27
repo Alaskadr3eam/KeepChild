@@ -13,7 +13,7 @@ class MapKitAnnounceViewController: UIViewController {
     //MARK: - Outlet
     @IBOutlet weak var mapKitViewAnnounce: MKMapView!
     //MARK: - Properties
-    var mapKitAnnounce = MapKitAnnounceGestion()
+    var mapKitAnnounce = MapKitAnnounceManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()

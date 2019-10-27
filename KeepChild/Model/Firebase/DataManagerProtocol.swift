@@ -44,9 +44,9 @@ protocol DataManagerProtocol {
     
     func addMessageInConversation(documentID: String,arrayMessageRep: [[String: Any]], completionHandler: @escaping(Bool) -> Void)
     //MARK: - Profil
-    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping(Error?,[ProfilUser]?) -> Void)
+    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping(Error?,[Profile]?) -> Void)
     
-    func addDataProfil(profil: ProfilUser, completionHandler: @escaping (Bool?) -> Void)
+    func addDataProfil(profil: Profile, completionHandler: @escaping (Bool?) -> Void)
     //MARK: - PhotoProfil
     func uploadProfileImage(imageData: Data, completionHandler: @escaping (Error?,StorageMetadata?) -> Void)
     

@@ -296,8 +296,8 @@ extension ManagerFirebase: DataManagerProtocol {
         }
     }
     //MARK: - Profil
-    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping (Error?, [ProfilUser]?) -> Void) {
-        var arrayProfil = [ProfilUser]()
+    func retrieveProfilUser(field: String, equal: String, completionHandler: @escaping (Error?, [Profile]?) -> Void) {
+        var arrayProfil = [Profile]()
         queryProfil.whereField(field, isEqualTo: equal).getDocuments { (querySnapshot, error) in
             guard error == nil else {
                 completionHandler(error, nil)
@@ -305,7 +305,7 @@ extension ManagerFirebase: DataManagerProtocol {
             }
             guard let querySnap = querySnapshot else { return }
             for document in querySnap.documents {
-                var profil = try! FirestoreDecoder().decode(ProfilUser.self, from: document.data())
+                var profil = try! FirestoreDecoder().decode(Profile.self, from: document.data())
                 profil.id = document.documentID
                 arrayProfil.append(profil)
                 print(document.documentID, document.data())
@@ -318,7 +318,7 @@ extension ManagerFirebase: DataManagerProtocol {
         }
     }
     
-    func addDataProfil(profil: ProfilUser, completionHandler: @escaping (Bool?) -> Void) {
+    func addDataProfil(profil: Profile, completionHandler: @escaping (Bool?) -> Void) {
         let docData = try! FirestoreEncoder().encode(profil)
         print(docData)
         profilsCollection.addDocument(data: docData) { error in

@@ -13,7 +13,7 @@ import InputBarAccessoryView
 
 class MessageViewController: MessagesViewController {
     //MARK: - Properties
-    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ConversationManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     private var messageListener: ListenerRegistration?
     
     let formatter: DateFormatter = {

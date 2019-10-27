@@ -10,11 +10,11 @@ import XCTest
 @testable import KeepChild
 
 class AuthGestionTest: XCTestCase {
-    var authGestion: AuthGestion!
+    var authGestion: AuthManager!
     var mockDataManager: MockDataManager!
     override func setUp() {
         mockDataManager = MockDataManager()
-        authGestion = AuthGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        authGestion = AuthManager(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         // Put setup code here. This method is called before the invocation of each test method in the class.
         //Given
         //When

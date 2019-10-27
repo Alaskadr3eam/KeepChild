@@ -12,11 +12,11 @@ import CoreLocation
 
 class AnnounceEditTest: XCTestCase {
     
-    var announceEdit: AnnounceGestion!
+    var announceEdit: AnnounceManager!
     var mockDataManager: MockDataManager!
     override func setUp() {
         mockDataManager = MockDataManager()
-        announceEdit = AnnounceGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        announceEdit = AnnounceManager(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         
         user1 = User(senderId: "uid1", email: "email1")
         user2 = User(senderId: "uid2", email: "email2")
@@ -80,8 +80,8 @@ class AnnounceEditTest: XCTestCase {
         XCTAssertNil(semaineString)
         XCTAssertNil(semaineString2)
         //When
-        semaineString = "\(announceEdit.transformateSemaineInString(semaine: semaine1))"
-        semaineString2 = "\(announceEdit.transformateSemaineInString(semaine: semaine2))"
+        semaineString = announceEdit.transformateSemaineInString(semaine: semaine1) ?? "non renseigné"
+        semaineString2 = announceEdit.transformateSemaineInString(semaine: semaine2) ?? "non renseigné"
         //Then
         XCTAssertEqual(semaineString, "lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche")
         XCTAssertEqual(semaineString2, "vendredi")
@@ -184,25 +184,6 @@ class AnnounceEditTest: XCTestCase {
         XCTAssertNotNil(errorTest)
         XCTAssertEqual(announceEdit.announceList, nil)
     }
-
-   /* func testGeocoderFail() {
-        let expect = expectation(description: "Wait for geocode")
-        announceEdit.getCoordinate(addressString: "abc") { (coordinate, error) in
-            defer { expect.fulfill() }
-            
-            guard error == nil else {
-                XCTFail(error!.domain)
-                return }
-            guard coordinate != nil else {
-                XCTFail("No coordinate")
-                return }
-            
-            XCTAssertEqual(coordinate.latitude, 37.3316851, accuracy: 0.001, "Latitude doesn't match")
-            XCTAssertEqual(coordinate.longitude, -122.0300674, accuracy: 0.001, "Longitude doesn't match")
-        }
-        waitForExpectations(timeout: 3, handler: nil)
-    }*/
-  
     
     //MARK: - Request firebase
     

@@ -13,12 +13,12 @@ import Firebase
 
 class ManageConversationTest: XCTestCase {
     
-    var manageConversation: ConversationGestion!
+    var manageConversation: ConversationManager!
     var mockDataManager: MockDataManager!
     
     override func setUp() {
         mockDataManager = MockDataManager()
-        manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
+        manageConversation = ConversationManager(firebaseServiceSession: FirebaseService(dataManager: mockDataManager))
         // Put setup code here. This method is called before the invocation of each test method in the class.
         //Given
         //When
@@ -173,6 +173,45 @@ class ManageConversationTest: XCTestCase {
         //Then
         XCTAssertNotNil(errorTest)
         XCTAssertEqual(manageConversation.arrayConversation.count, 0)
+    }
+
+    func testDeleteConversationSuccess() {
+        //Given
+        let announce = announce1
+        var errorTest: Error!
+        XCTAssertNil(errorTest)
+        XCTAssertEqual(mockDataManager.conversationArray.count, 1)
+        //When
+        guard let id = announce.id else { return }
+        manageConversation.deleteConversation(announceID: id) { (error) in
+            guard error == nil else {
+                errorTest = error
+                return
+            }
+        }
+        //Then
+        XCTAssertEqual(mockDataManager.conversationArray.count, 0)
+        XCTAssertNil(errorTest)
+    }
+    
+    func testDeleteConversationFail() {
+        //Given
+        mockDataManager.shouldSucceed = false
+        let announce = announce1
+        var errorTest: Error!
+        XCTAssertNil(errorTest)
+        XCTAssertEqual(mockDataManager.conversationArray.count, 1)
+        //When
+        guard let id = announce.id else { return }
+        manageConversation.deleteConversation(announceID: id) { (error) in
+            guard error == nil else {
+                errorTest = error
+                return
+            }
+        }
+        //Then
+        XCTAssertEqual(mockDataManager.conversationArray.count, 1)
+        XCTAssertNotNil(errorTest)
     }
 
     func testReadConversationSuccess() {

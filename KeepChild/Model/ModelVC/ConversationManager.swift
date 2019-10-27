@@ -9,7 +9,7 @@
 import Foundation
 import FirebaseFirestore
 
-class ConversationGestion {
+class ConversationManager {
     
     private var firebaseServiceSession = FirebaseService(dataManager: ManagerFirebase())
     
@@ -38,11 +38,12 @@ class ConversationGestion {
             guard let self = self else { return }
             guard error == nil else {
                 completionHandler(error,nil)
-                return }
+                return
+            }
             guard conversation != nil else {
                 completionHandler(nil,false)
-                //self.requestIdUser2()
-                return }
+                return
+            }
             guard let resultConv = conversation else { return }
             for conv in resultConv {
                 self.arrayConversation.append(conv)

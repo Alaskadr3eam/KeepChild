@@ -9,14 +9,14 @@
 import Foundation
 import CodableFirebase
 
-struct ProfilUser: Codable, Equatable {
+struct Profile: Codable, Equatable {
     var id: String?
-    var iDuser: String
-    var nom: String
-    var prenom: String
+    var idUser: String
+    var name: String
+    var firstName: String
     var pseudo: String
     var mail: String
-    var tel: String
+    var phone: String
     var postalCode: String
     var city: String
 }

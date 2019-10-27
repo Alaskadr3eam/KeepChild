@@ -16,8 +16,8 @@ class ProfilTableViewController: UITableViewController {
     //MARK: - Outlet
     @IBOutlet weak var profilView: ProfilView!
     //MARK: - Properties
-    var profilGestion = ProfilGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
-    var manageConversation = ConversationGestion(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var profilGestion = ProfileManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
+    var manageConversation = ConversationManager(firebaseServiceSession: FirebaseService(dataManager: ManagerFirebase()))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +80,7 @@ class ProfilTableViewController: UITableViewController {
     private func initView() {
         guard let profil = CurrentUserManager.shared.profil else { return }
         profilView.pseudoLabel.text = profil.pseudo
-        profilView.imageProfil.downloadCustom(idUserImage: profil.iDuser, contentMode: .scaleToFill)
+        profilView.imageProfil.downloadCustom(idUserImage: profil.idUser, contentMode: .scaleToFill)
     }
     
     private func initSetUpViewDasboard() {

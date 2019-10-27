@@ -41,7 +41,7 @@ class FilterTableViewController: UITableViewController, CLLocationManagerDelegat
     @IBOutlet var switchAll: [UISwitch]!
     //MARK: - Properties
     var delegate: isAbleToReceiveFilter?
-    var filter = FilterGestion()
+    var filter = FilterManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()

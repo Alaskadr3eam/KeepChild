@@ -63,14 +63,15 @@ class AnnounceEditTest: XCTestCase {
     
     func testCreateAnnounce() {
         //Given
+        guard let announceSecure = announceEdit.announce else { return }
         announceEdit.encodeObjectInData(semaine: semaine1)
         announceEdit.location = CLLocationCoordinate2D(latitude: 1.1, longitude: 1.1)
-        XCTAssertNil(announceEdit.announce)
+        XCTAssertNil(announceSecure)
         //When
         announceEdit.createAnnounce(title: "test", description: "testtest", price: "priceTest", tel: true, day: true, night: true)
         //Then
-        XCTAssertNotNil(announceEdit.announce)
-        XCTAssertEqual(announceEdit.announce.title, "test")
+        XCTAssertNotNil(announceSecure)
+        XCTAssertEqual(announceSecure.title, "test")
     }
     
     func testTransformeSemaineInString() {
@@ -121,6 +122,7 @@ class AnnounceEditTest: XCTestCase {
 
     func testSearchAnnounceFilteredSuccess1() {
         //Given
+        guard let announceListSecure = announceEdit.announceList else { return }
         announceEdit.filter = filter1
         guard let lesser = filter1.lesserGeopoint else { return }
         guard let greater = filter1.greaterGeopoint else { return }
@@ -138,7 +140,7 @@ class AnnounceEditTest: XCTestCase {
         }
         //Then
         XCTAssertNil(errorTest)
-        XCTAssertEqual(announceEdit.announceList[0], announce1)
+        XCTAssertEqual(announceListSecure[0], announce1)
     }
     func testSearchAnnounceFilteredSuccess2() {
         //Given
@@ -159,7 +161,8 @@ class AnnounceEditTest: XCTestCase {
         }
         //Then
         XCTAssertNil(errorTest)
-        XCTAssertEqual(announceEdit.announceList.count, 2)
+        guard let announceListSecure = announceEdit.announceList else { return }
+        XCTAssertEqual(announceListSecure.count, 2)
     }
 
     func testSearchAnnounceFilteredFail() {
@@ -224,7 +227,8 @@ class AnnounceEditTest: XCTestCase {
             guard announceList != nil else { return }
         }
         //Then
-        XCTAssertEqual(announceEdit.announceList.count, 2)
+        guard let announceListSecure = announceEdit.announceList else { return }
+        XCTAssertEqual(announceListSecure.count, 2)
         XCTAssertNil(errorTest)
     }
 

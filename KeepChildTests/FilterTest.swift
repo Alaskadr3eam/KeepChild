@@ -49,6 +49,7 @@ class FilterTest: XCTestCase {
 
     func testCreateFilterForSearch() {
         //Given
+        guard let filterSecure = filterGestion.filter else { return }
         filterGestion.dayFilter = ["lundi":true]
         filterGestion.momentDay = ["day":true]
         filterGestion.lesserGeopoint = coordinate1
@@ -57,12 +58,12 @@ class FilterTest: XCTestCase {
         filterGestion.latChoice = 1.5
         filterGestion.longChoice = 1.2
         filterGestion.profilLocIsSelected = true
-        XCTAssertNil(filterGestion.filter)
+        XCTAssertNil(filterSecure)
         //When
         filterGestion.createFilterForSearch()
         //Then
-        XCTAssertNotNil(filterGestion.filter)
-        XCTAssertEqual(filterGestion.filter.latChoice, 1.5)
+        XCTAssertNotNil(filterSecure)
+        XCTAssertEqual(filterSecure.latChoice, 1.5)
     }
     func testPrepareQueryIsPossibleF() {
         //Given

@@ -55,8 +55,9 @@ class DetailAnnounceTableViewController: UITableViewController {
     
     @IBAction func deleteAnnounce() {
         //metter a l'initView
-        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
-            guard let id = detailAnnounce.announce.id else { return }
+        guard let announceSecure = detailAnnounce.announce else { return }
+        if CurrentUserManager.shared.user.senderId == announceSecure.idUser {
+            guard let id = announceSecure.id else { return }
             detailAnnounce.deleteAnnounce(announceId: id) { (error) in
                 guard error == nil else {
                     self.presentAlert(title: "Erreur Suppression.", message: "Annonce non supprimée, vérifiez votre connexion internet.")
@@ -86,8 +87,10 @@ class DetailAnnounceTableViewController: UITableViewController {
     
     @IBAction func call() {
         if !itsAnnounceOfUserForTel() {
-            if detailAnnounce.announce.phone == true {
-                if let url = URL(string: "tel://\(profilGestion.profil.phone)"), UIApplication.shared.canOpenURL(url) {
+            guard let announceSecure = detailAnnounce.announce else { return }
+            if announceSecure.phone == true {
+                guard let profil = profilGestion.profil else { return }
+                if let url = URL(string: "tel://\(profil.phone)"), UIApplication.shared.canOpenURL(url) {
                     if #available(iOS 10, *)
                     {
                         UIApplication.shared.open(url)
@@ -108,15 +111,17 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     //func for create annotation for mapKitView
     private func createAnnotationMapView() {
-        guard let announceLoc = mapKitAnnounce.transformAnnounceIntoAnnounceLocation(announce: detailAnnounce.announce) else { return }
+        guard let announceSecure = detailAnnounce.announce else { return }
+        guard let announceLoc = mapKitAnnounce.transformAnnounceIntoAnnounceLocation(announce: announceSecure) else { return }
         mapKitAnnounce.announceDetailLocation = announceLoc
         locMapKit.addAnnotation(announceLoc)
     }
     //func for initialize mapKitView
     private func initializeRegionViewMapView() {
         createAnnotationMapView()
-        let lat = mapKitAnnounce.announceDetailLocation.coordinate.latitude
-        let longitude = mapKitAnnounce.announceDetailLocation.coordinate.longitude
+        guard let announceDetailLocationSecure = mapKitAnnounce.announceDetailLocation else { return }
+        let lat = announceDetailLocationSecure.coordinate.latitude
+        let longitude = announceDetailLocationSecure.coordinate.longitude
         let initialisation = CLLocation(latitude: lat, longitude: longitude)
         let regionRadius: CLLocationDistance = 10000
         centerMapOnLocation(location: initialisation, regionRadius: regionRadius)
@@ -131,7 +136,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     // request geocoder for mapKit
     private func retrieveCoordinateAnnounce() {
-        let adresseString = ("\(profilGestion.profil.city) \(profilGestion.profil.postalCode)")
+        guard let profil = profilGestion.profil else { return }
+        let adresseString = ("\(profil.city) \(profil.postalCode)")
         print(adresseString)
         detailAnnounce.getCoordinate(addressString: adresseString) { [weak self] (coordinate, error) in
             guard let self = self else { return }
@@ -147,7 +153,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     //MARK: - Helpers
     //on verifie que l'annonce n'appartient pas a l'utilisateur avant d'ouvrir l'envoie message
     private func itsAnnounceOfUserForMessage() -> Bool {
-        if detailAnnounce.announce.idUser == CurrentUserManager.shared.user.senderId {
+        guard let announceSecure = detailAnnounce.announce else { return false }
+        if announceSecure.idUser == CurrentUserManager.shared.user.senderId {
             self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous envoyer un message.")
             return true
         }
@@ -155,7 +162,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     
     private func itsAnnounceOfUserForTel() -> Bool {
-        if profilGestion.profil.phone == CurrentUserManager.shared.profil.phone {
+        guard let profil = profilGestion.profil else { return false }
+        if profil.phone == CurrentUserManager.shared.profil.phone {
             self.presentAlert(title: "Attention", message: "Ceci est votre annonce, vous ne pouvez pas vous appeler.")
             return true
         }
@@ -163,11 +171,13 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     
     private func telLabelInit() {
-        (detailAnnounce.announce.phone == true) ? (telLabel.text = String(profilGestion.profil.phone)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
+        guard let profil = profilGestion.profil, let announceSecure = detailAnnounce.announce else { return }
+        (announceSecure.phone == true) ? (telLabel.text = String(profil.phone)) : (telLabel.text = "Le correspondant souhaite etre contacté uniquement par mail.")
     }
     
     private func buttonDeleteInitView() {
-        if CurrentUserManager.shared.user.senderId == detailAnnounce.announce.idUser {
+        guard let announceSecure = detailAnnounce.announce else { return }
+        if CurrentUserManager.shared.user.senderId == announceSecure.idUser {
             deleteButton.isHidden = false
         } else {
             deleteButton.isHidden = true
@@ -177,7 +187,8 @@ class DetailAnnounceTableViewController: UITableViewController {
     private func request() {
         //mise en place d'une page de chargement(on l'enleve une fois l'image uploadé)
         locMapKit.setLoadingScreen()
-        let idUser = detailAnnounce.announce.idUser
+        guard let announceSecure = detailAnnounce.announce else { return }
+        let idUser = announceSecure.idUser
         profilGestion.retrieveProfilAnnounce(field: "idUser", equal: idUser) { [weak self] (error, profil) in
             guard let self = self else { return }
             guard error == nil else { return }
@@ -188,17 +199,18 @@ class DetailAnnounceTableViewController: UITableViewController {
     }
     // MARK: - Prepare the view for display
     private func initView() {
+        guard let profil = profilGestion.profil, let announceSecure = detailAnnounce.announce else { return }
         let announce = detailAnnounce.announce
         titleLabel.text = announce?.title
         priceLabel.text = announce?.price
         descriptionTextView.text = announce?.description
-        pseudoLabel.text = profilGestion.profil.pseudo
-        let city = profilGestion.profil.city
-        let postalCode = profilGestion.profil.postalCode
+        pseudoLabel.text = profil.pseudo
+        let city = profil.city
+        let postalCode = profil.postalCode
         cpLabel.text = "\(postalCode),\(city)"
         telLabelInit()
-        mailLabel.text = profilGestion.profil.mail
-        image.downloadCustom(idUserImage: detailAnnounce.announce.idUser, contentMode: .scaleToFill)
+        mailLabel.text = profil.mail
+        image.downloadCustom(idUserImage: announceSecure.idUser, contentMode: .scaleToFill)
         buttonDeleteInitView()
     }
     //MARK: -Navigation

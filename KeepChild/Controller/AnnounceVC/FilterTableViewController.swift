@@ -180,7 +180,8 @@ class FilterTableViewController: UITableViewController, CLLocationManagerDelegat
     
     private func filterOkPassAndDismiss() {
         filter.createFilterForSearch()
-        delegate?.pass(filter: filter.filter)
+        guard let filterSecure = filter.filter else { return }
+        delegate?.pass(filter: filterSecure)
         dismiss(animated: true, completion: nil)
     }
     
@@ -223,7 +224,8 @@ class FilterTableViewController: UITableViewController, CLLocationManagerDelegat
     }
     
     private func initViewSwitchDay() {
-        for key in filter.filter.dayFilter {
+        guard let filterSecure = filter.filter else { return }
+        for key in filterSecure.dayFilter {
             keyEqualSwitch(key: key.key, day: "lundi", sender: lundiSwitch)
             keyEqualSwitch(key: key.key, day: "mardi", sender: mardiSwitch)
             keyEqualSwitch(key: key.key, day: "mercredi", sender: mercrediSwitch)
@@ -235,7 +237,8 @@ class FilterTableViewController: UITableViewController, CLLocationManagerDelegat
     }
     
     private func initViewSwitchMomentDay() {
-        for key in filter.filter.momentDay {
+        guard let filterSecure = filter.filter else { return }
+        for key in filterSecure.momentDay {
             keyEqualSwitch(key: key.key, day: "day", sender: jourSwitch)
             keyEqualSwitch(key: key.key, day: "night", sender: nuitSwitch)
         }

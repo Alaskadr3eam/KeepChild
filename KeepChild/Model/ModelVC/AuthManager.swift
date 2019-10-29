@@ -16,6 +16,7 @@ class AuthManager {
         self.firebaseServiceSession = firebaseServiceSession
     }
     //MARK: - Request
+    ///function that allows you to authenticate
     func signIn(withEmail: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         firebaseServiceSession.dataManager.signIn(withEmail: withEmail, password: password) { (bool) in
             guard bool == true else {
@@ -25,7 +26,7 @@ class AuthManager {
             completionHandler(true)
         }
     }
-    
+    ///function that allows you to disconnect
     func signOut(completionHandler: @escaping(Bool) -> Void) {
         firebaseServiceSession.dataManager.signOut { (bool) in
             guard bool == true else {
@@ -35,7 +36,7 @@ class AuthManager {
             completionHandler(true)
         }
     }
-    
+    ///function that allows you to create an account
     func createAccount(email: String, password: String, completionHandler: @escaping (Bool) -> Void) {
         firebaseServiceSession.dataManager.createAccount(email: email, password: password) { (bool) in
             guard bool == true else {
@@ -45,7 +46,7 @@ class AuthManager {
             completionHandler(true)
         }
     }
-    
+    ///function that allows you to retrieve user is connected
     func retrievUserConnected(completionHandler: @escaping(Bool)->Void) {
         firebaseServiceSession.dataManager.retrieveUserAuth { (bool) in
             guard bool == true else {

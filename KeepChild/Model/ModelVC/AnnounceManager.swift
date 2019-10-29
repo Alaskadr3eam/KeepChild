@@ -19,12 +19,12 @@ class AnnounceManager {
         self.firebaseServiceSession = firebaseServiceSession
     }
     
-    var filter: Filter!
-    var announce: Announce!
-    var announceList: [Announce]!
+    var filter: Filter?
+    var announce: Announce?
+    var announceList: [Announce]?
     var announceTransition = [Announce]()
     //for core location
-    var location: CLLocationCoordinate2D!
+    var location: CLLocationCoordinate2D?
     
     //MARK: - Func for UserDefault
     func encodeObjectInData(semaine: Semaine) {
@@ -32,7 +32,7 @@ class AnnounceManager {
             UserDefaults.standard.set(encodedData, forKey: "semaine")
         }
     }
-    
+    ///function that allows you decode data in userDefault
     func decodedDataInObject() -> Semaine? {
         guard let decodeUserDefault = UserDefaults.standard.data(forKey: "semaine") else { return nil }
         let decoded = decodeUserDefault
@@ -41,11 +41,12 @@ class AnnounceManager {
         }
         return nil
     }
-    
+    ///function that allows you remove data in userDefault
     func removeUserDefaultObject(forkey: String) {
         UserDefaults.standard.removeObject(forKey: forkey)
     }
     //MARK: - Request firebase
+    ///function that allows you add data announce in database
     func addData(announce: Announce, completionHandler: @escaping (Bool?) -> Void) {
         firebaseServiceSession.dataManager.addAnnounce(announce: announce) { (bool) in
             guard bool == true else {
@@ -55,7 +56,7 @@ class AnnounceManager {
             completionHandler(bool)
         }
     }
-    
+    ///function that allows you read data announce in database
     func readData(completionHandler: @escaping (Error?,[Announce]?) -> Void) {
         firebaseServiceSession.dataManager.readDataAnnounce { [weak self] (error, announceList) in
             guard let self = self else { return }
@@ -69,7 +70,7 @@ class AnnounceManager {
             completionHandler(nil,announce)
         }
     }
-    
+    ///function that allows you delete data announce in database
     func deleteAnnounce(announceId: String, completionHandler: @escaping(Error?) -> Void) {
         firebaseServiceSession.dataManager.deleteAnnounce(announceId: announceId) { (error) in
             guard error == nil else {
@@ -79,7 +80,7 @@ class AnnounceManager {
             completionHandler(nil)
         }
     }
-    
+    ///function that allows you search data announce in database with filter
     func searchAnnounceFiltered(lesserGeopoint: GeoPoint, greaterGeopoint: GeoPoint, completionHandler: @escaping(Error?, [Announce]?) -> Void) {
         announceTransition = [Announce]()
         firebaseServiceSession.dataManager.searchAnnounceWithFilter(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
@@ -97,6 +98,7 @@ class AnnounceManager {
         }
     }
     //MARK: - Func Geocoder
+    ///function that allows you retrieve location with adress string
     func getCoordinate( addressString : String,
                         completionHandler: @escaping(CLLocationCoordinate2D?, NSError?) -> Void ) {
         let geocoder = CLGeocoder()
@@ -113,20 +115,23 @@ class AnnounceManager {
         }
     }
     //MARK: - Func Helpers
+    ///function that allows you create announce
     func createAnnounce(title: String, description: String,price: String, tel: Bool, day: Bool, night: Bool) {
+        guard let locationSecure = location else { return }
         let idUser = CurrentUserManager.shared.user.senderId
-        let latitude = location.latitude
-        let longitute = location.longitude
+        let latitude = locationSecure.latitude
+        let longitute = locationSecure.longitude
         let coordinate = GeoPoint(latitude: latitude, longitude: longitute)
         guard let semaine = decodedDataInObject() else { return }
         let announceCreate = Announce(id: "",idUser: idUser , title: title, description: description, price: price, semaine: semaine, coordinate: coordinate, phone: tel, day: day, night: night)
         announce = announceCreate
     }
-    
+    ///function that allows you filter announce of the database with filter momentDay and DayFilter
     func filteredAnnounce() {
+        guard let filterSecure = filter else { return }
         //filter of the search
-        let dayFilter = filter.dayFilter
-        let momentDay = filter.momentDay
+        let dayFilter = filterSecure.dayFilter
+        let momentDay = filterSecure.momentDay
         //var for transition
         var announceWithFilterDay = [Announce]()
         var announceWithAllFilter = [Announce]()
@@ -165,7 +170,7 @@ class AnnounceManager {
         }
         announceList = announceWithAllFilter.removeDuplicates()
     }
-    
+    ///function that allows you transformate Semaine in string
     func transformateSemaineInString(semaine: Semaine) -> String? {
         guard let lundi = semaine.lundi,
                 let mardi = semaine.mardi,

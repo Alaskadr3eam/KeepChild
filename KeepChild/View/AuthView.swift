@@ -17,7 +17,7 @@ class AuthView: UIView {
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     // MARK: - Properties
-    var gradientLayer: CAGradientLayer!
+    var gradientLayer: CAGradientLayer?
     var authViewDelegate: AuthViewDelegate?
     var registration: Bool! {
         didSet {
@@ -64,10 +64,11 @@ class AuthView: UIView {
     
     func createGradientLayer() {
         gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.bounds
+        guard let gradientLayerSecure = gradientLayer else { return }
+        gradientLayerSecure.frame = self.bounds
         guard let bleu = Constants.Color.bleu else { return }
-        gradientLayer.colors = [bleu.cgColor, UIColor.white.cgColor, bleu.cgColor]
-        self.layer.insertSublayer(gradientLayer, at: 0)
+        gradientLayerSecure.colors = [bleu.cgColor, UIColor.white.cgColor, bleu.cgColor]
+        self.layer.insertSublayer(gradientLayerSecure, at: 0)
         
     }
     

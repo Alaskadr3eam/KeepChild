@@ -74,9 +74,10 @@ class MasterViewController: UIViewController {
     }
     
     private func requestWithFilter() {
+        guard let filterSecure = announceList.filter else { return }
         if announceList.filter != nil {
-            guard let lesserGeopoint = announceList.filter.lesserGeopoint else { return }
-            guard let greaterGeopoint = announceList.filter.greaterGeopoint else { return }
+            guard let lesserGeopoint = filterSecure.lesserGeopoint else { return }
+            guard let greaterGeopoint = filterSecure.greaterGeopoint else { return }
             //view for loading result
             announceSearchTableViewController.searchTableView.setLoadingScreen()
             self.announceList.searchAnnounceFiltered(lesserGeopoint: lesserGeopoint, greaterGeopoint: greaterGeopoint) { [weak self] (error, announceList) in
@@ -108,7 +109,8 @@ class MasterViewController: UIViewController {
     }
     
     private func prepareMapKit(vc: MapKitAnnounceViewController) {
-        vc.mapKitAnnounce.announceList = self.announceList.announceList
+        guard let annouceListSecure = announceList.announceList else { return }
+        vc.mapKitAnnounce.announceList = annouceListSecure
         vc.mapKitAnnounce.filter = self.announceList.filter
         vc.mapKitAnnounce.toFillTheLocationAnnounceArray()
     }

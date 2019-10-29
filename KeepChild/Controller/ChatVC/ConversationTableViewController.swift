@@ -92,7 +92,8 @@ class ConversationTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         manageConversation.conversation = manageConversation.arrayConversation[indexPath.row]
-        let vc = MessageViewController(conversation: manageConversation.conversation)
+        guard let conversationSecure = manageConversation.conversation else { return }
+        let vc = MessageViewController(conversation: conversationSecure)
         navigationController?.pushViewController(vc, animated: true)
     }
     

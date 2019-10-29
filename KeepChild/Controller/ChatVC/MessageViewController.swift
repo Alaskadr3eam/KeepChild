@@ -39,8 +39,9 @@ class MessageViewController: MessagesViewController {
         super.viewDidLoad()
         
         manageConversation.decodeConversationMessage()
-        navigationItem.title = manageConversation.conversation.name
-        Constants.configureTilteTextNavigationBar(view: self, title: .chatMessaging(manageConversation.conversation.name))
+        guard let conversationSecure = manageConversation.conversation else { return }
+        navigationItem.title = conversationSecure.name
+        Constants.configureTilteTextNavigationBar(view: self, title: .chatMessaging(conversationSecure.name))
         initInputBar()
     }
     //MARK: - Init

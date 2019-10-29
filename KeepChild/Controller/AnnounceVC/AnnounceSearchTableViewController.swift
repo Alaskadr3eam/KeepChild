@@ -32,9 +32,10 @@ class AnnounceSearchTableViewController: UITableViewController {
     }
     //MARK: - Init View
     private func setUpView() {
+        guard let announceListSecure = announceList.announceList else { return }
         if announceList.announceList == nil {
             searchTableView.setEmptyMessage("Aucune annonce pour le moment. Pour effectuer une recherche cliquez sur ", messageEnd: " en haut à droite de l'écran", imageName: "filtered" )
-        } else if announceList.announceList.count == 0 {
+        } else if announceListSecure.count == 0 {
             searchTableView.setEmptyMessage("Pas de résultat !", messageEnd: "Changez vos filtres.", imageName: "smileyPleure")
         } else {
             searchTableView.restore()
@@ -48,16 +49,18 @@ class AnnounceSearchTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        guard let announceListSecure = announceList.announceList else { return 0 }
         if announceList.announceList == nil {
             return 0
         } else {
-            return announceList.announceList.count
+            return announceListSecure.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CustomCell
-        let announce = announceList.announceList[indexPath.row]
+        guard let announceListSecure = announceList.announceList else { return cell }
+        let announce = announceListSecure[indexPath.row]
         cell.titleLabel.text = announce.title
         cell.semaineDayLabel.text = announceList.transformateSemaineInString(semaine: announce.semaine) ?? "Non renseigné"
         cell.momentDayLabel.text = "\(announceList.transformeMomentDayInString(announce: announce))"
@@ -73,7 +76,8 @@ class AnnounceSearchTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        announceList.announce = announceList.announceList[indexPath.row]
+        guard let announceListSecure = announceList.announceList else { return }
+        announceList.announce = announceListSecure[indexPath.row]
         performSegue(withIdentifier: Constants.Segue.segueDetailAnnounce, sender: nil)
     }
     // MARK: - Navigation
@@ -85,7 +89,8 @@ class AnnounceSearchTableViewController: UITableViewController {
         }
         if segue.identifier == Constants.Segue.segueMapKit {
             if let vcDestination = segue.destination as? MapKitAnnounceViewController {
-                vcDestination.mapKitAnnounce.announceList = announceList.announceList
+                guard let announceListSecure = announceList.announceList else { return }
+                vcDestination.mapKitAnnounce.announceList = announceListSecure
                 vcDestination.mapKitAnnounce.filter = announceList.filter
             }
         }

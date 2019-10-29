@@ -32,11 +32,12 @@ class MapKitAnnounceViewController: UIViewController {
     }
     //MARK: - Func
     private func centerMapOnLocation() {
-        if mapKitAnnounce.filter.latChoice != nil && mapKitAnnounce.filter.longChoice != nil && mapKitAnnounce.filter.regionRadius != nil {
+        guard let filterSecure = mapKitAnnounce.filter else { return }
+        if filterSecure.latChoice != nil && filterSecure.longChoice != nil && filterSecure.regionRadius != nil {
             guard
-                let lat = mapKitAnnounce.filter.latChoice,
-                let long = mapKitAnnounce.filter.longChoice,
-                let regionRadius = mapKitAnnounce.filter.regionRadius else { return }
+                let lat = filterSecure.latChoice,
+                let long = filterSecure.longChoice,
+                let regionRadius = filterSecure.regionRadius else { return }
             
             let initialLocation = CLLocation(latitude: lat, longitude: long)
             let coordinateRegion = MKCoordinateRegion(center: initialLocation.coordinate,
@@ -46,10 +47,10 @@ class MapKitAnnounceViewController: UIViewController {
         }
         let announce = mapKitAnnounce.announceListLocation
         mapKitViewAnnounce.addAnnotations(announce)
-        if mapKitAnnounce.filter.profilLocIsSelected == true {
+        if filterSecure.profilLocIsSelected == true {
             guard
-                let lat = mapKitAnnounce.filter.latChoice,
-                let long = mapKitAnnounce.filter.longChoice else { return }
+                let lat = filterSecure.latChoice,
+                let long = filterSecure.longChoice else { return }
             let userHome = ProfilMapKit(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long), title: "Home")
             mapKitViewAnnounce.addAnnotation(userHome)
             mapKitViewAnnounce.showsUserLocation = false

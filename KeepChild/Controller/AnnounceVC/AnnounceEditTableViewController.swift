@@ -133,7 +133,8 @@ class AnnounceEditTableViewController: UITableViewController {
     
     //request for addAnnounce in firebase
     private func addAnnounceInFirebase() {
-        announceEdit.addData(announce: self.announceEdit.announce) { [weak self] (bool) in
+        guard let announceSecure = announceEdit.announce else { return }
+        announceEdit.addData(announce: announceSecure) { [weak self] (bool) in
             guard let self = self else { return }
             guard bool == true else {
                 self.presentAlert(title: "Annonce non envoyé", message: "Désolé, votre annonce n'a pas pu etre sauvegardée. Vérifiez votre connexion internet. Si le problème persiste contactez le développeur.")

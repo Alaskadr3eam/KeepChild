@@ -33,11 +33,17 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         authView.createGradientLayer()
+        registerKeyboardNotifications()
         if CurrentUserManager.shared.profil != nil {
             performSegue(withIdentifier: Constants.Segue.segueLoginToList, sender: nil)
         } else {
             retrieveUserAuth()
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        removeKeyboardNotifications()
     }
     
     private func initLocationManager() {
@@ -98,25 +104,12 @@ class AuthViewController: UIViewController, FUIAuthDelegate {
 }
 
 extension AuthViewController: UITextFieldDelegate {
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        switch textField {
-        case authView.emailLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: 0, up: false)
-        case authView.passwordLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: true)
-        default:break
-        }
-        return true
-    }
-    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case authView.emailLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: 0, up: false)
             authView.emailLoginTextField.resignFirstResponder()
         case authView.passwordLoginTextField:
-            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: false)
             authView.passwordLoginTextField.resignFirstResponder()
         default:break
         }
@@ -133,7 +126,29 @@ extension AuthViewController: UITextFieldDelegate {
         self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
         UIView.commitAnimations()
     }
+
+    func registerKeyboardNotifications() {
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(keyboardWillBeShown(note:)), name: UIWindow.keyboardWillShowNotification, object: nil)
+        center.addObserver(self, selector: #selector(keyboardWillBeHidden(note:)), name: UIWindow.keyboardWillHideNotification, object: nil)
+    }
     
+    func removeKeyboardNotifications() {
+        NotificationCenter.default.removeObserver(self, name: UIWindow.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIWindow.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc func keyboardWillBeShown(note: Notification) {
+        if authView.passwordLoginTextField.isEditing == true {
+            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: true)
+        }
+    }
+    
+    @objc func keyboardWillBeHidden(note: Notification) {
+        if authView.passwordLoginTextField.isEditing == true {
+            moveTextField(authView.passwordLoginTextField, moveDistance: Constants.MoveTextField.movePasswordTextfield, up: false)
+        }
+    }
 }
 
 extension AuthViewController: AuthViewDelegate {
@@ -178,5 +193,3 @@ extension AuthViewController: AuthViewDelegate {
         }
     }
 }
-
-

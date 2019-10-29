@@ -12,14 +12,15 @@ import Firebase
 
 class MapKitAnnounceManager {
     //MARK: - Properties
-    var announceDetail: Announce!
-    var filter: Filter!
-    var announceDetailLocation: AnnounceLocation!
+    var announceDetail: Announce?
+    var filter: Filter?
+    var announceDetailLocation: AnnounceLocation?
     var announceList = [Announce]()
     var announceListLocation = [AnnounceLocation]()
     
     
     //MARK: - Func Helpers
+    ///func for fill announcelistlocation
     func toFillTheLocationAnnounceArray() {
         for announce in announceList {
             guard let announceLoc = transformAnnounceIntoAnnounceLocation(announce: announce) else { return }
@@ -27,6 +28,7 @@ class MapKitAnnounceManager {
         }
     }
     //func used for mapKitViewController and DetailViewController
+    ///func for transformate announce into announceLocation
     func transformAnnounceIntoAnnounceLocation(announce: Announce) -> AnnounceLocation? {
         let latitude = announce.coordinate.latitude
         let longitude = announce.coordinate.longitude
@@ -39,7 +41,7 @@ class MapKitAnnounceManager {
         let announceLoc = AnnounceLocation(id: id, idUser: announce.idUser, title: announce.title, descriptionAnnounce: announce.description, price: announce.price, coordinate: coordinate, tel: tel, semaine: semaine, day: day, night: night)
         return announceLoc
     }
-    
+    ///func for transformate announceLoction into announce
     func transformAnnounceLocationIntoAnnounce(announceLoc: AnnounceLocation) -> Announce? {
         let latitude = announceLoc.coordinate.latitude
         let longitude = announceLoc.coordinate.longitude

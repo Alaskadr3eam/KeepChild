@@ -87,8 +87,8 @@ class ProfilTableViewController: UITableViewController {
         profilView.dashboardView.setUpView()
         profilView.dashboardView.labelCountAnnounce.text = "\(profilGestion.arrayProfilAnnounce.count)"
         profilView.dashboardView.labelCountConversation.text = "\(manageConversation.arrayConversation.count)"
-        guard let lastCo = profilView.dashboardView.lastConnexionlabel.text else { return }
-        let myString = lastCo + profilGestion.transformeDateInString()
+        guard let lastCo = profilView.dashboardView.lastConnexionlabel.text, let dateInString = profilGestion.transformeDateInString() else { return }
+        let myString = lastCo + dateInString
         profilView.dashboardView.lastConnexionlabel.text = myString
     }
     // MARK: - Table view data source
